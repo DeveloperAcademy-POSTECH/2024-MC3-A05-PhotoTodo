@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E02C56395900A02C7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DF2C56395900A02C7E /* ContentView.swift */; };
 		1A2778E22C56395900A02C7E /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778E12C56395900A02C7E /* Item.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoModel.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
 		1A2778DF2C56395900A02C7E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,6 +46,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A2472A22C57A79C00A135D9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		1A2778D12C56395900A02C7E = {
 			isa = PBXGroup;
 			children = (
@@ -71,6 +81,7 @@
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
 				1A2778E12C56395900A02C7E /* Item.swift */,
+				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
 				1A2778E52C56395A00A02C7E /* Preview Content */,
 			);
@@ -160,6 +171,7 @@
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
 				1A2778FA2C5741CF00A02C7E /* TodoView.swift in Sources */,
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
+				1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */,
 				1A2778E22C56395900A02C7E /* Item.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,
