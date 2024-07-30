@@ -10,26 +10,29 @@ import SwiftData
 
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
+    @Query private var folders: [Folder]
 
     var body: some View {
         NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+            NavigationStack{
+                List {
+                    ForEach(folders) { folder in
+                        NavigationLink {
+                            //TODO: TodoList View로 이동하기
+                            Text(folder.name)
+                        } label: {
+                            Text(folder.name)
+                        }
                     }
+                    .onDelete(perform: deleteItems)
                 }
-                .onDelete(perform: deleteItems)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addItem) {
+                    Button(action: addFolders) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
@@ -39,17 +42,21 @@ struct FolderListView: View {
         }
     }
 
-    private func addItem() {
+    private func addFolders() {
         withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
+            let newFolder = Folder(
+                id: UUID(),
+                name: "새 폴더",
+                todos: []
+            )
+            modelContext.insert(newFolder)
         }
     }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(folders[index])
             }
         }
     }
@@ -57,5 +64,5 @@ struct FolderListView: View {
 
 #Preview {
     FolderListView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Folder.self, inMemory: true)
 }

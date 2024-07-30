@@ -13,6 +13,9 @@ struct PhotoTodoApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
+            Folder.self,
+            Todo.self,
+            Options.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
