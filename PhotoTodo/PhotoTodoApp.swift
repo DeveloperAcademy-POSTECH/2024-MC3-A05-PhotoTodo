@@ -28,7 +28,7 @@ struct PhotoTodoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FolderListView()
         }
         .modelContainer(sharedModelContainer)
     }

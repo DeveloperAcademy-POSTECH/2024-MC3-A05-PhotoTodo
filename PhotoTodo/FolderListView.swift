@@ -11,22 +11,21 @@ import SwiftData
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
-
+    
     var body: some View {
-        NavigationSplitView {
-            NavigationStack{
-                List {
-                    ForEach(folders) { folder in
-                        NavigationLink {
-                            //TODO: TodoList View로 이동하기
-                            Text(folder.name)
-                        } label: {
-                            Text(folder.name)
-                        }
+        NavigationStack{
+            List {
+                ForEach(folders) { folder in
+                    NavigationLink {
+                        //TODO: TodoList View로 이동하기
+                        TodoListView(folder: folder)
+                    } label: {
+                        Text(folder.name)
                     }
-                    .onDelete(perform: deleteItems)
                 }
+                .onDelete(perform: deleteItems)
             }
+            .navigationBarTitle("폴더")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -37,22 +36,31 @@ struct FolderListView: View {
                     }
                 }
             }
-        } detail: {
-            Text("Select an item")
         }
+        
     }
-
+    
     private func addFolders() {
         withAnimation {
             let newFolder = Folder(
                 id: UUID(),
                 name: "새 폴더",
-                todos: []
+                todos: [
+                    Todo(
+                        id: UUID(),
+                        image: UIImage(contentsOfFile: "filledCoffee")?.pngData() ?? Data(),
+                        createdAt: Date(),
+                        options: Options(
+                            alarm : nil,
+                            memo : nil
+                        )
+                    )
+                ]
             )
             modelContext.insert(newFolder)
         }
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
