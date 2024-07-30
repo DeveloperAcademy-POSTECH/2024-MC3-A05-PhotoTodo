@@ -8,8 +8,18 @@
 import SwiftUI
 
 struct MainView: View {
+    @State private var showCamera: Bool = false
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        
+        NavigationStack {
+            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            NavigationLink {
+                CameraView()
+            } label: {
+                Text("카메라 실행")
+            }
+        }
     }
 }
 
