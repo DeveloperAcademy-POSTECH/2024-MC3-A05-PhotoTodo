@@ -53,7 +53,8 @@ struct FolderListView: View {
                         options: Options(
                             alarm : nil,
                             memo : nil
-                        )
+                        ),
+                        isDone : false
                     )
                 ]
             )

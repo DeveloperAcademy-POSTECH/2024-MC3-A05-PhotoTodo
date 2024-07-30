@@ -58,7 +58,8 @@ struct TodoListView: View {
                 options: Options(
                     alarm : nil,
                     memo : nil
-                )
+                ),
+                isDone : false
             )
             folder.todos.append(newTodo)
             modelContext.insert(newTodo)
@@ -90,7 +91,8 @@ struct TodoListView_Previews: PreviewProvider {
             options: Options(
                 alarm: nil,
                 memo: nil
-            )
+            ),
+            isDone: false
         )
         
         return Folder(

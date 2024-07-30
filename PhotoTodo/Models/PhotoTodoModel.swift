@@ -36,19 +36,23 @@ class Folder: Codable {
 @Model
 class Todo: Codable {
     enum CodingKeys: String, CodingKey {
-        case id, image, createdAt, options
+        case id, image, createdAt, options, isDone, isDoneAt
     }
 
     let id: UUID
     @Attribute(.externalStorage) var image: Data
     var createdAt: Date
     var options: Options
+    var isDone: Bool
+    var isDoneAt: Date?
 
-    init(id: UUID, image: Data, createdAt: Date, options: Options) {
+    init(id: UUID, image: Data, createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil) {
         self.id = id
         self.image = image
         self.createdAt = createdAt
         self.options = options
+        self.isDone = isDone
+        self.isDoneAt  = isDoneAt
     }
 
     required init(from decoder: Decoder) throws {
@@ -57,6 +61,8 @@ class Todo: Codable {
         image = try container.decode(Data.self, forKey: .image)
         createdAt = try container.decode(Date.self, forKey: .createdAt)
         options = try container.decode(Options.self, forKey: .options)
+        isDone = try container.decode(Bool.self, forKey: .isDone)
+        isDoneAt = try container.decodeIfPresent(Date.self, forKey: .isDoneAt)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -65,6 +71,8 @@ class Todo: Codable {
         try container.encode(image, forKey: .image)
         try container.encode(createdAt, forKey: .createdAt)
         try container.encode(options, forKey: .options)
+        try container.encode(isDone, forKey: .isDone)
+        try container.encodeIfPresent(isDoneAt, forKey: .isDoneAt)
     }
 }
 
