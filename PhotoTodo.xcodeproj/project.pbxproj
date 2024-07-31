@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96742C59287600784CBA /* TodoItemView.swift */; };
+		1A0D96772C59C8C100784CBA /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96762C59C8C100784CBA /* Item.swift */; };
 		1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E02C56395900A02C7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DF2C56395900A02C7E /* ContentView.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		1A0D96742C59287600784CBA /* TodoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemView.swift; sourceTree = "<group>"; };
+		1A0D96762C59C8C100784CBA /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoModel.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
 				1A0D96742C59287600784CBA /* TodoItemView.swift */,
+				1A0D96762C59C8C100784CBA /* Item.swift */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
 				1A2778E52C56395A00A02C7E /* Preview Content */,
@@ -166,6 +169,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0D96772C59C8C100784CBA /* Item.swift in Sources */,
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,

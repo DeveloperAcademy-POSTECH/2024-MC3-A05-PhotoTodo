@@ -25,11 +25,18 @@ struct TodoListView: View {
                 ForEach(folder.todos) { todo in
                     NavigationLink{
                         EmptyView()
-                    } label: { 
-                        Image("FilledCoffee")
-                            .resizable()
-                            .frame(width: 180, height: 200)
-                            .scaledToFit()
+                    } label: {
+                        ZStack{
+                            Image("FilledCoffee")
+                                .resizable()
+                                .frame(width: 180, height: 200)
+                                .scaledToFit()
+                            Image(systemName: "circle")
+                                .padding(4)
+                                .background(Color.black)
+                                .foregroundColor(.white)
+                                .offset(x: -10, y: 15)
+                        }
                     }
                 }
                 //TODO: delete 제대로 작동하게 만들기
@@ -71,7 +78,7 @@ struct TodoListView: View {
             for index in offsets {
                 modelContext.delete(folder.todos[index])
             }
-            folder.todos.remove(atOffsets: offsets)
+//            folder.todos.remove(atOffsets: offsets)
         }
     }
 }
