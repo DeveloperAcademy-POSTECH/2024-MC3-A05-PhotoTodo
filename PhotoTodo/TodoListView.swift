@@ -10,6 +10,8 @@ import SwiftUI
 struct TodoListView: View {
     @Environment(\.modelContext) private var modelContext
     @State var folder: Folder
+    @State private var selectedTodos = Set<UUID>()
+    @State private var editMode: EditMode = .inactive
     
     let columns = [
         GridItem(.flexible()),
@@ -23,18 +25,33 @@ struct TodoListView: View {
                 //TODO: 이미지 비율 맞추기
                 
                 ForEach(folder.todos) { todo in
-                    NavigationLink{
-                        EmptyView()
-                    } label: {
-                        TodoItemView(todo: todo)
-                    }
+                    TodoItemView(todo: todo)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
+                        )
+                        .onTapGesture {
+                            if editMode == .active {
+                                if selectedTodos.contains(todo.id) {
+                                    selectedTodos.remove(todo.id)
+                                } else {
+                                    selectedTodos.insert(todo.id)
+                                }
+                            }
+                        }
                 }
                 //TODO: delete 제대로 작동하게 만들기
                 .onDelete(perform: deleteTodos)
             }
+            .navigationBarTitle(folder.name)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
+                        .onChange(of: editMode) { newEditMode in
+                            if newEditMode == .inactive {
+                                selectedTodos.removeAll()
+                            }
+                        }
                 }
                 ToolbarItem {
                     Button(action: addTodos) {
@@ -42,8 +59,8 @@ struct TodoListView: View {
                     }
                 }
             }
+            .environment(\.editMode, $editMode)
         }
-        
     }
     
     private func addTodos() {
@@ -68,7 +85,7 @@ struct TodoListView: View {
             for index in offsets {
                 modelContext.delete(folder.todos[index])
             }
-//            folder.todos.remove(atOffsets: offsets)
+            //            folder.todos.remove(atOffsets: offsets)
         }
     }
 }
