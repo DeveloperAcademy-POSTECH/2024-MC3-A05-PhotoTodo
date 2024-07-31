@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96742C59287600784CBA /* TodoItemView.swift */; };
 		1A0D96772C59C8C100784CBA /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96762C59C8C100784CBA /* Item.swift */; };
+		1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96822C5A14F300784CBA /* CameraViewModel.swift */; };
+		1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96842C5A150D00784CBA /* CameraPreview.swift */; };
+		1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96862C5A152A00784CBA /* MakeTodoView.swift */; };
+		1A0D96892C5A156800784CBA /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96882C5A156800784CBA /* TodoView.swift */; };
 		1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E02C56395900A02C7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DF2C56395900A02C7E /* ContentView.swift */; };
@@ -24,6 +28,10 @@
 /* Begin PBXFileReference section */
 		1A0D96742C59287600784CBA /* TodoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemView.swift; sourceTree = "<group>"; };
 		1A0D96762C59C8C100784CBA /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		1A0D96822C5A14F300784CBA /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
+		1A0D96842C5A150D00784CBA /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		1A0D96862C5A152A00784CBA /* MakeTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTodoView.swift; sourceTree = "<group>"; };
+		1A0D96882C5A156800784CBA /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoModel.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
@@ -48,6 +56,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A0D96812C5A14CC00784CBA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1A0D96822C5A14F300784CBA /* CameraViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		1A2472A22C57A79C00A135D9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -78,12 +94,16 @@
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoListView.swift */,
+				1A0D96882C5A156800784CBA /* TodoView.swift */,
 				1A2778DF2C56395900A02C7E /* ContentView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
 				1A0D96742C59287600784CBA /* TodoItemView.swift */,
+				1A0D96842C5A150D00784CBA /* CameraPreview.swift */,
+				1A0D96862C5A152A00784CBA /* MakeTodoView.swift */,
 				1A0D96762C59C8C100784CBA /* Item.swift */,
+				1A0D96812C5A14CC00784CBA /* ViewModel */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
 				1A2778E52C56395A00A02C7E /* Preview Content */,
@@ -171,12 +191,16 @@
 			files = (
 				1A0D96772C59C8C100784CBA /* Item.swift in Sources */,
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
+				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
+				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
 				1A2778FA2C5741CF00A02C7E /* TodoListView.swift in Sources */,
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
 				1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */,
+				1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */,
 				1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */,
+				1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,
 			);
