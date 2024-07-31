@@ -33,92 +33,43 @@ struct CameraView: View {
     @State private var folderScrollPaddingSize = UIScreen.main.bounds.size.width / 2 - 40
     
     var folderList : [(String,Color)] = [("기본",Color.red), ("공지사항",Color.blue),( "강의",Color.green), ("해커톤",Color.yellow)]
-    
-    enum SwipeHVDirection: String {
-        case left, right, up, down, none
-    }
-
-    func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
-    if value.startLocation.x < value.location.x - 24 {
-                return .left
-              }
-              if value.startLocation.x > value.location.x + 24 {
-                return .right
-              }
-              if value.startLocation.y < value.location.y - 24 {
-                return .down
-              }
-              if value.startLocation.y > value.location.y + 24 {
-                return .up
-              }
-      return .none
-      }
+    var colors: [Color] = [.red, .green, .blue, .yellow, .pink, .black, .cyan]
     
     var body: some View {
+        
         
         VStack(alignment: .center){
                 cameraPreview
                     .frame(width: 350, height: 500)
                     .clipShape(RoundedRectangle(cornerRadius: 25))
-                    .border(Color.black)
             
             if cameraCaptureState == .single {
-                
                 FolderCarouselView()
                     .frame(height: 80)
-                
-//                ScrollViewReader { value in
-//                    ScrollView(.horizontal) {
-//                        HStack{
-//                            ForEach(0..<folderList.count, id: \.self) { index in
-//                                Button(action: {
-//                                    value.scrollTo(index+1)
-//                                    folderScrollPaddingSize -= 60
-//                                }, label: {
-//                                    ZStack{
-//                                        RoundedRectangle(cornerRadius: 5)
-//                                            .frame(width: 80, height: 30)
-//                                            .foregroundStyle(folderList[index].1)
-//                                        
-//                                        Text("\(folderList[index].0)")
-//                                            .foregroundStyle(Color.white)
-//                                            .bold()
-//                                    }
-//                                })
-//                                .id(index)
-//                            }
-//                        }
-//                        .gesture(
-//                            DragGesture()
-//                                    .onEnded { value in
-//                                    print("value ",value.translation.width)
-//                                      let direction = self.detectDirection(value: value)
-//                                      if direction == .left {
-//                                        print("왼쪽 드레그됨")
-//                                      }
-//                                    }
-//                        )
-//                    }
-//                }
-//                .padding(.leading, folderScrollPaddingSize)
-//                .padding(.top, 20)
-//                .padding(.bottom, 20)
+                    .padding(.top)
                 
                 VStack {
                     Button {
                         cameraVM.takePhoto()
                         cameraCaptureisActive.toggle()
                     } label: {
-                        Circle().frame(width: 80, height: 80)
-                            .foregroundStyle(Color.black)
+                        ZStack{
+                            Circle().frame(width: 80, height: 80)
+                                .foregroundStyle(Color.green)
+                            Circle().frame(width: 60, height: 60)
+                                .foregroundStyle(Color.green)
+                                .overlay(
+                                                    Circle()
+                                                        .stroke(Color.white, lineWidth: 4) // 테두리 색상과 두께
+                                                )
+                        }
                     }
                     .navigationDestination(isPresented: $cameraCaptureisActive) {
                         MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
                             .toolbar {
                                 Button("Add") {
-                                    
-                                }
                             }
+                        }
                     }
                 }
             } else {

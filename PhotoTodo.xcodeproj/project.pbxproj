@@ -24,6 +24,7 @@
 		1A2778FA2C5741CF00A02C7E /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F92C5741CF00A02C7E /* TodoListView.swift */; };
 		1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778FB2C57719B00A02C7E /* DashBoardView.swift */; };
 		3C7064882C5A2B9700C2770E /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7064872C5A2B9700C2770E /* FolderCarouselView.swift */; };
+		3C70648B2C5A4EA200C2770E /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 3C70648A2C5A4EA200C2770E /* SkeletonUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C70648B2C5A4EA200C2770E /* SkeletonUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,19 +99,19 @@
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoListView.swift */,
 				1A0D96882C5A156800784CBA /* TodoView.swift */,
+				1A0D96862C5A152A00784CBA /* MakeTodoView.swift */,
 				1A2778DF2C56395900A02C7E /* ContentView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
+				3C7064872C5A2B9700C2770E /* FolderCarouselView.swift */,
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
 				1A0D96742C59287600784CBA /* TodoItemView.swift */,
 				1A0D96842C5A150D00784CBA /* CameraPreview.swift */,
-				1A0D96862C5A152A00784CBA /* MakeTodoView.swift */,
 				1A0D96762C59C8C100784CBA /* Item.swift */,
 				1A0D96812C5A14CC00784CBA /* ViewModel */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
 				1A2778E52C56395A00A02C7E /* Preview Content */,
-				3C7064872C5A2B9700C2770E /* FolderCarouselView.swift */,
 			);
 			path = PhotoTodo;
 			sourceTree = "<group>";
@@ -138,6 +140,9 @@
 			dependencies = (
 			);
 			name = PhotoTodo;
+			packageProductDependencies = (
+				3C70648A2C5A4EA200C2770E /* SkeletonUI */,
+			);
 			productName = "2024-MC3-A05-PhotoTodo";
 			productReference = 1A2778DA2C56395900A02C7E /* PhotoTodo.app */;
 			productType = "com.apple.product-type.application";
@@ -166,6 +171,9 @@
 				Base,
 			);
 			mainGroup = 1A2778D12C56395900A02C7E;
+			packageReferences = (
+				3C7064892C5A4EA200C2770E /* XCRemoteSwiftPackageReference "SkeletonUI" */,
+			);
 			productRefGroup = 1A2778DB2C56395900A02C7E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -416,6 +424,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3C7064892C5A4EA200C2770E /* XCRemoteSwiftPackageReference "SkeletonUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CSolanaM/SkeletonUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3C70648A2C5A4EA200C2770E /* SkeletonUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C7064892C5A4EA200C2770E /* XCRemoteSwiftPackageReference "SkeletonUI" */;
+			productName = SkeletonUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1A2778D22C56395900A02C7E /* Project object */;
 }
