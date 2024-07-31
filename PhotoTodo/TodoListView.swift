@@ -26,17 +26,7 @@ struct TodoListView: View {
                     NavigationLink{
                         EmptyView()
                     } label: {
-                        ZStack{
-                            Image("FilledCoffee")
-                                .resizable()
-                                .frame(width: 180, height: 200)
-                                .scaledToFit()
-                            Image(systemName: "circle")
-                                .padding(4)
-                                .background(Color.black)
-                                .foregroundColor(.white)
-                                .offset(x: -10, y: 15)
-                        }
+                        TodoItemView(todo: todo)
                     }
                 }
                 //TODO: delete 제대로 작동하게 만들기
