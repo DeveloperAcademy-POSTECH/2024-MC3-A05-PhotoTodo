@@ -55,7 +55,8 @@ struct TodoListView: View {
                 }
                 ToolbarItem {
                     editMode == .active ?
-                    Button(action: addTodos) {
+                    //MARK: 다중선택된 아이템 삭제
+                    Button(action: deleteSelectedTodos) {
                         Label("Delete Item", systemImage: "trash")
                     } :
                     Button(action: addTodos) {
@@ -84,13 +85,13 @@ struct TodoListView: View {
         }
     }
     
-    private func deleteTodos(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(folder.todos[index])
-            }
-            //            folder.todos.remove(atOffsets: offsets)
+    private func deleteTodos(at offsets: IndexSet) {
+            folder.todos.remove(atOffsets: offsets)
         }
+    
+    private func deleteSelectedTodos() {
+        folder.todos.removeAll { selectedTodos.contains($0.id) }
+        selectedTodos.removeAll() // Clear selected items after deletion
     }
 }
 
