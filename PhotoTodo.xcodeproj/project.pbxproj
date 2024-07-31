@@ -20,6 +20,7 @@
 		1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778FB2C57719B00A02C7E /* DashBoardView.swift */; };
 		3C6D9CB22C58B81E0065DA91 /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6D9CB12C58B81E0065DA91 /* CameraViewModel.swift */; };
 		3C6D9CB42C58BAB70065DA91 /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6D9CB32C58BAB70065DA91 /* CameraPreview.swift */; };
+		3C6D9CB62C5940E20065DA91 /* MakeTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6D9CB52C5940E20065DA91 /* MakeTodoView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		1A2778FB2C57719B00A02C7E /* DashBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardView.swift; sourceTree = "<group>"; };
 		3C6D9CB12C58B81E0065DA91 /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		3C6D9CB32C58BAB70065DA91 /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
+		3C6D9CB52C5940E20065DA91 /* MakeTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTodoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				1A2778DF2C56395900A02C7E /* ContentView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
 				3C6D9CB32C58BAB70065DA91 /* CameraPreview.swift */,
+				3C6D9CB52C5940E20065DA91 /* MakeTodoView.swift */,
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
 				1A2778E12C56395900A02C7E /* Item.swift */,
@@ -188,6 +191,7 @@
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
 				3C6D9CB42C58BAB70065DA91 /* CameraPreview.swift in Sources */,
 				1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */,
+				3C6D9CB62C5940E20065DA91 /* MakeTodoView.swift in Sources */,
 				1A2778E22C56395900A02C7E /* Item.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,
