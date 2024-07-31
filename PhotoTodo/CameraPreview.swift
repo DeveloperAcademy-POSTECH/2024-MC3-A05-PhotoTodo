@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CameraPreview: UIViewRepresentable {
     
-    @Binding var cameraVM: CameraViewModel
+    @ObservedObject var cameraVM: CameraViewModel
     let frame: CGRect
     
     func makeUIView(context: Context) -> UIView {

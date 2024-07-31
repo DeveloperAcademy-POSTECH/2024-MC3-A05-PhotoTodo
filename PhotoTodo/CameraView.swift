@@ -24,77 +24,111 @@ enum FolderColor {
 
 struct CameraView: View {
     
-    @State private var cameraVM: CameraViewModel = CameraViewModel()
+    @StateObject private var cameraVM: CameraViewModel = CameraViewModel()
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var photoData: [Data] = []
     @State private var chosenFolder: String = "기본"
     let cameraWidth: CGFloat = 120
     let cameraHeight: CGFloat = 90
+    @State private var folderScrollPaddingSize = UIScreen.main.bounds.size.width / 2 - 40
     
-    var folderList : [String] = ["기본", "공지사항", "강의", "해커톤"]
+    var folderList : [(String,Color)] = [("기본",Color.red), ("공지사항",Color.blue),( "강의",Color.green), ("해커톤",Color.yellow)]
+    
+    enum SwipeHVDirection: String {
+        case left, right, up, down, none
+    }
+
+    func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
+    if value.startLocation.x < value.location.x - 24 {
+                return .left
+              }
+              if value.startLocation.x > value.location.x + 24 {
+                return .right
+              }
+              if value.startLocation.y < value.location.y - 24 {
+                return .down
+              }
+              if value.startLocation.y > value.location.y + 24 {
+                return .up
+              }
+      return .none
+      }
     
     var body: some View {
-        NavigationStack {
-            VStack{
+        
+        VStack(alignment: .center){
                 cameraPreview
-                
-                if cameraCaptureState == .single {
+                    .frame(width: 350, height: 500)
+                    .clipShape(RoundedRectangle(cornerRadius: 25))
+                    .border(Color.black)
+                    .padding(.top, -50)
+            
+            if cameraCaptureState == .single {
+                ScrollViewReader { value in
                     ScrollView(.horizontal) {
                         HStack{
-                            ForEach(folderList, id: \.self) { name in
-                                Text("\(name)")
-                                    .background(Color.yellow)
+                            ForEach(0..<folderList.count, id: \.self) { index in
+                                Button(action: {
+                                    value.scrollTo(index+1)
+                                    folderScrollPaddingSize -= 60
+                                }, label: {
+                                    ZStack{
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .frame(width: 80, height: 30)
+                                            .foregroundStyle(folderList[index].1)
+                                        
+                                        Text("\(folderList[index].0)")
+                                            .foregroundStyle(Color.white)
+                                            .bold()
+                                    }
+                                })
+                                .id(index)
                             }
                         }
+                        .gesture(
+                            DragGesture()
+                                    .onEnded { value in
+                                    print("value ",value.translation.width)
+                                      let direction = self.detectDirection(value: value)
+                                      if direction == .left {
+                                        print("왼쪽 드레그됨")
+                                      }
+                                    }
+                        )
                     }
+                }
+                .padding(.leading, folderScrollPaddingSize)
+                .padding(.top, 20)
+                .padding(.bottom, 20)
+                
+                VStack {
                     Button {
                         cameraVM.takePhoto()
-                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-                            photoData = cameraVM.photoData
-                            print("여기서 제대로 찍여햐 함 \(photoData)")
-                            cameraCaptureisActive.toggle()
-                        }
+                        cameraCaptureisActive.toggle()
                     } label: {
-                        Circle().frame(width: 50, height: 50)
+                        Circle().frame(width: 80, height: 80)
                             .foregroundStyle(Color.black)
                     }
                     .navigationDestination(isPresented: $cameraCaptureisActive) {
-                        MakeTodoView(cameraVM: $cameraVM, chosenFolder: $chosenFolder)
+                        MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
                             .toolbar {
-                                                Button("Add") {
-                                                    
-                                                }
-
-                                            }
-//                        MakeTodoView()
+                                Button("Add") {
+                                    
+                                }
+                            }
                     }
-                    // MARK: NavigationDestination으로 하면 뒤로가기 시 root로 돌아가는 문제
-                    //                    NavigationLink {
-                    //                        MakeTodoView(cameraVM: $cameraVM)
-                    //                    } label: {
-                    //                        Text("넘어가보자")
-                    //                    }
-                    //
-                    //
-                    //                    Button {
-                    //                        cameraVM.takePhoto()
-                    //                        cameraCaptureisActive = true
-                    //                    } label: {
-                    //                        Circle().frame(width: 50, height: 50)
-                    //                            .foregroundStyle(Color.black)
-                    //                    }
-                    
-                } else {
-                    
                 }
+            } else {
+                
             }
         }
+        
     }
     
     private var cameraPreview: some View {
         GeometryReader { geo in
-            CameraPreview(cameraVM: $cameraVM, frame: CGRect(x: 0, y: 0, width: 500, height: 500))
+            CameraPreview(cameraVM: cameraVM, frame: CGRect(x: 0, y: 0, width: 350, height: 500))
                 .onAppear(){
                     print("열였을 때")
                     cameraVM.requestAccessAndSetup()

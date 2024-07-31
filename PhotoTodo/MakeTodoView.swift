@@ -10,14 +10,14 @@ import UIKit
 
 struct MakeTodoView: View {
     
-    @Binding var cameraVM: CameraViewModel
+    @ObservedObject var cameraVM: CameraViewModel
     @Binding var chosenFolder: String
     @State private var wakeUp = Date()
 //    @ObservedObject private var cameraVM: CameraViewModel = CameraViewModel()
 //    @State var data = CameraViewModel().photoData
     
     var body: some View {
-        NavigationStack {
+        
             VStack{
                 HStack{
                     Image(systemName: "folder")
@@ -67,14 +67,14 @@ struct MakeTodoView: View {
                 })
                 
             }
-        }
+        
     }
 }
 
-#Preview {
-    @State var cameraVM = CameraViewModel()
-    @State var chosenFolder = "기본"
-    return MakeTodoView(cameraVM: $cameraVM, chosenFolder: $chosenFolder)
-    
-//    MakeTodoView()
-}
+//#Preview {
+//    @State var cameraVM = CameraViewModel()
+//    @State var chosenFolder = "기본"
+//    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+//    
+////    MakeTodoView()
+//}
