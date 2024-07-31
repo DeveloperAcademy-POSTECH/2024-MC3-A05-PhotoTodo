@@ -21,7 +21,6 @@ enum FolderColor {
     case orange
 }
 
-
 struct CameraView: View {
     
     @StateObject private var cameraVM: CameraViewModel = CameraViewModel()
@@ -62,45 +61,48 @@ struct CameraView: View {
                     .frame(width: 350, height: 500)
                     .clipShape(RoundedRectangle(cornerRadius: 25))
                     .border(Color.black)
-                    .padding(.top, -50)
             
             if cameraCaptureState == .single {
-                ScrollViewReader { value in
-                    ScrollView(.horizontal) {
-                        HStack{
-                            ForEach(0..<folderList.count, id: \.self) { index in
-                                Button(action: {
-                                    value.scrollTo(index+1)
-                                    folderScrollPaddingSize -= 60
-                                }, label: {
-                                    ZStack{
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .frame(width: 80, height: 30)
-                                            .foregroundStyle(folderList[index].1)
-                                        
-                                        Text("\(folderList[index].0)")
-                                            .foregroundStyle(Color.white)
-                                            .bold()
-                                    }
-                                })
-                                .id(index)
-                            }
-                        }
-                        .gesture(
-                            DragGesture()
-                                    .onEnded { value in
-                                    print("value ",value.translation.width)
-                                      let direction = self.detectDirection(value: value)
-                                      if direction == .left {
-                                        print("왼쪽 드레그됨")
-                                      }
-                                    }
-                        )
-                    }
-                }
-                .padding(.leading, folderScrollPaddingSize)
-                .padding(.top, 20)
-                .padding(.bottom, 20)
+                
+                FolderCarouselView()
+                    .frame(height: 80)
+                
+//                ScrollViewReader { value in
+//                    ScrollView(.horizontal) {
+//                        HStack{
+//                            ForEach(0..<folderList.count, id: \.self) { index in
+//                                Button(action: {
+//                                    value.scrollTo(index+1)
+//                                    folderScrollPaddingSize -= 60
+//                                }, label: {
+//                                    ZStack{
+//                                        RoundedRectangle(cornerRadius: 5)
+//                                            .frame(width: 80, height: 30)
+//                                            .foregroundStyle(folderList[index].1)
+//                                        
+//                                        Text("\(folderList[index].0)")
+//                                            .foregroundStyle(Color.white)
+//                                            .bold()
+//                                    }
+//                                })
+//                                .id(index)
+//                            }
+//                        }
+//                        .gesture(
+//                            DragGesture()
+//                                    .onEnded { value in
+//                                    print("value ",value.translation.width)
+//                                      let direction = self.detectDirection(value: value)
+//                                      if direction == .left {
+//                                        print("왼쪽 드레그됨")
+//                                      }
+//                                    }
+//                        )
+//                    }
+//                }
+//                .padding(.leading, folderScrollPaddingSize)
+//                .padding(.top, 20)
+//                .padding(.bottom, 20)
                 
                 VStack {
                     Button {
@@ -147,3 +149,6 @@ struct CameraView: View {
     //    return CameraView(path: $path)
     CameraView()
 }
+
+
+//https://prod.velog.io/@realhsb/iOS17-SwiftUI-Carousel

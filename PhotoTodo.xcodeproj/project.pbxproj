@@ -23,6 +23,7 @@
 		1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F72C5741BD00A02C7E /* MainView.swift */; };
 		1A2778FA2C5741CF00A02C7E /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F92C5741CF00A02C7E /* TodoListView.swift */; };
 		1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778FB2C57719B00A02C7E /* DashBoardView.swift */; };
+		3C7064882C5A2B9700C2770E /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7064872C5A2B9700C2770E /* FolderCarouselView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		1A2778F72C5741BD00A02C7E /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		1A2778F92C5741CF00A02C7E /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
 		1A2778FB2C57719B00A02C7E /* DashBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardView.swift; sourceTree = "<group>"; };
+		3C7064872C5A2B9700C2770E /* FolderCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCarouselView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
 				1A2778E52C56395A00A02C7E /* Preview Content */,
+				3C7064872C5A2B9700C2770E /* FolderCarouselView.swift */,
 			);
 			path = PhotoTodo;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
+				3C7064882C5A2B9700C2770E /* FolderCarouselView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
 				1A2778FA2C5741CF00A02C7E /* TodoListView.swift in Sources */,
@@ -337,7 +341,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -368,7 +372,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
