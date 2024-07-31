@@ -7,11 +7,30 @@
 
 import SwiftUI
 
+enum SortOption {
+    case byDate
+    case byName
+    case byStatus
+}
+
 struct TodoListView: View {
     @Environment(\.modelContext) private var modelContext
     @State var folder: Folder
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
+    @State private var sortOption: SortOption = .byDate
+    
+    var sortedTodos: [Todo] {
+        switch sortOption {
+        case .byDate:
+            return folder.todos.sorted { $0.createdAt < $1.createdAt }
+        case .byName:
+            return folder.todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
+        case .byStatus:
+            return folder.todos.sorted { $0.isDone && !$1.isDone }
+        }
+    }
+    //TODO: folder.todos를 여러 옵션으로 정렬하기
     
     let columns = [
         GridItem(.flexible()),
@@ -24,7 +43,7 @@ struct TodoListView: View {
                 //TODO: 각 Todo에 대한 DetailView Link 연결시키기
                 //TODO: 이미지 비율 맞추기
                 
-                ForEach(folder.todos) { todo in
+                ForEach(sortedTodos) { todo in
                     TodoItemView(editMode: $editMode, todo: todo)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
@@ -86,12 +105,14 @@ struct TodoListView: View {
     }
     
     private func deleteTodos(at offsets: IndexSet) {
-            folder.todos.remove(atOffsets: offsets)
-        }
+        folder.todos.remove(atOffsets: offsets)
+    }
     
     private func deleteSelectedTodos() {
-        folder.todos.removeAll { selectedTodos.contains($0.id) }
-        selectedTodos.removeAll() // Clear selected items after deletion
+        withAnimation {
+            folder.todos.removeAll { selectedTodos.contains($0.id) }
+            selectedTodos.removeAll() // Clear selected items after deletion
+        }
     }
 }
 
