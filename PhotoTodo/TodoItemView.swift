@@ -8,11 +8,49 @@
 import SwiftUI
 
 struct TodoItemView: View {
+    var todo: Todo
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack{
+            Image("FilledCoffee")
+                .resizable()
+                .frame(width: 180, height: 200)
+                .scaledToFit()
+            //TODO: overlay하고 alignment로 top 주기
+                .overlay(alignment: .topLeading) {
+                    Button{
+                        todo.isDone.toggle()
+                    } label : {
+                        todo.isDone ?
+                        Image(systemName: "circle.fill")
+                            .padding(4)
+                            .background(Color.black)
+                            .foregroundColor(.white)
+                        :
+                        Image(systemName: "circle")
+                            .padding(4)
+                            .background(Color.black)
+                            .foregroundColor(.white)
+                    }
+                }
+
+        }
     }
 }
 
 #Preview {
-    TodoItemView()
+    var newTodo = Todo(
+        id: UUID(),
+        image: UIImage(systemName: "star")?.pngData() ?? Data(),
+        createdAt: Date(),
+        options: Options(
+            alarm: nil,
+            memo: nil
+        ),
+        isDone: false
+    )
+    
+    return TodoItemView(todo: newTodo)
 }
+
+
