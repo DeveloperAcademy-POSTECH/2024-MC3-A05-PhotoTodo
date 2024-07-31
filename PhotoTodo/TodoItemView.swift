@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TodoItemView: View {
+    @Binding var editMode: EditMode
     var todo: Todo
     
     var body: some View {
@@ -32,6 +33,7 @@ struct TodoItemView: View {
                             .background(Color.black)
                             .foregroundColor(.white)
                     }
+                    .disabled(editMode == .active)
                 }
 
         }
@@ -50,7 +52,8 @@ struct TodoItemView: View {
         isDone: false
     )
     
-    return TodoItemView(todo: newTodo)
+    @State var editMode: EditMode = .inactive
+    return TodoItemView(editMode: $editMode, todo: newTodo)
 }
 
 

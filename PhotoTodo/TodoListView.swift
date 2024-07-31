@@ -25,7 +25,7 @@ struct TodoListView: View {
                 //TODO: 이미지 비율 맞추기
                 
                 ForEach(folder.todos) { todo in
-                    TodoItemView(todo: todo)
+                    TodoItemView(editMode: $editMode, todo: todo)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
@@ -54,6 +54,10 @@ struct TodoListView: View {
                         }
                 }
                 ToolbarItem {
+                    editMode == .active ?
+                    Button(action: addTodos) {
+                        Label("Delete Item", systemImage: "trash")
+                    } :
                     Button(action: addTodos) {
                         Label("Add Item", systemImage: "plus")
                     }
