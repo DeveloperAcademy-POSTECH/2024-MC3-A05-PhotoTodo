@@ -46,17 +46,25 @@ struct MakeTodoView: View {
                                 .frame(width: 12, height: 12)
                                 .foregroundStyle(Color.yellow)
                             
-                            Menu {
-                                Button("기본폴더", action: {})
-                                Button("공지사항", action: {})
-                                Button("아카데미", action: {})
-                                Button("Add", action: {})
-                            } label: {
-                                Text("아카데미")
-                                Image(systemName: "chevron.up.chevron.down")
-                                    .resizable()
-                                    .frame(width: 10, height: 15)
-                            }
+//                            Menu {
+//                                Button(action: {
+//                                    
+//                                }) {
+//                                    Label("관리함", systemImage: "circle")
+//                                        .foregroundColor(.blue)
+//                                        
+//                                }
+//                                .foregroundStyle(Color.yellow)
+//                                Button("공지사항", action: {})
+//                                Button("아카데미", action: {})
+//                                Button("Add", action: {})
+//                            } label: {
+//                                Text("아카데미")
+//                                Image(systemName: "chevron.up.chevron.down")
+//                                    .resizable()
+//                                    .frame(width: 10, height: 15)
+//                            }
+                            
                             
                         }
                     }

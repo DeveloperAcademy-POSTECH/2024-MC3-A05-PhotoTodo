@@ -21,6 +21,8 @@ enum FolderColor {
     case orange
 }
 
+
+
 struct CameraView: View {
     
     @StateObject private var cameraVM: CameraViewModel = CameraViewModel()
@@ -39,41 +41,100 @@ struct CameraView: View {
         
         
         VStack(alignment: .center){
-                cameraPreview
-                    .frame(width: 350, height: 500)
-                    .clipShape(RoundedRectangle(cornerRadius: 25))
+            cameraPreview
+                .frame(width: 350, height: 500)
+                .clipShape(RoundedRectangle(cornerRadius: 25))
+            
+            FolderCarouselView()
+                .frame(height: 80)
+                .padding(.top)
             
             if cameraCaptureState == .single {
-                FolderCarouselView()
-                    .frame(height: 80)
-                    .padding(.top)
-                
-                VStack {
-                    Button {
-                        cameraVM.takePhoto()
-                        cameraCaptureisActive.toggle()
-                    } label: {
-                        ZStack{
-                            Circle().frame(width: 80, height: 80)
-                                .foregroundStyle(Color.green)
-                            Circle().frame(width: 60, height: 60)
-                                .foregroundStyle(Color.green)
-                                .overlay(
-                                                    Circle()
-                                                        .stroke(Color.white, lineWidth: 4) // 테두리 색상과 두께
-                                                )
-                        }
-                    }
-                    .navigationDestination(isPresented: $cameraCaptureisActive) {
-                        MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
-                            .toolbar {
-                                Button("Add") {
+                HStack(alignment: .center) {
+                    ZStack{
+                        VStack {
+                            Button {
+                                cameraVM.takePhoto()
+                                cameraCaptureisActive.toggle()
+                            } label: {
+                                ZStack{
+                                    Circle().frame(width: 80, height: 80)
+                                        .foregroundStyle(Color.green)
+                                    Circle().frame(width: 60, height: 60)
+                                        .foregroundStyle(Color.green)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white, lineWidth: 4) // 테두리 색상과 두께
+                                        )
+                                }
                             }
+                            .navigationDestination(isPresented: $cameraCaptureisActive) {
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                    .toolbar {
+                                        Button("Add") {
+                                        }
+                                    }
+                            }
+                        }
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                cameraCaptureState = .plural
+                            }, label: {
+                                VStack{
+                                    Image(systemName: "square.stack.3d.down.right")
+                                        .resizable()
+                                        .frame(width: 48, height: 52)
+                                    Text("다중촬영")
+                                }
+                            })
+                            .padding(.trailing, 35)
                         }
                     }
                 }
             } else {
-                
+                HStack(alignment: .center) {
+                    ZStack{
+                        VStack {
+                            Button {
+                                cameraVM.takePhoto()
+                                cameraCaptureisActive.toggle()
+                            } label: {
+                                ZStack{
+                                    Circle().frame(width: 80, height: 80)
+                                        .foregroundStyle(Color.green)
+                                    Circle().frame(width: 60, height: 60)
+                                        .foregroundStyle(Color.green)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white, lineWidth: 4) // 테두리 색상과 두께
+                                        )
+                                }
+                            }
+                            .navigationDestination(isPresented: $cameraCaptureisActive) {
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                    .toolbar {
+                                        Button("Add") {
+                                        }
+                                    }
+                            }
+                        }
+                        HStack{
+                            Spacer()
+                            Button(action: {
+                                cameraCaptureState = .plural
+                            }, label: {
+                                VStack{
+                                    Image(systemName: "square.stack.3d.down.right")
+                                        .resizable()
+                                        .frame(width: 45, height: 52)
+                                    Text("다중촬영")
+                                }
+                            })
+                            .padding(.trailing, 35)
+                        }
+                    }
+                }
             }
         }
         
