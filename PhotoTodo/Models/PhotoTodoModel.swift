@@ -17,6 +17,7 @@ class Folder {
 
 @Model
 class Todo {
+    var folder: Folder?
     let id: UUID
     @Attribute(.externalStorage) var image: Data
     var createdAt: Date
@@ -24,7 +25,9 @@ class Todo {
     var isDone: Bool
     var isDoneAt: Date?
 
-    init(id: UUID, image: Data, createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil) {
+
+    init(id: UUID, image: Data, createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date?=nil, folder: Folder?=nil) {
+        self.folder = folder
         self.id = id
         self.image = image
         self.createdAt = createdAt
