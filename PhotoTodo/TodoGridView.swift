@@ -111,8 +111,10 @@ struct TodoGridView: View {
     
     private func deleteSelectedTodos() {
         withAnimation {
-            folder.todos.removeAll { selectedTodos.contains($0.id) }
-            selectedTodos.removeAll() // Clear selected items after deletion
+            DispatchQueue.main.async{
+                folder.todos.removeAll { selectedTodos.contains($0.id) }
+                selectedTodos.removeAll() // Clear selected items after deletion
+            }
         }
     }
 }
