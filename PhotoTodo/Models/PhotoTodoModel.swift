@@ -2,6 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
+// MARK: Folder Model에 color 추가해야 할 것 같아욥 by 룰루
 class Folder {
     let id: UUID
     var name: String
