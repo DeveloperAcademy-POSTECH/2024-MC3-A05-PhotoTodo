@@ -11,7 +11,7 @@ struct MainView: View {
     @State private var showCamera: Bool = false
     @State var path: [String] = []
     var body: some View {
-        
+        Text("")
         // NavigationStack은 root에 하나만 두면 됨 안에서 전부 사용 가능
         NavigationStack {
             Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)

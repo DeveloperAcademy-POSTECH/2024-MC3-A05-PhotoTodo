@@ -97,8 +97,8 @@
 		1A2778DC2C56395900A02C7E /* PhotoTodo */ = {
 			isa = PBXGroup;
 			children = (
-				3C7064902C5C113B00C2770E /* TabBarView.swift */,
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
+				3C7064902C5C113B00C2770E /* TabBarView.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
 				1A0D96882C5A156800784CBA /* TodoView.swift */,

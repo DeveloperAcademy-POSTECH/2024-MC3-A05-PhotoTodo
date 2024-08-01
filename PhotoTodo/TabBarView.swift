@@ -8,54 +8,67 @@
 import SwiftUI
 
 struct TabBarView: View {
-    @State private var selectedTab = 1
+    @State private var selectedTab = 0
+    @State private var isCameraViewActive = false
 
-        var body: some View {
+    var body: some View {
+        NavigationStack {
             ZStack {
                 TabView(selection: $selectedTab) {
-                    TodoView()
+                    ContentView()
                         .tabItem {
-                            Image(systemName: "list.bullet")
-                            Text("전체사진")
+                            VStack {
+                                Image(systemName: "list.bullet")
+                                Text("전체사진")
+                            }
                         }
                         .tag(0)
 
-
-                    FolderListView()
+                    TodoView()
                         .tabItem {
-                            Image(systemName: "folder.fill")
-                            Text("폴더")
+                            VStack {
+                                Image(systemName: "folder.fill")
+                                Text("폴더")
+                            }
                         }
                         .tag(1)
                 }
 
                 VStack {
                     Spacer()
-
                     HStack {
                         Spacer()
 
-                        Button(action: {
+                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
                             
-                        }) {
-                            Image(systemName: "camera.fill")
-                                .font(.largeTitle)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.green)
-                                .clipShape(Circle())
-                                .shadow(radius: 5)
                         }
 
+                        Button(action: {
+                            isCameraViewActive = true
+                        }) {
+                            ZStack {
+                                Circle()
+                                    .foregroundColor(.white)
+                                    .frame(width: 70, height: 70)
+                                    .shadow(radius: 10)
+                                
+                                Circle()
+                                    .foregroundColor(.green)
+                                    .frame(width: 60, height: 60)
+                                
+                                Image(systemName: "camera.fill")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        
                         Spacer()
                     }
                     .padding(.horizontal, 50)
-
-//                    CustomTabBar(selectedTab: $selectedTab)
                 }
             }
         }
-}
+    }}
 
 //struct CustomTabBar: View {
 //    @Binding var selectedTab: Int
