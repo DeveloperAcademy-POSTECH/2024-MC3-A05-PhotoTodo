@@ -25,6 +25,7 @@
 		1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778FB2C57719B00A02C7E /* DashBoardView.swift */; };
 		1A2E5C822C5B557200BAFD13 /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1A2E5C812C5B557200BAFD13 /* SkeletonUI */; };
 		1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */; };
+		3C7064912C5C113B00C2770E /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7064902C5C113B00C2770E /* TabBarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		1A2778F92C5741CF00A02C7E /* TodoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoGridView.swift; sourceTree = "<group>"; };
 		1A2778FB2C57719B00A02C7E /* DashBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardView.swift; sourceTree = "<group>"; };
 		1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCarouselView.swift; sourceTree = "<group>"; };
+		3C7064902C5C113B00C2770E /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 		1A2778DC2C56395900A02C7E /* PhotoTodo */ = {
 			isa = PBXGroup;
 			children = (
+				3C7064902C5C113B00C2770E /* TabBarView.swift */,
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
@@ -202,6 +205,7 @@
 			files = (
 				1A0D96772C59C8C100784CBA /* Item.swift in Sources */,
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
+				3C7064912C5C113B00C2770E /* TabBarView.swift in Sources */,
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
