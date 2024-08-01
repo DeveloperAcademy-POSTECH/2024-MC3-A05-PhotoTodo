@@ -25,6 +25,7 @@
 		1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778FB2C57719B00A02C7E /* DashBoardView.swift */; };
 		1A2E5C822C5B557200BAFD13 /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1A2E5C812C5B557200BAFD13 /* SkeletonUI */; };
 		1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */; };
+		1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		1A2778F92C5741CF00A02C7E /* TodoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoGridView.swift; sourceTree = "<group>"; };
 		1A2778FB2C57719B00A02C7E /* DashBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardView.swift; sourceTree = "<group>"; };
 		1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCarouselView.swift; sourceTree = "<group>"; };
+		1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCompositeGridView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
+				1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */,
 				1A0D96882C5A156800784CBA /* TodoView.swift */,
 				1A2778DF2C56395900A02C7E /* ContentView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
@@ -200,6 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */,
 				1A0D96772C59C8C100784CBA /* Item.swift in Sources */,
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
