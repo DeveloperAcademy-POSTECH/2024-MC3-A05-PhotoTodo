@@ -14,6 +14,25 @@ struct ListItem: Identifiable {
     let color: Color
 }
 
+func changeStringToColor(colorName: String) -> Color {
+    switch colorName {
+    case "red":
+        return Color.red
+    case "blue":
+        return Color.blue
+    case "green":
+        return Color.green
+    case "yellow":
+        return Color.yellow
+    case "pink":
+        return Color.pink
+    case "cyan":
+        return Color.cyan
+    default:
+        return Color.red
+    }
+}
+
 struct FolderCarouselView: View {
     @Binding var chosenFolder: Folder
     @State private var selectedButtonIndex: Int = 0
@@ -27,26 +46,6 @@ struct FolderCarouselView: View {
         Folder(id: UUID(), name: "공지사항", color: "yellow", todos: []),
         Folder(id: UUID(), name: "쇼핑", color: "pink", todos: []),
         Folder(id: UUID(), name: "룰루랄라", color: "cyan", todos: [])]
-    
-    func changeStringToColor(colorName: String) -> Color {
-        switch colorName {
-        case "red":
-            return Color.red
-        case "blue":
-            return Color.blue
-        case "green":
-            return Color.green
-        case "yellow":
-            return Color.yellow
-        case "pink":
-            return Color.pink
-        case "cyan":
-            return Color.cyan
-        default:
-            return Color.red
-        }
-    }
-    
     
     var body: some View {
         GeometryReader { geometry in

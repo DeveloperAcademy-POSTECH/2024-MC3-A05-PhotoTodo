@@ -12,6 +12,7 @@ import SwiftData
 
 struct MakeTodoView: View {
     
+    @Environment(\.modelContext) private var modelContext
     @ObservedObject var cameraVM: CameraViewModel
     @Binding var chosenFolder: Folder
     
@@ -30,6 +31,7 @@ struct MakeTodoView: View {
         Folder(id: UUID(), name: "쇼핑", color: "pink", todos: []),
         Folder(id: UUID(), name: "룰루랄라", color: "cyan", todos: [])]
     @State private var chosenFolderName: String = "기본폴더"
+    @State private var chosenFolderColor: Color = Color.red
 
     var body: some View {
         
@@ -57,18 +59,16 @@ struct MakeTodoView: View {
                         Group{
                             Circle()
                                 .frame(width: 12, height: 12)
-                                .foregroundStyle(Color.yellow)
+                                .foregroundStyle(chosenFolderColor)
                             
                             Menu {
                                 ForEach(testFolders, id: \.self.id){ folder in
                                     Button(action: {
                                         chosenFolder = folder
                                         chosenFolderName = folder.name
-                                        print(folder.name)
+                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
                                     }) {
                                         Label("\(folder.name)", systemImage: "circle")
-                                            .foregroundColor(.blue)
-                                            
                                     }
                                 }
                             } label: {
@@ -142,6 +142,17 @@ struct MakeTodoView: View {
         .onAppear(perform: {
             print(chosenFolder.name)
             chosenFolderName = chosenFolder.name
+            chosenFolderColor = changeStringToColor(colorName: chosenFolder.color)
+        })
+        .toolbar(content: {
+            Button {
+                //SwiftData 저장 작업
+                let newTodo: Todo = Todo(id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
+                modelContext.insert(newTodo)
+            } label: {
+                Text("Add")
+            }
+
         })
     }
 }

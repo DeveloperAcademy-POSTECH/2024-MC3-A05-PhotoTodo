@@ -22,6 +22,8 @@ enum FolderColor {
     case orange
 }
 
+
+
 struct CameraView: View {
     
     // 카메라 촬영 관련
@@ -65,10 +67,6 @@ struct CameraView: View {
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
                                 MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
-                                    .toolbar {
-                                        Button("Add") {
-                                        }
-                                    }
                             }
                         }
                         HStack{
