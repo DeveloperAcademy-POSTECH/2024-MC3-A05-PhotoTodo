@@ -20,7 +20,13 @@ struct TodoItemView: View {
             //TODO: overlay하고 alignment로 top 주기
                 .overlay(alignment: .topLeading) {
                     Button{
-                        todo.isDone.toggle()
+                        if (todo.isDone) {
+                            todo.isDone.toggle()
+                            todo.isDoneAt = nil
+                        } else {
+                            todo.isDone.toggle()
+                            todo.isDoneAt = Date()
+                        }
                     } label : {
                         todo.isDone ?
                         Image(systemName: "circle.fill")
@@ -35,7 +41,7 @@ struct TodoItemView: View {
                     }
                     .disabled(editMode == .active)
                 }
-
+            
         }
     }
 }
