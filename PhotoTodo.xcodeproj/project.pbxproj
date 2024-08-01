@@ -21,7 +21,7 @@
 		1A2778F42C57415900A02C7E /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F32C57415900A02C7E /* CameraView.swift */; };
 		1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F52C57416800A02C7E /* FolderListView.swift */; };
 		1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F72C5741BD00A02C7E /* MainView.swift */; };
-		1A2778FA2C5741CF00A02C7E /* TodoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F92C5741CF00A02C7E /* TodoListView.swift */; };
+		1A2778FA2C5741CF00A02C7E /* TodoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F92C5741CF00A02C7E /* TodoGridView.swift */; };
 		1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778FB2C57719B00A02C7E /* DashBoardView.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +41,7 @@
 		1A2778F32C57415900A02C7E /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		1A2778F52C57416800A02C7E /* FolderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListView.swift; sourceTree = "<group>"; };
 		1A2778F72C5741BD00A02C7E /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		1A2778F92C5741CF00A02C7E /* TodoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListView.swift; sourceTree = "<group>"; };
+		1A2778F92C5741CF00A02C7E /* TodoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoGridView.swift; sourceTree = "<group>"; };
 		1A2778FB2C57719B00A02C7E /* DashBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,7 +93,7 @@
 			children = (
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
-				1A2778F92C5741CF00A02C7E /* TodoListView.swift */,
+				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
 				1A0D96882C5A156800784CBA /* TodoView.swift */,
 				1A2778DF2C56395900A02C7E /* ContentView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
@@ -195,7 +195,7 @@
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
-				1A2778FA2C5741CF00A02C7E /* TodoListView.swift in Sources */,
+				1A2778FA2C5741CF00A02C7E /* TodoGridView.swift in Sources */,
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
 				1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */,
 				1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */,

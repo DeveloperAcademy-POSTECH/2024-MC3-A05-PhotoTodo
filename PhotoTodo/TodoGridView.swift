@@ -13,7 +13,7 @@ enum SortOption {
     case byStatus
 }
 
-struct TodoListView: View {
+struct TodoGridView: View {
     @Environment(\.modelContext) private var modelContext
     @State var folder: Folder
     @State private var selectedTodos = Set<UUID>()
@@ -67,6 +67,7 @@ struct TodoListView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                         .onChange(of: editMode) { newEditMode in
+                        //MARK: 편집모드 해제시 선택정보 삭제
                             if newEditMode == .inactive {
                                 selectedTodos.removeAll()
                             }
@@ -120,7 +121,7 @@ struct TodoListView: View {
 
 struct TodoListView_Previews: PreviewProvider {
     static var previews: some View {
-        TodoListView(folder: previewFolder)
+        TodoGridView(folder: previewFolder)
     }
     
     static var previewFolder: Folder {
