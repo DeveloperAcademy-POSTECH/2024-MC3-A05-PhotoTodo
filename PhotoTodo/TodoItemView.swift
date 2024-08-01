@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TodoItemView: View {
+    @Binding var editMode: EditMode
     var todo: Todo
     
     var body: some View {
@@ -19,7 +20,13 @@ struct TodoItemView: View {
             //TODO: overlay하고 alignment로 top 주기
                 .overlay(alignment: .topLeading) {
                     Button{
-                        todo.isDone.toggle()
+                        if (todo.isDone) {
+                            todo.isDone.toggle()
+                            todo.isDoneAt = nil
+                        } else {
+                            todo.isDone.toggle()
+                            todo.isDoneAt = Date()
+                        }
                     } label : {
                         todo.isDone ?
                         Image(systemName: "circle.fill")
@@ -32,8 +39,9 @@ struct TodoItemView: View {
                             .background(Color.black)
                             .foregroundColor(.white)
                     }
+                    .disabled(editMode == .active)
                 }
-
+            
         }
     }
 }
@@ -50,7 +58,8 @@ struct TodoItemView: View {
         isDone: false
     )
     
-    return TodoItemView(todo: newTodo)
+    @State var editMode: EditMode = .inactive
+    return TodoItemView(editMode: $editMode, todo: newTodo)
 }
 
 

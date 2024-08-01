@@ -18,7 +18,7 @@ struct FolderListView: View {
                 ForEach(folders) { folder in
                     NavigationLink {
                         //TODO: TodoList View로 이동하기
-                        TodoListView(folder: folder)
+                        TodoGridView(folder: folder)
                     } label: {
                         Text(folder.name)
                     }
