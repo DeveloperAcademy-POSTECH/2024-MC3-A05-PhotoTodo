@@ -22,46 +22,25 @@ enum FolderColor {
     case orange
 }
 
-//struct ListItem: Identifiable {
-//    let id = UUID()
-//    let title: String
-//    let color: Color
-////
-////    static let preview: [ListItem] = [
-////        .init(title: "기본", color: .red),
-////        .init(title: "공지사항", color: .blue),
-////        .init(title: "강의자료", color: .green),
-////        .init(title: "MC3", color: .yellow),
-////        .init(title: "해커톤", color: .gray),
-////        .init(title: "기본", color: .red),
-////        .init(title: "공지사항", color: .blue),
-////        .init(title: "강의자료", color: .green),
-////        .init(title: "MC3", color: .yellow),
-////        .init(title: "해커톤", color: .gray),
-////    ]
-//}
-
 struct CameraView: View {
     
+    // 카메라 촬영 관련
     @StateObject private var cameraVM: CameraViewModel = CameraViewModel()
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var photoData: [Data] = []
-    @State private var chosenFolder: String = "기본"
-    let cameraWidth: CGFloat = 120
-    let cameraHeight: CGFloat = 90
-    @State private var folderScrollPaddingSize = UIScreen.main.bounds.size.width / 2 - 40
+    
+    // 폴더 관련
+    @State private var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     @Query private var folders: [Folder]
     
     var body: some View {
-        
-        
         VStack(alignment: .center){
             cameraPreview
                 .frame(width: 350, height: 500)
                 .clipShape(RoundedRectangle(cornerRadius: 25))
             
-            FolderCarouselView()
+            FolderCarouselView(chosenFolder: $chosenFolder)
                 .frame(height: 80)
                 .padding(.top)
             
@@ -80,7 +59,7 @@ struct CameraView: View {
                                         .foregroundStyle(Color.green)
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.white, lineWidth: 4) // 테두리 색상과 두께
+                                                .stroke(Color.white, lineWidth: 4)
                                         )
                                 }
                             }
@@ -152,7 +131,10 @@ struct CameraView: View {
                     }
                 }
             }
-        }
+        }.onAppear(perform: {
+            // MARK: SwiftData 테스트용, 데이터 연동 시 아래 코드 사용하면 됨
+            // chosenFolder = folders.first!
+        })
         
     }
     
@@ -173,10 +155,5 @@ struct CameraView: View {
 }
 
 #Preview {
-    //    @State var path: [String] = []
-    //    return CameraView(path: $path)
     CameraView()
 }
-
-
-//https://prod.velog.io/@realhsb/iOS17-SwiftUI-Carousel

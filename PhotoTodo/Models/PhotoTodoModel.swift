@@ -26,14 +26,16 @@ class Todo {
     var options: Options
     var isDone: Bool
     var isDoneAt: Date?
+    var folder: Folder?
 
-    init(id: UUID, image: Data, createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil) {
+    init(id: UUID, image: Data, createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil, folder: Folder? = nil) {
         self.id = id
         self.image = image
         self.createdAt = createdAt
         self.options = options
         self.isDone = isDone
-        self.isDoneAt  = isDoneAt
+        self.isDoneAt = isDoneAt
+        self.folder = folder
     }
 }
 

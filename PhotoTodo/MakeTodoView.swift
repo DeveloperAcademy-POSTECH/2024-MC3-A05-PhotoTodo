@@ -8,16 +8,29 @@
 import SwiftUI
 import SkeletonUI
 import UIKit
+import SwiftData
 
 struct MakeTodoView: View {
     
     @ObservedObject var cameraVM: CameraViewModel
-    @Binding var chosenFolder: String
+    @Binding var chosenFolder: Folder
+    
+    // 내부 컨텐츠
     @State private var contentAlarm = Date()
     @State private var folderMenuisActive: Bool = false
     @State private var memoisActive: Bool = false
     @State private var memo: String = ""
-    
+    @Query private var folders: [Folder]
+    //SwiftData 테스트용 데이터
+    @State private var testFolders: [Folder] = [
+        Folder(id: UUID(), name: "기본폴더", color: "red", todos: []),
+        Folder(id: UUID(), name: "아카데미", color: "blue", todos: []),
+        Folder(id: UUID(), name: "해커톤", color: "green", todos: []),
+        Folder(id: UUID(), name: "공지사항", color: "yellow", todos: []),
+        Folder(id: UUID(), name: "쇼핑", color: "pink", todos: []),
+        Folder(id: UUID(), name: "룰루랄라", color: "cyan", todos: [])]
+    @State private var chosenFolderName: String = "기본폴더"
+
     var body: some View {
         
         VStack(alignment: .center){
@@ -46,24 +59,25 @@ struct MakeTodoView: View {
                                 .frame(width: 12, height: 12)
                                 .foregroundStyle(Color.yellow)
                             
-//                            Menu {
-//                                Button(action: {
-//                                    
-//                                }) {
-//                                    Label("관리함", systemImage: "circle")
-//                                        .foregroundColor(.blue)
-//                                        
-//                                }
-//                                .foregroundStyle(Color.yellow)
-//                                Button("공지사항", action: {})
-//                                Button("아카데미", action: {})
-//                                Button("Add", action: {})
-//                            } label: {
-//                                Text("아카데미")
-//                                Image(systemName: "chevron.up.chevron.down")
-//                                    .resizable()
-//                                    .frame(width: 10, height: 15)
-//                            }
+                            Menu {
+                                ForEach(testFolders, id: \.self.id){ folder in
+                                    Button(action: {
+                                        chosenFolder = folder
+                                        chosenFolderName = folder.name
+                                        print(folder.name)
+                                    }) {
+                                        Label("\(folder.name)", systemImage: "circle")
+                                            .foregroundColor(.blue)
+                                            
+                                    }
+                                }
+                            } label: {
+                                Text("\(chosenFolderName)")
+//                                Text(chosenFolder.name)
+                                Image(systemName: "chevron.up.chevron.down")
+                                    .resizable()
+                                    .frame(width: 10, height: 15)
+                            }
                             
                             
                         }
@@ -125,13 +139,16 @@ struct MakeTodoView: View {
             .scrollContentBackground(.hidden)
             .scrollDisabled(true)
         }
-        
+        .onAppear(perform: {
+            print(chosenFolder.name)
+            chosenFolderName = chosenFolder.name
+        })
     }
 }
 
 #Preview {
     @State var cameraVM = CameraViewModel()
-    @State var chosenFolder = "기본"
+    @State var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
     
 }

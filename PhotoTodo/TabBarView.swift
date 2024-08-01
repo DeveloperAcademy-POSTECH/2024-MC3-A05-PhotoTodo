@@ -15,7 +15,8 @@ struct TabBarView: View {
         NavigationStack {
             ZStack {
                 TabView(selection: $selectedTab) {
-                    ContentView()
+                    //MARK: 룰루가 데이터 테스트를 위해서 사용하는 뷰
+                    MainView()
                         .tabItem {
                             VStack {
                                 Image(systemName: "list.bullet")
@@ -23,49 +24,58 @@ struct TabBarView: View {
                             }
                         }
                         .tag(0)
+                    
+                    CameraView()
+                        .tabItem {
+                            VStack {
+                                Image(systemName: "list.bullet")
+                                Text("전체사진")
+                            }
+                        }
+                        .tag(1)
 
-                    TodoView()
+                    ContentView()
                         .tabItem {
                             VStack {
                                 Image(systemName: "folder.fill")
                                 Text("폴더")
                             }
                         }
-                        .tag(1)
+                        .tag(2)
                 }
-
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-
-                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
-                            
-                        }
-
-                        Button(action: {
-                            isCameraViewActive = true
-                        }) {
-                            ZStack {
-                                Circle()
-                                    .foregroundColor(.white)
-                                    .frame(width: 70, height: 70)
-                                    .shadow(radius: 10)
-                                
-                                Circle()
-                                    .foregroundColor(.green)
-                                    .frame(width: 60, height: 60)
-                                
-                                Image(systemName: "camera.fill")
-                                    .font(.largeTitle)
-                                    .foregroundColor(.white)
-                            }
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 50)
-                }
+                
+//                VStack {
+//                    Spacer()
+//                    HStack {
+//                        Spacer()
+//
+//                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
+//                            
+//                        }
+//
+//                        Button(action: {
+//                            isCameraViewActive = true
+//                        }) {
+//                            ZStack {
+//                                Circle()
+//                                    .foregroundColor(.white)
+//                                    .frame(width: 70, height: 70)
+//                                    .shadow(radius: 10)
+//                                
+//                                Circle()
+//                                    .foregroundColor(.green)
+//                                    .frame(width: 60, height: 60)
+//                                
+//                                Image(systemName: "camera.fill")
+//                                    .font(.largeTitle)
+//                                    .foregroundColor(.white)
+//                            }
+//                        }
+//                        
+//                        Spacer()
+//                    }
+//                    .padding(.horizontal, 50)
+//                }
             }
         }
     }}

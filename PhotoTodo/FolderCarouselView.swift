@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ListItem: Identifiable {
     let id = UUID()
@@ -13,13 +14,38 @@ struct ListItem: Identifiable {
     let color: Color
 }
 
-import SwiftUI
-import SwiftData
-
 struct FolderCarouselView: View {
+    @Binding var chosenFolder: Folder
     @State private var selectedButtonIndex: Int = 0
-    @Query private var folders: [Folder]
     @State private var listItems: [ListItem] = []
+    @Query private var folders: [Folder]
+    // Query 테스트용
+    @State private var testFolders: [Folder] = [
+        Folder(id: UUID(), name: "기본폴더", color: "red", todos: []),
+        Folder(id: UUID(), name: "아카데미", color: "blue", todos: []),
+        Folder(id: UUID(), name: "해커톤", color: "green", todos: []),
+        Folder(id: UUID(), name: "공지사항", color: "yellow", todos: []),
+        Folder(id: UUID(), name: "쇼핑", color: "pink", todos: []),
+        Folder(id: UUID(), name: "룰루랄라", color: "cyan", todos: [])]
+    
+    func changeStringToColor(colorName: String) -> Color {
+        switch colorName {
+        case "red":
+            return Color.red
+        case "blue":
+            return Color.blue
+        case "green":
+            return Color.green
+        case "yellow":
+            return Color.yellow
+        case "pink":
+            return Color.pink
+        case "cyan":
+            return Color.cyan
+        default:
+            return Color.red
+        }
+    }
     
     
     var body: some View {
@@ -27,23 +53,24 @@ struct FolderCarouselView: View {
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(Array(listItems.enumerated()), id: \.element.id) { index, item in
+                        ForEach(Array(testFolders.enumerated()), id: \.element.id) { index, folder in
                             Button(action: {
                                 withAnimation {
                                     selectedButtonIndex = index
                                     // Scroll to the selected button and center it
                                     proxy.scrollTo(index, anchor: .center)
                                 }
+                                chosenFolder = folder
                             }) {
                                 RoundedRectangle(cornerRadius: 5)
-                                                .fill(selectedButtonIndex == index ? item.color.opacity(0.2) : Color.white)
+                                    .fill(selectedButtonIndex == index ? changeStringToColor(colorName: folder.color).opacity(0.2) : Color.white)
                                                 .frame(width: 82, height: 34)
                                                 .overlay(
                                                     ZStack{
                                                         RoundedRectangle(cornerRadius: 5)
-                                                            .stroke(item.color, lineWidth: 4)
-                                                        Text(item.title)
-                                                            .foregroundColor(item.color)
+                                                            .stroke(changeStringToColor(colorName: folder.color), lineWidth: 4)
+                                                        Text(folder.name)
+                                                            .foregroundColor(changeStringToColor(colorName: folder.color))
                                                             .bold()
                                                     }
                                                 )
@@ -85,62 +112,7 @@ struct FolderCarouselView: View {
     }
 }
 
-
-//struct FolderCarouselView: View {
-//    
-//    @State private var selectedFolder: ListItem = ListItem.preview.first!
-//    
-//    var body: some View {
-//        GeometryReader { proxy in
-//            ScrollView(.horizontal) {
-//                HStack {
-//                    RoundedRectangle(cornerRadius: 5)
-//                        .frame(width: UIScreen.main.bounds.size.width / 2 - 55, height: 30)
-//                        .foregroundColor(Color.white)
-//                    
-//                    ForEach(ListItem.preview) { item in
-//                        Button(action: {
-//                            selectedFolder = item
-//                            print("\(selectedFolder)")
-//                        }, label: {
-//                            RoundedRectangle(cornerRadius: 5)
-//                                .frame(width: 82, height: 34)
-//                                .foregroundColor(item.id == selectedFolder.id ? item.color.opacity(0.2) : Color.white)
-//                                .overlay {
-//                                    Text(item.title)
-//                                        .foregroundColor(item.color)
-//                                        .bold()
-//                                }
-//                        })
-//                    }
-//                    Button(action: {
-//                        
-//                    }, label: {
-//                        RoundedRectangle(cornerRadius: 5)
-//                            .frame(width: 82, height: 34)
-//                            .foregroundColor(Color.white)
-//                            .overlay {
-//                                HStack{
-//                                    Image(systemName: "plus")
-//                                        .resizable()
-//                                        .frame(width: 15, height: 15)
-//                                        .foregroundStyle(Color.gray)
-//                                    Text("추가하기")
-//                                        .foregroundColor(Color.gray)
-//                                        .bold()
-//                                }
-//                            }
-//                    })
-//                    .padding(.leading, 5)
-//                }
-//                .padding(.horizontal, 5)
-//                
-//            }
-//            .scrollIndicators(.hidden)
-//        }
-//    }
-//}
-
 #Preview {
-    FolderCarouselView()
+    @State var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    return FolderCarouselView(chosenFolder: $chosenFolder)
 }
