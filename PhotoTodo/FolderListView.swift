@@ -25,6 +25,12 @@ struct FolderListView: View {
                     }
                 }
                 .onDelete(perform: deleteItems)
+                //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
+                NavigationLink {
+                    TodoCompositeGridView(folders: folders)
+                } label : {
+                    Text("완료함")
+                }
             }
             .navigationBarTitle("폴더")
             .toolbar {
@@ -51,12 +57,6 @@ struct FolderListView: View {
                 todos: []
             )
             modelContext.insert(defaultFolder)
-            let DoneBox = Folder(
-                id: UUID(),
-                name: "완료함",
-                todos: []
-            )
-            modelContext.insert(DoneBox)
             hasBeenLaunched = true
         }
     }
@@ -67,18 +67,7 @@ struct FolderListView: View {
             let newFolder = Folder(
                 id: UUID(),
                 name: "새 폴더",
-                todos: [
-                    Todo(
-                        id: UUID(),
-                        image: UIImage(contentsOfFile: "filledCoffee")?.pngData() ?? Data(),
-                        createdAt: Date(),
-                        options: Options(
-                            alarm : nil,
-                            memo : nil
-                        ),
-                        isDone : false
-                    )
-                ]
+                todos: []
             )
             modelContext.insert(newFolder)
         }
