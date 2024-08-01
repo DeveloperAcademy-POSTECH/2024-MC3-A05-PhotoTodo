@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVFoundation
+import SwiftData
 
 enum CameraCaptureState {
     case single
@@ -21,7 +22,24 @@ enum FolderColor {
     case orange
 }
 
-
+//struct ListItem: Identifiable {
+//    let id = UUID()
+//    let title: String
+//    let color: Color
+////
+////    static let preview: [ListItem] = [
+////        .init(title: "기본", color: .red),
+////        .init(title: "공지사항", color: .blue),
+////        .init(title: "강의자료", color: .green),
+////        .init(title: "MC3", color: .yellow),
+////        .init(title: "해커톤", color: .gray),
+////        .init(title: "기본", color: .red),
+////        .init(title: "공지사항", color: .blue),
+////        .init(title: "강의자료", color: .green),
+////        .init(title: "MC3", color: .yellow),
+////        .init(title: "해커톤", color: .gray),
+////    ]
+//}
 
 struct CameraView: View {
     
@@ -33,9 +51,7 @@ struct CameraView: View {
     let cameraWidth: CGFloat = 120
     let cameraHeight: CGFloat = 90
     @State private var folderScrollPaddingSize = UIScreen.main.bounds.size.width / 2 - 40
-    
-    var folderList : [(String,Color)] = [("기본",Color.red), ("공지사항",Color.blue),( "강의",Color.green), ("해커톤",Color.yellow)]
-    var colors: [Color] = [.red, .green, .blue, .yellow, .pink, .black, .cyan]
+    @Query private var folders: [Folder]
     
     var body: some View {
         

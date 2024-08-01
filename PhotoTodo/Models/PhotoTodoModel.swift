@@ -1,15 +1,18 @@
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Model
 // MARK: Folder Model에 color 추가해야 할 것 같아욥 by 룰루
 class Folder {
     let id: UUID
     var name: String
+    var color: String
     @Relationship(deleteRule:.cascade) var todos: [Todo]
-    init(id: UUID, name: String, todos: [Todo]) {
+    init(id: UUID, name: String, color: String, todos: [Todo]) {
         self.id = id
         self.name = name
+        self.color = color
         self.todos = todos
     }
 }
