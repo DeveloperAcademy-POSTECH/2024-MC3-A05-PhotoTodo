@@ -11,6 +11,7 @@ import SwiftData
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
+    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     
     var body: some View {
         NavigationStack{
@@ -37,8 +38,29 @@ struct FolderListView: View {
                 }
             }
         }
-        
+        .onAppear {
+            //MARK: 최초 1회 실행된 적이 있을 시
+            if hasBeenLaunched {
+                return
+            }
+
+            //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
+            let defaultFolder = Folder(
+                id: UUID(),
+                name: "기본",
+                todos: []
+            )
+            modelContext.insert(defaultFolder)
+            let DoneBox = Folder(
+                id: UUID(),
+                name: "완료함",
+                todos: []
+            )
+            modelContext.insert(DoneBox)
+            hasBeenLaunched = true
+        }
     }
+       
     
     private func addFolders() {
         withAnimation {
