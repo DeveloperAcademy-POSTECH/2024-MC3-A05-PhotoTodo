@@ -98,7 +98,8 @@ struct TodoGridView: View {
                     alarm : nil,
                     memo : nil
                 ),
-                isDone : false
+                isDone : false,
+                folder: folder
             )
             folder.todos.append(newTodo)
             modelContext.insert(newTodo)
@@ -112,7 +113,11 @@ struct TodoGridView: View {
     private func deleteSelectedTodos() {
         withAnimation {
             DispatchQueue.main.async{
-                folder.todos.removeAll { selectedTodos.contains($0.id) }
+                selectedTodos.forEach { id in
+                    if let todo = folder.todos.first(where: { $0.id == id }) {
+                        modelContext.delete(todo)
+                    }
+                }
                 selectedTodos.removeAll() // Clear selected items after deletion
             }
         }
