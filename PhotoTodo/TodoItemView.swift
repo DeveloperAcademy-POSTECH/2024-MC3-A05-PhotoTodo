@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct TodoItemView: View {
     @Binding var editMode: EditMode
@@ -13,7 +14,7 @@ struct TodoItemView: View {
     
     var body: some View {
         ZStack{
-            Image("FilledCoffee")
+            Image(uiImage: UIImage(data: todo.image))
                 .resizable()
                 .frame(width: 180, height: 200)
                 .scaledToFit()
