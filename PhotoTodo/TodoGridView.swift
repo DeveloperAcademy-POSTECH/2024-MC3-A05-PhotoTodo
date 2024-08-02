@@ -145,7 +145,8 @@ struct TodoListView_Previews: PreviewProvider {
         
         return Folder(
             id: UUID(),
-            name: "예제폴더",
+            name: "예제폴더", 
+            color: "red",
             todos: [sampleTodo]
         )
     }

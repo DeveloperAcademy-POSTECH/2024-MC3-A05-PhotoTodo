@@ -109,12 +109,12 @@
 				1A2778DF2C56395900A02C7E /* ContentView.swift */,
 				1A2E5C8B2C5C643600BAFD13 /* TestView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
+				1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */,
+				1A0D96862C5A152A00784CBA /* MakeTodoView.swift */,
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
 				1A0D96742C59287600784CBA /* TodoItemView.swift */,
 				1A0D96842C5A150D00784CBA /* CameraPreview.swift */,
-				1A0D96862C5A152A00784CBA /* MakeTodoView.swift */,
-				1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */,
 				1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */,
 				1A0D96762C59C8C100784CBA /* Item.swift */,
 				1A0D96812C5A14CC00784CBA /* ViewModel */,
@@ -213,6 +213,7 @@
 				1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */,
 				1A0D96772C59C8C100784CBA /* Item.swift in Sources */,
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
+				3C7064912C5C113B00C2770E /* TabBarView.swift in Sources */,
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */,
@@ -360,7 +361,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -389,7 +390,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

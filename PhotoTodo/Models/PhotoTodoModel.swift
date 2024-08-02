@@ -27,6 +27,7 @@ class Todo {
     var options: Options
     var isDone: Bool
     var isDoneAt: Date?
+    var folder: Folder?
 
     init(id: UUID, image: Data, createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil, folder: Folder? = nil) {
         self.id = id
