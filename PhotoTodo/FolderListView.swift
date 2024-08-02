@@ -45,6 +45,7 @@ struct FolderListView: View {
             let newFolder = Folder(
                 id: UUID(),
                 name: "새 폴더",
+                color: "green",
                 todos: [
                     Todo(
                         id: UUID(),
