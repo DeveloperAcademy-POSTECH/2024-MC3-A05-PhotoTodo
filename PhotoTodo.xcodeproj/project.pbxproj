@@ -27,6 +27,7 @@
 		1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */; };
 		1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */; };
 		1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */; };
+		1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8B2C5C643600BAFD13 /* TestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCarouselView.swift; sourceTree = "<group>"; };
 		1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCompositeGridView.swift; sourceTree = "<group>"; };
 		1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		1A2E5C8B2C5C643600BAFD13 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */,
 				1A0D96882C5A156800784CBA /* TodoView.swift */,
 				1A2778DF2C56395900A02C7E /* ContentView.swift */,
+				1A2E5C8B2C5C643600BAFD13 /* TestView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
@@ -212,6 +215,7 @@
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
+				1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,

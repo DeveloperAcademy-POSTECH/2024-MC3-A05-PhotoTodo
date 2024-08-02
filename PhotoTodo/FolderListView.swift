@@ -1,3 +1,5 @@
+
+
 //
 //  FolderListView.swift
 //  PhotoTodo
@@ -54,6 +56,7 @@ struct FolderListView: View {
             let defaultFolder = Folder(
                 id: UUID(),
                 name: "기본",
+                color: "green",
                 todos: []
             )
             modelContext.insert(defaultFolder)
@@ -67,6 +70,7 @@ struct FolderListView: View {
             let newFolder = Folder(
                 id: UUID(),
                 name: "새 폴더",
+                color: "green",
                 todos: []
             )
             modelContext.insert(newFolder)
@@ -86,3 +90,4 @@ struct FolderListView: View {
     FolderListView()
         .modelContainer(for: Folder.self, inMemory: true)
 }
+
