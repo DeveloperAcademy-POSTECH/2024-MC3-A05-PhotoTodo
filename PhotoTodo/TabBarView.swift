@@ -50,7 +50,6 @@ struct TabBarView: View {
 //                        Spacer()
 //
 //                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
-//                            
 //                        }
 //
 //                        Button(action: {
@@ -71,7 +70,6 @@ struct TabBarView: View {
 //                                    .foregroundColor(.white)
 //                            }
 //                        }
-//                        
 //                        Spacer()
 //                    }
 //                    .padding(.horizontal, 50)

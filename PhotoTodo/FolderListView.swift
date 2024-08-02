@@ -1,3 +1,5 @@
+
+
 //
 //  FolderListView.swift
 //  PhotoTodo
@@ -11,6 +13,7 @@ import SwiftData
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
+    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     
     var body: some View {
         NavigationStack{
@@ -24,6 +27,12 @@ struct FolderListView: View {
                     }
                 }
                 .onDelete(perform: deleteItems)
+                //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
+                NavigationLink {
+                    TodoCompositeGridView(folders: folders)
+                } label : {
+                    Text("완료함")
+                }
             }
             .navigationBarTitle("폴더")
             .toolbar {
@@ -37,8 +46,24 @@ struct FolderListView: View {
                 }
             }
         }
-        
+        .onAppear {
+            //MARK: 최초 1회 실행된 적이 있을 시
+            if hasBeenLaunched {
+                return
+            }
+
+            //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
+            let defaultFolder = Folder(
+                id: UUID(),
+                name: "기본",
+                color: "green",
+                todos: []
+            )
+            modelContext.insert(defaultFolder)
+            hasBeenLaunched = true
+        }
     }
+       
     
     private func addFolders() {
         withAnimation {
@@ -46,18 +71,7 @@ struct FolderListView: View {
                 id: UUID(),
                 name: "새 폴더",
                 color: "green",
-                todos: [
-                    Todo(
-                        id: UUID(),
-                        image: UIImage(contentsOfFile: "filledCoffee")?.pngData() ?? Data(),
-                        createdAt: Date(),
-                        options: Options(
-                            alarm : nil,
-                            memo : nil
-                        ),
-                        isDone : false
-                    )
-                ]
+                todos: []
             )
             modelContext.insert(newFolder)
         }
@@ -76,3 +90,4 @@ struct FolderListView: View {
     FolderListView()
         .modelContainer(for: Folder.self, inMemory: true)
 }
+

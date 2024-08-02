@@ -6,16 +6,12 @@
 //
 
 import SwiftUI
-
-enum SortOption {
-    case byDate
-    case byName
-    case byStatus
-}
-
-struct TodoGridView: View {
+import SwiftData
+    
+struct TodoCompositeGridView: View {
     @Environment(\.modelContext) private var modelContext
-    @State var folder: Folder
+    @Query private var todos: [Todo]
+    @State var folders: [Folder]
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
     @State private var sortOption: SortOption = .byDate
@@ -23,11 +19,11 @@ struct TodoGridView: View {
     var sortedTodos: [Todo] {
         switch sortOption {
         case .byDate:
-            return folder.todos.sorted { $0.createdAt < $1.createdAt }
+            return todos.sorted { $0.createdAt < $1.createdAt }
         case .byName:
-            return folder.todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
+            return todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
         case .byStatus:
-            return folder.todos.sorted { $0.isDone && !$1.isDone }
+            return todos.sorted { $0.isDone && !$1.isDone }
         }
     }
     //TODO: folder.todos를 여러 옵션으로 정렬하기
@@ -60,9 +56,9 @@ struct TodoGridView: View {
                         }
                 }
                 //TODO: delete 제대로 작동하게 만들기
-                .onDelete(perform: deleteTodos)
+//                .onDelete(perform: deleteTodos)
             }
-            .navigationBarTitle(folder.name)
+            .navigationBarTitle("Composite")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -99,22 +95,22 @@ struct TodoGridView: View {
                     memo : nil
                 ),
                 isDone : false,
-                folder: folder
+                folder: folders[0]
             )
-            folder.todos.append(newTodo)
+            folders[0].todos.append(newTodo)
             modelContext.insert(newTodo)
         }
     }
-    
-    private func deleteTodos(at offsets: IndexSet) {
-        folder.todos.remove(atOffsets: offsets)
-    }
+//    
+//    private func deleteTodos(at offsets: IndexSet) {
+//        folder.todos.remove(atOffsets: offsets)
+//    }
     
     private func deleteSelectedTodos() {
         withAnimation {
             DispatchQueue.main.async{
                 selectedTodos.forEach { id in
-                    if let todo = folder.todos.first(where: { $0.id == id }) {
+                    if let todo = todos.first(where: { $0.id == id }) {
                         modelContext.delete(todo)
                     }
                 }
@@ -125,29 +121,3 @@ struct TodoGridView: View {
 }
 
 
-
-struct TodoListView_Previews: PreviewProvider {
-    static var previews: some View {
-        TodoGridView(folder: previewFolder)
-    }
-    
-    static var previewFolder: Folder {
-        let sampleTodo = Todo(
-            id: UUID(),
-            image: UIImage(systemName: "star")?.pngData() ?? Data(),
-            createdAt: Date(),
-            options: Options(
-                alarm: nil,
-                memo: nil
-            ),
-            isDone: false
-        )
-        
-        return Folder(
-            id: UUID(),
-            name: "예제폴더", 
-            color: "red",
-            todos: [sampleTodo]
-        )
-    }
-}
