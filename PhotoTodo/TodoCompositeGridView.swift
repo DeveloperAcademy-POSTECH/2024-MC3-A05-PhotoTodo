@@ -87,6 +87,7 @@ struct TodoCompositeGridView: View {
     private func addTodos() {
         withAnimation {
             let newTodo = Todo(
+                folder: folders[0],
                 id: UUID(),
                 image: UIImage(contentsOfFile: "filledCoffee")?.pngData() ?? Data(),
                 createdAt: Date(),
@@ -94,8 +95,7 @@ struct TodoCompositeGridView: View {
                     alarm : nil,
                     memo : nil
                 ),
-                isDone : false,
-                folder: folders[0]
+                isDone : false
             )
             folders[0].todos.append(newTodo)
             modelContext.insert(newTodo)

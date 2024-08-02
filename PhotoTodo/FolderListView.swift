@@ -17,6 +17,14 @@ struct FolderListView: View {
     
     var body: some View {
         NavigationStack{
+            HStack{
+                Spacer()
+                EditButton()
+                Button(action: addFolders) {
+                    Image(systemName: "plus")
+                }
+                .padding(.trailing)
+            }
             List {
                 ForEach(folders) { folder in
                     NavigationLink {
@@ -34,17 +42,17 @@ struct FolderListView: View {
                     Text("완료함")
                 }
             }
-            .navigationBarTitle("폴더")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addFolders) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
+//            .navigationBarTitle("폴더")
+//            .toolbar {
+//                ToolbarItem(placement: .navigationBarTrailing) {
+//                    EditButton()
+//                }
+//                ToolbarItem {
+//                    Button(action: addFolders) {
+//                        Label("Add Item", systemImage: "plus")
+//                    }
+//                }
+//            }
         }
         .onAppear {
             //MARK: 최초 1회 실행된 적이 있을 시

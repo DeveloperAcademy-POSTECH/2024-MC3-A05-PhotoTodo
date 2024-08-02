@@ -34,7 +34,7 @@ struct TabBarView: View {
                         }
                         .tag(1)
 
-                    ContentView()
+                    FolderListView()
                         .tabItem {
                             VStack {
                                 Image(systemName: "folder.fill")
