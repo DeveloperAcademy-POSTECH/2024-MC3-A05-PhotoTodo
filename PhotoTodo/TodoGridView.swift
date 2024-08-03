@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 enum SortOption {
     case byDate
@@ -15,19 +16,33 @@ enum SortOption {
 
 struct TodoGridView: View {
     @Environment(\.modelContext) private var modelContext
-    @State var folder: Folder
+    @Query var folders: [Folder]
+    @Query var compositeTodos: [Todo]
+    @State var currentFolder: Folder? = nil
+    var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
     @State private var sortOption: SortOption = .byDate
     
+    var todos: [Todo] {
+        switch viewType {
+        case .singleFolder:
+            return currentFolder!.todos
+        case .main:
+            return compositeTodos
+        case .doneList:
+            return compositeTodos
+        }
+    }
+    
     var sortedTodos: [Todo] {
         switch sortOption {
         case .byDate:
-            return folder.todos.sorted { $0.createdAt < $1.createdAt }
+            return todos.sorted { $0.createdAt < $1.createdAt }
         case .byName:
-            return folder.todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
+            return todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
         case .byStatus:
-            return folder.todos.sorted { $0.isDone && !$1.isDone }
+            return todos.sorted { $0.isDone && !$1.isDone }
         }
     }
     //TODO: folder.todos를 여러 옵션으로 정렬하기
@@ -37,6 +52,18 @@ struct TodoGridView: View {
         GridItem(.flexible()),
     ]
     
+    var navigationBarTitle: String {
+        switch viewType {
+        case .singleFolder:
+            return currentFolder?.name ?? folders[0].name
+        case .main:
+            return "메인뷰"
+        case .doneList:
+            return "완료함"
+        }
+    }
+    
+    
     var body: some View {
         ScrollView {
             LazyVGrid(columns: columns) {
@@ -45,10 +72,12 @@ struct TodoGridView: View {
                 
                 ForEach(sortedTodos) { todo in
                     TodoItemView(editMode: $editMode, todo: todo)
+                        //각 TodoItem에 체크박스를 오버레이하여 보여줌
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
                         )
+                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
                         .onTapGesture {
                             if editMode == .active {
                                 if selectedTodos.contains(todo.id) {
@@ -59,15 +88,15 @@ struct TodoGridView: View {
                             }
                         }
                 }
-                //TODO: delete 제대로 작동하게 만들기
-                .onDelete(perform: deleteTodos)
             }
-            .navigationBarTitle(folder.name)
+            .navigationBarTitle(
+                navigationBarTitle
+            )
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                         .onChange(of: editMode) { newEditMode in
-                        //MARK: 편집모드 해제시 선택정보 삭제
+                        //편집모드 해제시 선택정보 삭제
                             if newEditMode == .inactive {
                                 selectedTodos.removeAll()
                             }
@@ -75,10 +104,11 @@ struct TodoGridView: View {
                 }
                 ToolbarItem {
                     editMode == .active ?
-                    //MARK: 다중선택된 아이템 삭제
+                    //편집모드에서 다중선택된 아이템 삭제
                     Button(action: deleteSelectedTodos) {
                         Label("Delete Item", systemImage: "trash")
                     } :
+                    //편집모드가 아닐 시 아이템 추가 버튼
                     Button(action: addTodos) {
                         Label("Add Item", systemImage: "plus")
                     }
@@ -91,7 +121,7 @@ struct TodoGridView: View {
     private func addTodos() {
         withAnimation {
             let newTodo = Todo(
-                folder: folder,
+                folder: currentFolder,
                 id: UUID(),
                 image: UIImage(contentsOfFile: "filledCoffee")?.pngData() ?? Data(),
                 createdAt: Date(),
@@ -101,20 +131,24 @@ struct TodoGridView: View {
                 ),
                 isDone : false
             )
-            folder.todos.append(newTodo)
+            if let folder = currentFolder {
+                //ViewType이 singleFolder인 경우에는 currentFolder 인자가 전달되 오므로 그곳으로 저장
+                folder.todos.append(newTodo)
+            } else {
+                //ViewType이 main, doneList인 경우에는 currentFolder가 nil이므로 저장 불가. 기본 폴더로 저장해야 함.
+                folders[0].todos.append(newTodo)
+            }
+            
             modelContext.insert(newTodo)
         }
     }
     
-    private func deleteTodos(at offsets: IndexSet) {
-        folder.todos.remove(atOffsets: offsets)
-    }
     
     private func deleteSelectedTodos() {
         withAnimation {
             DispatchQueue.main.async{
                 selectedTodos.forEach { id in
-                    if let todo = folder.todos.first(where: { $0.id == id }) {
+                    if let todo = todos.first(where: { $0.id == id }) {
                         modelContext.delete(todo)
                     }
                 }
@@ -126,28 +160,29 @@ struct TodoGridView: View {
 
 
 
-struct TodoListView_Previews: PreviewProvider {
-    static var previews: some View {
-        TodoGridView(folder: previewFolder)
-    }
-    
-    static var previewFolder: Folder {
-        let sampleTodo = Todo(
-            id: UUID(),
-            image: UIImage(systemName: "star")?.pngData() ?? Data(),
-            createdAt: Date(),
-            options: Options(
-                alarm: nil,
-                memo: nil
-            ),
-            isDone: false
-        )
-        
-        return Folder(
-            id: UUID(),
-            name: "예제폴더", 
-            color: "red",
-            todos: [sampleTodo]
-        )
-    }
-}
+//struct TodoListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        var viewType: TodoGridViewType = .singleFolder
+//        TodoGridView(defaultStorageFolder: previewFolder, todos: previewFolder.todos, viewType: viewType)
+//    }
+//    
+//    static var previewFolder: Folder {
+//        let sampleTodo = Todo(
+//            id: UUID(),
+//            image: UIImage(systemName: "star")?.pngData() ?? Data(),
+//            createdAt: Date(),
+//            options: Options(
+//                alarm: nil,
+//                memo: nil
+//            ),
+//            isDone: false
+//        )
+//        
+//        return Folder(
+//            id: UUID(),
+//            name: "예제폴더", 
+//            color: "red",
+//            todos: [sampleTodo]
+//        )
+//    }
+//}
