@@ -31,6 +31,9 @@ struct CameraView: View {
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var photoData: [Data] = []
+    @State private var contentAlarm = Date()
+    @State private var memo: String = ""
+    @State private var alarmDataisEmpty: Bool = true
     
     // 폴더 관련
     @State private var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
@@ -66,7 +69,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo)
                             }
                         }
 //                        HStack{
@@ -105,7 +108,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo)
                                     .toolbar {
                                         Button("Add") {
                                         }
