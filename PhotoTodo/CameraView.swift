@@ -69,20 +69,20 @@ struct CameraView: View {
                                 MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
                             }
                         }
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                cameraCaptureState = .plural
-                            }, label: {
-                                VStack{
-                                    Image(systemName: "square.stack.3d.down.right")
-                                        .resizable()
-                                        .frame(width: 48, height: 52)
-                                    Text("다중촬영")
-                                }
-                            })
-                            .padding(.trailing, 35)
-                        }
+//                        HStack{
+//                            Spacer()
+//                            Button(action: {
+//                                cameraCaptureState = .plural
+//                            }, label: {
+//                                VStack{
+//                                    Image(systemName: "square.stack.3d.down.right")
+//                                        .resizable()
+//                                        .frame(width: 48, height: 52)
+//                                    Text("다중촬영")
+//                                }
+//                            })
+//                            .padding(.trailing, 35)
+//                        }
                     }
                 }
             } else {
@@ -130,8 +130,8 @@ struct CameraView: View {
                 }
             }
         }.onAppear(perform: {
-            // MARK: SwiftData 테스트용, 데이터 연동 시 아래 코드 사용하면 됨
-            // chosenFolder = folders.first!
+            // MARK: Preview에 생성이 안되있어서 오류가 날 뿐, 디폴드 폴더는 삭제가 안되게 구현 예정이여서 문제 없습니다.
+            chosenFolder = folders.first!
         })
         
     }

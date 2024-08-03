@@ -62,7 +62,7 @@ struct MakeTodoView: View {
                                 .foregroundStyle(chosenFolderColor)
                             
                             Menu {
-                                ForEach(testFolders, id: \.self.id){ folder in
+                                ForEach(folders, id: \.self.id){ folder in
                                     Button(action: {
                                         chosenFolder = folder
                                         chosenFolderName = folder.name
@@ -147,7 +147,7 @@ struct MakeTodoView: View {
         .toolbar(content: {
             Button {
                 //SwiftData 저장 작업
-                let newTodo: Todo = Todo(id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
+                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
                 modelContext.insert(newTodo)
             } label: {
                 Text("Add")
