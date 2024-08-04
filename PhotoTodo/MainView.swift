@@ -10,7 +10,9 @@ import SwiftUI
 struct MainView: View {
     var viewType: TodoGridViewType = .main
     var body: some View {
-        TodoCompositeGridView(viewType: viewType)
+        NavigationStack{
+            TodoCompositeGridView(viewType: viewType)
+        }
     }
 }
 
