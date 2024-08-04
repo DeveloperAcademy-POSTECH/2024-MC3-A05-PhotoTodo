@@ -12,7 +12,6 @@ struct TabBarView: View {
     @State private var isCameraViewActive = false
 
     var body: some View {
-        NavigationStack {
             ZStack {
                 TabView(selection: $selectedTab) {
                     //MARK: 룰루가 데이터 테스트를 위해서 사용하는 뷰
@@ -75,7 +74,6 @@ struct TabBarView: View {
                     .padding(.horizontal, 50)
                 }
             }
-        }
     }}
 
 //struct CustomTabBar: View {
