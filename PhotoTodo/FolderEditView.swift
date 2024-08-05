@@ -1,106 +1,112 @@
 //
-//  FolderEditView.swift
+//  SwiftUIView.swift
 //  PhotoTodo
 //
-//  Created by JiaeShin on 8/2/24.
+//  Created by JiaeShin on 8/5/24.
 //
-
-
 import SwiftUI
 
 struct FolderEditView: View {
-    @State private var isSheetPresented = false
-    @State private var textFieldValue = ""
-    @State private var showAlert = false
-    @State private var selectedColor: Color? = nil
-
+    @Binding var isSheetPresented: Bool
+    @Binding var folderNameInput: String
+    @Binding var selectedColor: Color?
+    
+    @State private var showActionSheet = false
     let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple]
 
     var body: some View {
-        VStack {
-            Button("Show Sheet") {
-                self.isSheetPresented = true
-            }
-        }
-        .sheet(isPresented: $isSheetPresented) {
-            VStack {
-                HStack {
-                    Button("Cancel") {
-                        if !textFieldValue.isEmpty {
-                            showAlert = true
-                        } else {
-                            isSheetPresented = false
-                        }
-                    }
-                    Spacer()
-                    Button("Done") {
-                        // Save action
+        VStack (alignment: .leading) {
+            HStack {
+                Button("취소") {
+                    if !folderNameInput.isEmpty {
+                        showActionSheet = true
+                    } else {
                         isSheetPresented = false
                     }
                 }
-                .padding()
-
-                VStack(alignment: .leading) {
-                    Text("폴더명")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    TextField("", text: $textFieldValue)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding(.vertical, 8)
-                        .overlay(Rectangle().frame(height: 1).padding(.top, 35))
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                // Automatically focus the TextField and show keyboard
-                                UITextField.appearance(whenContainedInInstancesOf: [UIView.self]).becomeFirstResponder()
-                            }
-                        }
-                }
-                .padding()
-
-                VStack(alignment: .leading) {
-                    Text("색상")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    HStack {
-                        ForEach(colors, id: \.self) { color in
-                            Button(action: {
-                                selectedColor = color
-                            }) {
-                                Circle()
-                                    .fill(color)
-                                    .frame(width: 40, height: 40)
-                                    .padding(5)  // 5px 마진
-                                    .overlay(
-                                        Circle()
-                                            .stroke(Color.black, lineWidth: selectedColor == color ? 3 : 0)
-                                    )
-                            }
-                        }
-                    }
-                    .padding(.vertical, 8)
-                }
-                .padding()
-
                 Spacer()
+                
+                Text("폴더 정보")
+                    .font(.headline)
+                Spacer()
+                Button("저장") {
+                    isSheetPresented = false
+                }
             }
-            .presentationDetents([.medium])
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Unsaved Changes"),
-                    message: Text("You have unsaved changes. Do you really want to discard them?"),
-                    primaryButton: .destructive(Text("Discard")) {
+            .padding()
+
+            HStack {
+                Text("폴더명")
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+                    .frame(width: 60, alignment: .leading)
+                
+                TextField("폴더명 입력", text: $folderNameInput)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                
+                if !folderNameInput.isEmpty {
+                    Button(action: {
+                        folderNameInput = ""
+                    }) {
+                        Image(systemName: "multiply.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .overlay(
+                Rectangle()
+                    .frame(height: 1)
+                    .padding(.top, 50)
+                    .foregroundColor(.lightGray)
+            )
+            .padding()
+            .padding(.bottom, 8)
+
+            VStack(alignment: .leading) {
+                Text("색상")
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal)
+
+                HStack {
+                    Spacer()
+                    ForEach(colors, id: \.self) { color in
+                        Button(action: {
+                            selectedColor = color
+                        }) {
+                            Circle()
+                                .fill(color)
+                                .frame(width: 40, height: 40)
+                                .padding(7)
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.gray, lineWidth: selectedColor == color ? 1 : 0)
+                                )
+                        }
+                        Spacer()
+                    }
+                }
+                .padding(.vertical, 8)
+            }
+            Spacer()
+        }
+        .padding(.vertical, 14)
+        .padding(.horizontal, 20)
+        .presentationDetents([.medium])
+        .actionSheet(isPresented: $showActionSheet) {
+            ActionSheet(
+                title: Text("변경 사항을 저장하지 않고 나가시겠습니까?"),
+                buttons: [
+                    .destructive(Text("변경 사항 폐기")) {
+                        folderNameInput = ""
                         isSheetPresented = false
                     },
-                    secondaryButton: .cancel()
-                )
-            }
-            .interactiveDismissDisabled(!textFieldValue.isEmpty)
+                    .cancel()
+                ]
+            )
         }
-    }
-}
-
-struct FolderEditView_Previews: PreviewProvider {
-    static var previews: some View {
-        FolderEditView()
+        .interactiveDismissDisabled(!folderNameInput.isEmpty)
     }
 }
