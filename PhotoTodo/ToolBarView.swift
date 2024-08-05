@@ -33,7 +33,7 @@ struct ToolBarView: View {
                         Image(systemName: "photo.on.rectangle")
                     }
                     NavigationLink {
-                        CameraView()
+//                        CameraView()
                     }label: {
                         Image(systemName: "camera")
                     }

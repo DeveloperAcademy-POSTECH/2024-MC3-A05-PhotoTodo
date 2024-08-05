@@ -368,7 +368,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";
@@ -398,7 +398,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";

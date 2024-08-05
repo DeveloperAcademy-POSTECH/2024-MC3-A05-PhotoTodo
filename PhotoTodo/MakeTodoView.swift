@@ -18,6 +18,7 @@ enum startViewType {
 struct MakeTodoView: View {
     
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var cameraVM: CameraViewModel
     @Binding var chosenFolder: Folder
     var startViewType: startViewType
@@ -32,6 +33,7 @@ struct MakeTodoView: View {
     @Query private var folders: [Folder]
     @State private var chosenFolderName: String = "기본폴더"
     @State private var chosenFolderColor: Color = Color.red
+    @Binding var home: Bool
 
     var body: some View {
         
@@ -205,6 +207,8 @@ struct MakeTodoView: View {
                 
                 let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
                 modelContext.insert(newTodo)
+                home = true
+                dismiss()
             } label: {
                 Text("Add")
             }
@@ -219,6 +223,7 @@ struct MakeTodoView: View {
     @State var contentAlarm = Date()
     @State var memo: String = ""
     @State var alarmDataisEmpty: Bool = true
-    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo)
+    @State var home: Bool = false
+    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
     
 }
