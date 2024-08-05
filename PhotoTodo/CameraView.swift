@@ -31,6 +31,9 @@ struct CameraView: View {
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var photoData: [Data] = []
+    @State private var contentAlarm = Date()
+    @State private var memo: String = ""
+    @State private var alarmDataisEmpty: Bool = true
     
     // 폴더 관련
     @State private var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
@@ -66,23 +69,23 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo)
                             }
                         }
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                cameraCaptureState = .plural
-                            }, label: {
-                                VStack{
-                                    Image(systemName: "square.stack.3d.down.right")
-                                        .resizable()
-                                        .frame(width: 48, height: 52)
-                                    Text("다중촬영")
-                                }
-                            })
-                            .padding(.trailing, 35)
-                        }
+//                        HStack{
+//                            Spacer()
+//                            Button(action: {
+//                                cameraCaptureState = .plural
+//                            }, label: {
+//                                VStack{
+//                                    Image(systemName: "square.stack.3d.down.right")
+//                                        .resizable()
+//                                        .frame(width: 48, height: 52)
+//                                    Text("다중촬영")
+//                                }
+//                            })
+//                            .padding(.trailing, 35)
+//                        }
                     }
                 }
             } else {
@@ -105,7 +108,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo)
                                     .toolbar {
                                         Button("Add") {
                                         }
@@ -130,8 +133,8 @@ struct CameraView: View {
                 }
             }
         }.onAppear(perform: {
-            // MARK: SwiftData 테스트용, 데이터 연동 시 아래 코드 사용하면 됨
-            // chosenFolder = folders.first!
+            // MARK: Preview에 생성이 안되있어서 오류가 날 뿐, 디폴드 폴더는 삭제가 안되게 구현 예정이여서 문제 없습니다.
+            chosenFolder = folders.first!
         })
         
     }
