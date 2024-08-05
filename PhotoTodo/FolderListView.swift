@@ -10,49 +10,50 @@
 import SwiftUI
 import SwiftData
 
+enum TodoGridViewType {
+    case singleFolder
+    case main
+    case doneList
+}
+
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
     @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
+    private var basicViewType: TodoGridViewType = .singleFolder
+    private var doneListViewType: TodoGridViewType = .doneList
     
     var body: some View {
         NavigationStack{
-            HStack{
-                Spacer()
-                EditButton()
-                Button(action: addFolders) {
-                    Image(systemName: "plus")
-                }
-                .padding(.trailing)
-            }
             List {
+                //리스트 뷰에 각 폴더에 대한 네비게이션 링크를 보여줌
                 ForEach(folders) { folder in
                     NavigationLink {
-                        //TODO: TodoList View로 이동하기
-                        TodoGridView(folder: folder)
+                        TodoGridView(currentFolder: folder, viewType: basicViewType)
                     } label: {
                         Text(folder.name)
                     }
                 }
                 .onDelete(perform: deleteItems)
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
+                //리스트 뷰의 마지막에는 완료함이 위치함
                 NavigationLink {
-                    TodoCompositeGridView(folders: folders)
+                    TodoCompositeGridView(viewType: doneListViewType)
                 } label : {
                     Text("완료함")
                 }
             }
-//            .navigationBarTitle("폴더")
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-//                ToolbarItem {
-//                    Button(action: addFolders) {
-//                        Label("Add Item", systemImage: "plus")
-//                    }
-//                }
-//            }
+            .navigationBarTitle("폴더")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+                ToolbarItem {
+                    Button(action: addFolders) {
+                        Label("Add Item", systemImage: "plus")
+                    }
+                }
+            }
         }
         .onAppear {
             //MARK: 최초 1회 실행된 적이 있을 시
