@@ -10,26 +10,26 @@ import SkeletonUI
 import UIKit
 import SwiftData
 
+enum startViewType {
+    case camera
+    case edit
+}
+
 struct MakeTodoView: View {
     
     @Environment(\.modelContext) private var modelContext
     @ObservedObject var cameraVM: CameraViewModel
     @Binding var chosenFolder: Folder
+    var startViewType: startViewType
     
     // 내부 컨텐츠
-    @State private var contentAlarm = Date()
+    @Binding var contentAlarm: Date
     @State private var folderMenuisActive: Bool = false
+    @State private var alarmisActive: Bool = false
+    @Binding var alarmDataisEmpty: Bool
     @State private var memoisActive: Bool = false
-    @State private var memo: String = ""
+    @Binding var memo: String
     @Query private var folders: [Folder]
-    //SwiftData 테스트용 데이터
-    @State private var testFolders: [Folder] = [
-        Folder(id: UUID(), name: "기본폴더", color: "red", todos: []),
-        Folder(id: UUID(), name: "아카데미", color: "blue", todos: []),
-        Folder(id: UUID(), name: "해커톤", color: "green", todos: []),
-        Folder(id: UUID(), name: "공지사항", color: "yellow", todos: []),
-        Folder(id: UUID(), name: "쇼핑", color: "pink", todos: []),
-        Folder(id: UUID(), name: "룰루랄라", color: "cyan", todos: [])]
     @State private var chosenFolderName: String = "기본폴더"
     @State private var chosenFolderColor: Color = Color.red
 
@@ -40,7 +40,7 @@ struct MakeTodoView: View {
             Image(uiImage: UIImage(data: cameraVM.photoData.first ?? Data()))
                 .resizable()
                 .skeleton(with: cameraVM.photoData.isEmpty,
-                          animation: /*.linear(duration: 5, delay: 0, speed: 3, autoreverses: true)*/.pulse(),
+                          animation: .pulse(),
                           appearance: .solid(color: Color.paleGray, background: Color.lightGray),
                           shape: .rectangle,
                           lines: 1,
@@ -62,7 +62,7 @@ struct MakeTodoView: View {
                                 .foregroundStyle(chosenFolderColor)
                             
                             Menu {
-                                ForEach(testFolders, id: \.self.id){ folder in
+                                ForEach(folders, id: \.self.id){ folder in
                                     Button(action: {
                                         chosenFolder = folder
                                         chosenFolderName = folder.name
@@ -83,20 +83,65 @@ struct MakeTodoView: View {
                         }
                     }
                     
-                    HStack{
-                        Image(systemName: "alarm")
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                        Text("알람설정")
-                        Spacer()
-                        DatePicker(
-                            "Select Date",
-                            selection: $contentAlarm,
-                            displayedComponents: [.date, .hourAndMinute]
-                        )
-                        .labelsHidden()
-                        .datePickerStyle(.compact)
+//                    HStack{
+//                        Image(systemName: "alarm")
+//                            .resizable()
+//                            .frame(width: 15, height: 15)
+//                        Text("알람설정")
+//                        Spacer()
+//                        DatePicker(
+//                            "Select Date",
+//                            selection: $contentAlarm,
+//                            displayedComponents: [.date, .hourAndMinute]
+//                        )
+//                        .labelsHidden()
+//                        .datePickerStyle(.compact)
+//                    }
+//                    
+//                    
+                    Button {
+                        alarmisActive.toggle()
+                    } label: {
+                        HStack{
+                            Image(systemName: "alarm")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                            Text("알람설정")
+                            Spacer()
+                            Text(alarmDataisEmpty ? "없음" : "\(contentAlarm)")
+                        }
                     }
+                    .sheet(isPresented: $alarmisActive, content: {
+                        VStack{
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    contentAlarm = Date()
+                                    alarmDataisEmpty = true
+                                    alarmisActive.toggle()
+                                }, label: {
+                                    Text("리셋")
+                                })
+                                Button(action: {
+                                    alarmDataisEmpty = false
+                                    alarmisActive.toggle()
+                                }, label: {
+                                    Text("완료")
+                                })
+                            }
+                            
+                            DatePicker(
+                                "Select Date",
+                                selection: $contentAlarm,
+                                displayedComponents: [.date, .hourAndMinute]
+                            )
+                            .labelsHidden()
+                            .datePickerStyle(.wheel)
+                        }
+                        .padding()
+                        .presentationDetents([.height(CGFloat(300))])
+                    })
+                    
                     
                     Button(action: {
                         memoisActive.toggle()
@@ -143,11 +188,22 @@ struct MakeTodoView: View {
             print(chosenFolder.name)
             chosenFolderName = chosenFolder.name
             chosenFolderColor = changeStringToColor(colorName: chosenFolder.color)
+            if startViewType == .edit {
+            }
         })
         .toolbar(content: {
             Button {
                 //SwiftData 저장 작업
-                let newTodo: Todo = Todo(id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
+                // 알람 데이터 없을 때
+//                if alarmDataisEmpty {
+//                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options( memo: memo), isDone: false)
+//                    modelContext.insert(newTodo)
+//                } else { // 알람 데이터 있을 때
+//                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
+//                    modelContext.insert(newTodo)
+//                }
+                
+                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
                 modelContext.insert(newTodo)
             } label: {
                 Text("Add")
@@ -160,6 +216,9 @@ struct MakeTodoView: View {
 #Preview {
     @State var cameraVM = CameraViewModel()
     @State var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
-    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+    @State var contentAlarm = Date()
+    @State var memo: String = ""
+    @State var alarmDataisEmpty: Bool = true
+    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo)
     
 }

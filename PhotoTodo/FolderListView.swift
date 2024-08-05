@@ -25,15 +25,6 @@ struct FolderListView: View {
     
     var body: some View {
         NavigationStack{
-            HStack{
-                Spacer()
-                EditButton()
-                Button(action: addFolders) {
-                    Image(systemName: "plus")
-                }
-                .padding(.trailing)
-            }
-            //리스트 뷰에 각 폴더에 대한 네비게이션 링크를 보여줌
             List {
                 //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
                 NavigationLink{
@@ -64,17 +55,17 @@ struct FolderListView: View {
                     Text("완료함")
                 }
             }
-//            .navigationBarTitle("폴더")
-//            .toolbar {
-//                ToolbarItem(placement: .navigationBarTrailing) {
-//                    EditButton()
-//                }
-//                ToolbarItem {
-//                    Button(action: addFolders) {
-//                        Label("Add Item", systemImage: "plus")
-//                    }
-//                }
-//            }
+            .navigationBarTitle("폴더")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+                ToolbarItem {
+                    Button(action: addFolders) {
+                        Label("Add Item", systemImage: "plus")
+                    }
+                }
+            }
         }
         .onAppear {
             //MARK: 최초 1회 실행된 적이 있을 시

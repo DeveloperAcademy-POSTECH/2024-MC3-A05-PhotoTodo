@@ -10,7 +10,7 @@ import SwiftUI
 struct TabBarView: View {
     @State private var selectedTab = 0
     @State private var isCameraViewActive = false
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -33,7 +33,7 @@ struct TabBarView: View {
                             }
                         }
                         .tag(1)
-
+                    
                     FolderListView()
                         .tabItem {
                             VStack {
@@ -44,36 +44,38 @@ struct TabBarView: View {
                         .tag(2)
                 }
                 
-//                VStack {
-//                    Spacer()
-//                    HStack {
-//                        Spacer()
-//
-//                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
-//                        }
-//
-//                        Button(action: {
-//                            isCameraViewActive = true
-//                        }) {
-//                            ZStack {
-//                                Circle()
-//                                    .foregroundColor(.white)
-//                                    .frame(width: 70, height: 70)
-//                                    .shadow(radius: 10)
-//                                
-//                                Circle()
-//                                    .foregroundColor(.green)
-//                                    .frame(width: 60, height: 60)
-//                                
-//                                Image(systemName: "camera.fill")
-//                                    .font(.largeTitle)
-//                                    .foregroundColor(.white)
-//                            }
-//                        }
-//                        Spacer()
-//                    }
-//                    .padding(.horizontal, 50)
-//                }
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        
+                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
+                        }
+                        
+                        
+                        Button(action: {
+                            isCameraViewActive = true
+                        }) {
+                            ZStack {
+                                Circle()
+                                    .foregroundColor(.white)
+                                    .frame(width: 70, height: 70)
+                                    .shadow(radius: 10)
+                                
+                                Circle()
+                                    .foregroundColor(.green)
+                                    .frame(width: 60, height: 60)
+                                
+                                Image(systemName: "camera.fill")
+                                    .font(.largeTitle)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        Spacer()
+                    }
+                    .padding(.horizontal, 50)
+                }
+                //                }
             }
         }
     }}

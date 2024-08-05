@@ -28,6 +28,8 @@
 		1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */; };
 		1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */; };
 		1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8B2C5C643600BAFD13 /* TestView.swift */; };
+		61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D7192C5E443D00C22046 /* ToolBarView.swift */; };
+		61E6D71C2C5E5EA700C22046 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCompositeGridView.swift; sourceTree = "<group>"; };
 		1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2E5C8B2C5C643600BAFD13 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		61E6D7192C5E443D00C22046 /* ToolBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarView.swift; sourceTree = "<group>"; };
+		61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,8 @@
 				1A0D96842C5A150D00784CBA /* CameraPreview.swift */,
 				1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */,
 				1A0D96762C59C8C100784CBA /* Item.swift */,
+				61E6D7192C5E443D00C22046 /* ToolBarView.swift */,
+				61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */,
 				1A0D96812C5A14CC00784CBA /* ViewModel */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
@@ -213,10 +219,10 @@
 				1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */,
 				1A0D96772C59C8C100784CBA /* Item.swift in Sources */,
 				1A2778E02C56395900A02C7E /* ContentView.swift in Sources */,
-				3C7064912C5C113B00C2770E /* TabBarView.swift in Sources */,
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */,
+				61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
@@ -226,6 +232,7 @@
 				1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */,
 				1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */,
 				1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */,
+				61E6D71C2C5E5EA700C22046 /* ImagePicker.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,
 			);
@@ -361,9 +368,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -390,9 +398,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

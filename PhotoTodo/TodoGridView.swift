@@ -27,13 +27,20 @@ struct TodoGridView: View {
     var todos: [Todo] {
         switch viewType {
         case .singleFolder:
-            return currentFolder!.todos
+            return currentFolder!.todos.filter { todo in
+                todo.isDone == false
+            }
         case .main:
-            return compositeTodos
+            return compositeTodos.filter { todo in
+                todo.isDone == false
+            }
         case .doneList:
-            return compositeTodos
+            return compositeTodos.filter { todo in
+                todo.isDone == true
+            }
         }
     }
+    
     
     var sortedTodos: [Todo] {
         switch sortOption {
