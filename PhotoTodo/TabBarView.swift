@@ -10,50 +10,55 @@ import SwiftUI
 struct TabBarView: View {
     @State private var selectedTab = 0
     @State private var isCameraViewActive = false
-
+    @State var tag:Int? = nil
+    
     var body: some View {
-            ZStack {
-                TabView(selection: $selectedTab) {
-                    //MARK: 룰루가 데이터 테스트를 위해서 사용하는 뷰
-                    MainView()
-                        .tabItem {
-                            VStack {
-                                Image(systemName: "list.bullet")
-                                Text("전체사진")
-                            }
+        VStack {
+            TabView(selection: $selectedTab) {
+                //MARK: 룰루가 데이터 테스트를 위해서 사용하는 뷰
+                MainView()
+                    .navigationTitle("fddd")
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "list.bullet")
+                            Text("전체사진")
                         }
-                        .tag(0)
-                    
-                    CameraView()
-                        .tabItem {
-                            VStack {
-                                Image(systemName: "list.bullet")
-                                Text("전체사진")
-                            }
-                        }
-                        .tag(1)
-
-                    FolderListView()
-                        .tabItem {
-                            VStack {
-                                Image(systemName: "folder.fill")
-                                Text("폴더")
-                            }
-                        }
-                        .tag(2)
-                }
+                    }
+                    .tag(0)
                 
+                CameraView()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "list.bullet")
+                            Text("전체사진")
+                        }
+                    }
+                    .toolbar(.hidden, for: .tabBar)
+                    .tag(1)
+                
+                
+                FolderListView()
+                    .tabItem {
+                        VStack {
+                            Image(systemName: "folder.fill")
+                            Text("폴더")
+                        }
+                    }
+                    .tag(2)
+                
+            }
+            .overlay(
                 VStack {
                     Spacer()
                     HStack {
                         Spacer()
-
-                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
+                        Button{
+                            selectedTab = 1
                         }
-
-                        Button(action: {
-                            isCameraViewActive = true
-                        }) {
+                        
+                        label : {
+                            selectedTab == 1 ?
+                            nil :
                             ZStack {
                                 Circle()
                                     .foregroundColor(.white)
@@ -73,7 +78,42 @@ struct TabBarView: View {
                     }
                     .padding(.horizontal, 50)
                 }
-            }
+            )
+            
+            
+            
+            
+            //                VStack {
+            //                    Spacer()
+            //                    HStack {
+            //                        Spacer()
+            //
+            //                        NavigationLink(destination: CameraView(), isActive: $isCameraViewActive) {
+            //                        }
+            //
+            //                        Button(action: {
+            //                            isCameraViewActive = true
+            //                        }) {
+            //                            ZStack {
+            //                                Circle()
+            //                                    .foregroundColor(.white)
+            //                                    .frame(width: 70, height: 70)
+            //                                    .shadow(radius: 10)
+            //
+            //                                Circle()
+            //                                    .foregroundColor(.green)
+            //                                    .frame(width: 60, height: 60)
+            //
+            //                                Image(systemName: "camera.fill")
+            //                                    .font(.largeTitle)
+            //                                    .foregroundColor(.white)
+            //                            }
+            //                        }
+            //                        Spacer()
+            //                    }
+            //                    .padding(.horizontal, 50)
+            //                }
+        }
     }}
 
 //struct CustomTabBar: View {
