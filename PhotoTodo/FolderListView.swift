@@ -26,15 +26,27 @@ struct FolderListView: View {
     var body: some View {
         NavigationStack{
             List {
-                //리스트 뷰에 각 폴더에 대한 네비게이션 링크를 보여줌
-                ForEach(folders) { folder in
+                //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
+                NavigationLink{
+                    TodoGridView(currentFolder: folders[0], viewType: basicViewType)
+                } label : {
+                    Text(folders[0].name)
+                }
+                
+                //기본 폴더를 제외하고는 모두 삭제 가능
+                ForEach(folders.indices.dropFirst(), id: \.self) { index in
                     NavigationLink {
-                        TodoGridView(currentFolder: folder, viewType: basicViewType)
+                        TodoGridView(currentFolder: folders[index], viewType: basicViewType)
                     } label: {
-                        Text(folder.name)
+                        Text(folders[index].name)
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete{ indexSet in
+                    // Adjust the indices for the deletion process
+                    let adjustedIndices = indexSet.map { $0 + 1 }
+                    let adjustedIndexSet = IndexSet(adjustedIndices)
+                    deleteItems(offsets: indexSet)
+                }
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
                 //리스트 뷰의 마지막에는 완료함이 위치함
                 NavigationLink {
