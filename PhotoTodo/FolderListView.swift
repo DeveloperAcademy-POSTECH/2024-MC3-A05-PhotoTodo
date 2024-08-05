@@ -28,9 +28,9 @@ struct FolderListView: View {
             List {
                 //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
                 NavigationLink{
-                    TodoGridView(currentFolder: folders[0], viewType: basicViewType)
+                    TodoGridView(currentFolder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
                 } label : {
-                    Text(folders[0].name)
+                    Text(folders.count > 0 ? folders[0].name : "")
                 }
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
