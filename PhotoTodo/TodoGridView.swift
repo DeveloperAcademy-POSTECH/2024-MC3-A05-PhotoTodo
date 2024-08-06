@@ -23,6 +23,7 @@ struct TodoGridView: View {
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
     @State private var sortOption: SortOption = .byDate
+    @State private var isShowingOptions = false
     
     var todos: [Todo] {
         switch viewType {
@@ -96,10 +97,29 @@ struct TodoGridView: View {
                         }
                 }
             }
+            .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
+                Button("촬영하기"){
+                    addTodos()
+                }
+                Button("앨범에서 가져오기"){
+                    print("앨범에서 가져오기")
+                }
+            }
             .navigationBarTitle(
                 navigationBarTitle
             )
             .toolbar {
+                ToolbarItem {
+                    editMode == .active ?
+                    //편집모드에서 다중선택된 아이템 삭제
+                    Button(action: deleteSelectedTodos) {
+                        Label("Delete Item", systemImage: "trash")
+                    } :
+                    //편집모드가 아닐 시 아이템 추가 버튼
+                    Button(action: toggleAddOptions) {
+                        Label("add Item", systemImage: "plus")
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                         .onChange(of: editMode) { newEditMode in
@@ -109,20 +129,12 @@ struct TodoGridView: View {
                             }
                         }
                 }
-                ToolbarItem {
-                    editMode == .active ?
-                    //편집모드에서 다중선택된 아이템 삭제
-                    Button(action: deleteSelectedTodos) {
-                        Label("Delete Item", systemImage: "trash")
-                    } :
-                    //편집모드가 아닐 시 아이템 추가 버튼
-                    Button(action: addTodos) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
             }
             .environment(\.editMode, $editMode)
         }
+    }
+    private func toggleAddOptions(){
+        isShowingOptions.toggle()
     }
     
     private func addTodos() {
