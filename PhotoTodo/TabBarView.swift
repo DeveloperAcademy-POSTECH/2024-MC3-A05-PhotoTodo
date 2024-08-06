@@ -6,23 +6,24 @@
 //
 import SwiftUI
 import SwiftData
-
+ 
 enum page {
     case main
     case folder
 }
-
+ 
 struct TabBarView: View {
-    @Environment(\.modelContext) private var modelContext
     @State private var selectedTab = 0
     @State private var isCameraViewActive = false
-    @State private var path: NavigationPath = NavigationPath()
+//    @State private var path: NavigationPath = NavigationPath()
     @State private var page: page = .main
-    @Query private var folders: [Folder]
     @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
+    @Environment(\.modelContext) private var modelContext
+    @Query private var folders: [Folder]
+    @State private var navigationisActive: Bool = false
     
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack/*(path: $path)*/ {
             ZStack{
                 VStack{
                     if page == .main {
@@ -47,21 +48,30 @@ struct TabBarView: View {
                         }
                         .foregroundStyle(page == .main ? Color.gray : Color.lightGray)
                         
+                        
                         NavigationLink(value: "camera") {
-                            ZStack{
-                                Circle()
-                                    .frame(width: 70, height: 70)
-                                    .foregroundStyle(Color.white)
-                                    .shadow(color: .lightGray, radius: 10)
-                                
-                                Image(systemName: "camera.fill")
-                                    .resizable()
-                                    .frame(width: 40, height: 30)
-                                    .foregroundStyle(Color.green)
+                            Button {
+                                navigationisActive.toggle()
+                            } label: {
+                                ZStack{
+                                    Circle()
+                                        .frame(width: 70, height: 70)
+                                        .foregroundStyle(Color.white)
+                                        .shadow(color: .lightGray, radius: 10)
+                                    
+                                    Image(systemName: "camera.fill")
+                                        .resizable()
+                                        .frame(width: 40, height: 30)
+                                        .foregroundStyle(Color.green)
+                                }
                             }
-                        }.navigationDestination(for: String.self) { value in
-                            CameraView()
                         }
+                        .navigationDestination(isPresented: $navigationisActive, destination: {
+                            CameraView()
+                        })
+//                        .navigationDestination(for: String.self) { value in
+//                            CameraView()
+//                        }
                         .padding(.horizontal, 55)
                         
                         Button {
@@ -80,14 +90,14 @@ struct TabBarView: View {
                         .foregroundStyle(page == .folder ? Color.gray : Color.lightGray)
                     }
                 }
-
+ 
 //                NavigationLink(value: "camera") {
 ////                    ZStack{
 //                        Circle()
 //                            .frame(width: 80, height: 80)
 //                            .foregroundStyle(Color.white)
 //                            .shadow(color: .lightGray, radius: 10)
-//                        
+//
 ////                        Image(systemName: "camera.fill")
 ////                            .resizable()
 ////                            .frame(width: 48, height: 35)
@@ -100,15 +110,12 @@ struct TabBarView: View {
 //                .offset(y: 290)
             }
         }
-        .navigationDestination(for: String.self) { value in
-            CameraView()
-        }
         .onAppear {
             //MARK: 최초 1회 실행된 적이 있을 시
             if hasBeenLaunched {
                 return
             }
-
+ 
             //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
             let defaultFolder = Folder(
                 id: UUID(),
@@ -156,12 +163,12 @@ struct TabBarView: View {
 //        .background(Color.white.shadow(radius: 2))
 //    }
 //}
-
+ 
 #Preview {
     TabBarView()
 }
-
-
+ 
+ 
 //import SwiftUI
 //
 //enum page {
@@ -175,7 +182,7 @@ struct TabBarView: View {
 //    @State private var isCameraViewActive = false
 //    @State private var path: [page] = []
 //    @State private var page: page = .main
-//    
+//
 //    var body: some View {
 //        NavigationStack(path: $path) {
 //            ZStack{
@@ -186,21 +193,21 @@ struct TabBarView: View {
 //                        FolderListView()
 //                    }
 //                    HStack {
-//                        
+//
 //                        Button {
 //                            page = .main
 //                        } label: {
 //                            Text("메인뷰")
 //                        }
-//                        
-//                        
+//
+//
 //                        NavigationLink(value: "camera") {
 //                            ZStack{
 //                                Circle()
 //                                    .frame(width: 80, height: 80)
 //                                    .foregroundStyle(Color.white)
 //                                    .shadow(color: .lightGray, radius: 10)
-//                                
+//
 //                                Image(systemName: "camera.fill")
 //                                    .resizable()
 //                                    .frame(width: 48, height: 35)
@@ -209,7 +216,7 @@ struct TabBarView: View {
 //                        }.navigationDestination(for: String.self) { value in
 //                            CameraView()
 //                        }
-//                        
+//
 //                        Spacer()
 //                        Button {
 //                            page = .folder
@@ -226,7 +233,7 @@ struct TabBarView: View {
 ////                            .frame(width: 80, height: 80)
 ////                            .foregroundStyle(Color.white)
 ////                            .shadow(color: .lightGray, radius: 10)
-////                        
+////
 ////                        Image(systemName: "camera.fill")
 ////                            .resizable()
 ////                            .frame(width: 48, height: 35)
