@@ -19,7 +19,6 @@ enum TodoGridViewType {
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
-    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     private var basicViewType: TodoGridViewType = .singleFolder
     private var doneListViewType: TodoGridViewType = .doneList
     
@@ -66,22 +65,6 @@ struct FolderListView: View {
                     }
                 }
             }
-        }
-        .onAppear {
-            //MARK: 최초 1회 실행된 적이 있을 시
-            if hasBeenLaunched {
-                return
-            }
-
-            //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
-            let defaultFolder = Folder(
-                id: UUID(),
-                name: "기본",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(defaultFolder)
-            hasBeenLaunched = true
         }
     }
        
