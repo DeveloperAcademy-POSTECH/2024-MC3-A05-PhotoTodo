@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		131501CD2C61FCA000AAA4A2 /* AlarmSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 131501CC2C61FCA000AAA4A2 /* AlarmSettingView.swift */; };
 		1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96742C59287600784CBA /* TodoItemView.swift */; };
 		1A0D96772C59C8C100784CBA /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96762C59C8C100784CBA /* Item.swift */; };
 		1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96822C5A14F300784CBA /* CameraViewModel.swift */; };
@@ -34,6 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		131501CC2C61FCA000AAA4A2 /* AlarmSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingView.swift; sourceTree = "<group>"; };
 		1A0D96742C59287600784CBA /* TodoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoItemView.swift; sourceTree = "<group>"; };
 		1A0D96762C59C8C100784CBA /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		1A0D96822C5A14F300784CBA /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				1A0D96762C59C8C100784CBA /* Item.swift */,
 				61E6D7192C5E443D00C22046 /* ToolBarView.swift */,
 				61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */,
+				131501CC2C61FCA000AAA4A2 /* AlarmSettingView.swift */,
 				1A0D96812C5A14CC00784CBA /* ViewModel */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
@@ -239,6 +242,7 @@
 				61E6D71C2C5E5EA700C22046 /* ImagePicker.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,
+				131501CD2C61FCA000AAA4A2 /* AlarmSettingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
