@@ -5,7 +5,7 @@ import SwiftUI
 @Model
 // MARK: Folder Model에 color 추가해야 할 것 같아욥 by 룰루
 class Folder {
-    let id: UUID
+    @Attribute(.unique) let id : UUID
     var name: String
     var color: String
     @Relationship(deleteRule:.cascade) var todos: [Todo]
@@ -21,7 +21,7 @@ class Folder {
 @Model
 class Todo {
     var folder: Folder?
-    @Attribute(.unique) var id : UUID
+    @Attribute(.unique) let id: UUID
     @Attribute(.externalStorage) var image: Data
     var createdAt: Date
     var options: Options
