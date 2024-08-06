@@ -35,10 +35,10 @@ struct CameraView: View {
     @State private var photoData: [Data] = []
     @State private var contentAlarm = Date()
     @State private var memo: String = ""
-    @State private var alarmDataisEmpty: Bool = true
+    @State private var alarmDataisEmpty: Bool = true  
     
     // 폴더 관련
-    @State private var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    @State var chosenFolder: Folder? = nil 
     @Query private var folders: [Folder]
     @State private var home: Bool = false
     
@@ -145,7 +145,7 @@ struct CameraView: View {
                 dismiss()
             }
             // MARK: Preview에 생성이 안되있어서 오류가 날 뿐, 디폴드 폴더는 삭제가 안되게 구현 예정이여서 문제 없습니다.
-            chosenFolder = folders.first!
+            chosenFolder = folders.count != 0 ? folders.first! : nil
         })
         
     }

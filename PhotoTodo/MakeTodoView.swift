@@ -20,7 +20,7 @@ struct MakeTodoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var cameraVM: CameraViewModel
-    @Binding var chosenFolder: Folder
+    @Binding var chosenFolder: Folder?
     var startViewType: startViewType
     
     // 내부 컨텐츠
@@ -187,9 +187,9 @@ struct MakeTodoView: View {
             .scrollDisabled(true)
         }
         .onAppear(perform: {
-            print(chosenFolder.name)
-            chosenFolderName = chosenFolder.name
-            chosenFolderColor = changeStringToColor(colorName: chosenFolder.color)
+//            print(chosenFolder.name ??")
+            chosenFolderName = chosenFolder?.name ?? ""
+            chosenFolderColor = changeStringToColor(colorName: chosenFolder?.color ?? "Yellow")
             if startViewType == .edit {
             }
         })
@@ -206,6 +206,7 @@ struct MakeTodoView: View {
 //                }
                 
                 let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
+                chosenFolder!.todos.append(newTodo)
                 modelContext.insert(newTodo)
                 home = true
                 dismiss()
@@ -219,7 +220,7 @@ struct MakeTodoView: View {
 
 #Preview {
     @State var cameraVM = CameraViewModel()
-    @State var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     @State var contentAlarm = Date()
     @State var memo: String = ""
     @State var alarmDataisEmpty: Bool = true
