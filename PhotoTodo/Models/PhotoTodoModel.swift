@@ -21,7 +21,7 @@ class Folder {
 @Model
 class Todo {
     var folder: Folder?
-    let id: UUID
+    @Attribute(.unique) var id : UUID
     @Attribute(.externalStorage) var image: Data
     var createdAt: Date
     var options: Options
