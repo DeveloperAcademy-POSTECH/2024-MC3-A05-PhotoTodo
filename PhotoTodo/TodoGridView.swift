@@ -98,9 +98,14 @@ struct TodoGridView: View {
                 }
             }
             .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
-                Button("촬영하기"){
-                    addTodos()
+                NavigationLink{
+                    CameraView(chosenFolder: currentFolder)
+                } label : {
+                    Text("촬영하기")
                 }
+//                Button("촬영하기"){
+//                    addTodos()
+//                }
                 Button("앨범에서 가져오기"){
                     print("앨범에서 가져오기")
                 }

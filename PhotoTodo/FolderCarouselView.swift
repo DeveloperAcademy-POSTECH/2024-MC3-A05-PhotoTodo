@@ -34,7 +34,7 @@ func changeStringToColor(colorName: String) -> Color {
 }
 
 struct FolderCarouselView: View {
-    @Binding var chosenFolder: Folder
+    @Binding var chosenFolder: Folder?
     @State private var selectedButtonIndex: Int = 0
     @Query private var folders: [Folder]
     
@@ -97,6 +97,6 @@ struct FolderCarouselView: View {
 }
 
 #Preview {
-    @State var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     return FolderCarouselView(chosenFolder: $chosenFolder)
 }

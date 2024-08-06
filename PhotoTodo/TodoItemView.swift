@@ -16,7 +16,7 @@ struct TodoItemView: View {
     @State private var editTodoisActive: Bool = false
     // TodoGridView에서 해당하는 todo를 넘겨받음
     var todo: Todo
-    @State private var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    @State private var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     @State private var contentAlarm = Date()
     @State private var memo: String = ""
     @State private var alarmDataisEmpty: Bool = true
