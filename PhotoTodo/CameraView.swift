@@ -26,25 +26,32 @@ enum FolderColor {
 
 struct CameraView: View {
     
+    @Environment(\.dismiss) private var dismiss
+    
     // 카메라 촬영 관련
     @StateObject private var cameraVM: CameraViewModel = CameraViewModel()
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var photoData: [Data] = []
+    @State private var contentAlarm = Date()
+    @State private var memo: String = ""
+    @State private var alarmDataisEmpty: Bool = true
     
     // 폴더 관련
     @State private var chosenFolder: Folder = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     @Query private var folders: [Folder]
+    @State private var home: Bool = false
     
     var body: some View {
         VStack(alignment: .center){
             cameraPreview
-                .frame(width: 350, height: 500)
+                .frame(width: 353, height: 542)
                 .clipShape(RoundedRectangle(cornerRadius: 25))
             
             FolderCarouselView(chosenFolder: $chosenFolder)
-                .frame(height: 80)
+                .frame(height: 34)
                 .padding(.top)
+
             
             if cameraCaptureState == .single {
                 HStack(alignment: .center) {
@@ -66,25 +73,26 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                             }
                         }
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                cameraCaptureState = .plural
-                            }, label: {
-                                VStack{
-                                    Image(systemName: "square.stack.3d.down.right")
-                                        .resizable()
-                                        .frame(width: 48, height: 52)
-                                    Text("다중촬영")
-                                }
-                            })
-                            .padding(.trailing, 35)
-                        }
+//                        HStack{
+//                            Spacer()
+//                            Button(action: {
+//                                cameraCaptureState = .plural
+//                            }, label: {
+//                                VStack{
+//                                    Image(systemName: "square.stack.3d.down.right")
+//                                        .resizable()
+//                                        .frame(width: 48, height: 52)
+//                                    Text("다중촬영")
+//                                }
+//                            })
+//                            .padding(.trailing, 35)
+//                        }
                     }
                 }
+                .padding(.top)
             } else {
                 HStack(alignment: .center) {
                     ZStack{
@@ -105,7 +113,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                                     .toolbar {
                                         Button("Add") {
                                         }
@@ -129,16 +137,22 @@ struct CameraView: View {
                     }
                 }
             }
-        }.onAppear(perform: {
-            // MARK: SwiftData 테스트용, 데이터 연동 시 아래 코드 사용하면 됨
-            // chosenFolder = folders.first!
+            
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear(perform: {
+            if home {
+                dismiss()
+            }
+            // MARK: Preview에 생성이 안되있어서 오류가 날 뿐, 디폴드 폴더는 삭제가 안되게 구현 예정이여서 문제 없습니다.
+            chosenFolder = folders.first!
         })
         
     }
     
     private var cameraPreview: some View {
         GeometryReader { geo in
-            CameraPreview(cameraVM: cameraVM, frame: CGRect(x: 0, y: 0, width: 350, height: 500))
+            CameraPreview(cameraVM: cameraVM, frame: CGRect(x: 0, y: 0, width: 353, height: 542))
                 .onAppear(){
                     print("열였을 때")
                     cameraVM.requestAccessAndSetup()

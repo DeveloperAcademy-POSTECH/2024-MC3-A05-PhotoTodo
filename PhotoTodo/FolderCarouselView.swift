@@ -36,23 +36,14 @@ func changeStringToColor(colorName: String) -> Color {
 struct FolderCarouselView: View {
     @Binding var chosenFolder: Folder
     @State private var selectedButtonIndex: Int = 0
-    @State private var listItems: [ListItem] = []
     @Query private var folders: [Folder]
-    // Query 테스트용
-    @State private var testFolders: [Folder] = [
-        Folder(id: UUID(), name: "기본폴더", color: "red", todos: []),
-        Folder(id: UUID(), name: "아카데미", color: "blue", todos: []),
-        Folder(id: UUID(), name: "해커톤", color: "green", todos: []),
-        Folder(id: UUID(), name: "공지사항", color: "yellow", todos: []),
-        Folder(id: UUID(), name: "쇼핑", color: "pink", todos: []),
-        Folder(id: UUID(), name: "룰루랄라", color: "cyan", todos: [])]
     
     var body: some View {
         GeometryReader { geometry in
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(Array(testFolders.enumerated()), id: \.element.id) { index, folder in
+                        ForEach(Array(folders.enumerated()), id: \.element.id) { index, folder in
                             Button(action: {
                                 withAnimation {
                                     selectedButtonIndex = index
@@ -101,12 +92,6 @@ struct FolderCarouselView: View {
                     .padding(.horizontal, (geometry.size.width - 40) / 2)
                 }
             }
-        }
-        .onAppear {
-            listItems.append(ListItem(title: "기본폴더", color: Color.red))
-            listItems.append(ListItem(title: "아카데미", color: Color.blue))
-            listItems.append(ListItem(title: "해커톤", color: Color.green))
-            listItems.append(ListItem(title: "공지사항", color: Color.yellow))
         }
     }
 }
