@@ -110,7 +110,7 @@ struct MakeTodoView: View {
                                 .frame(width: 15, height: 15)
                             Text("알람설정")
                             Spacer()
-                            Text(alarmDataisEmpty ? "없음" : "\(contentAlarm)")
+                            Text(alarmDataisEmpty ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm))
                         }
                     }
                     .sheet(isPresented: $alarmisActive, content: {
