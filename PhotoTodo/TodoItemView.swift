@@ -20,6 +20,8 @@ struct TodoItemView: View {
     @State private var contentAlarm = Date()
     @State private var memo: String = ""
     @State private var alarmDataisEmpty: Bool = true
+    @State private var path: NavigationPath = NavigationPath()
+    @State private var home: Bool = false
     
     var body: some View {
         ZStack{
@@ -84,7 +86,7 @@ struct TodoItemView: View {
                     }
                     .padding()
                     
-                    MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo)
+                    MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                 }
             })
         }
