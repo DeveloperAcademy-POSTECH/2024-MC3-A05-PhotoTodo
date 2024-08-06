@@ -28,6 +28,7 @@
 		1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */; };
 		1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */; };
 		1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8B2C5C643600BAFD13 /* TestView.swift */; };
+		4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
 		61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D7192C5E443D00C22046 /* ToolBarView.swift */; };
 		61E6D71C2C5E5EA700C22046 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,7 @@
 		1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCompositeGridView.swift; sourceTree = "<group>"; };
 		1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2E5C8B2C5C643600BAFD13 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		4F46B28A2C5C7E2100556646 /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
 		61E6D7192C5E443D00C22046 /* ToolBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarView.swift; sourceTree = "<group>"; };
 		61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -120,6 +122,7 @@
 				1A0D96742C59287600784CBA /* TodoItemView.swift */,
 				1A0D96842C5A150D00784CBA /* CameraPreview.swift */,
 				1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */,
+				4F46B28A2C5C7E2100556646 /* FolderEditView.swift */,
 				1A0D96762C59C8C100784CBA /* Item.swift */,
 				61E6D7192C5E443D00C22046 /* ToolBarView.swift */,
 				61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */,
@@ -225,6 +228,7 @@
 				61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
+				4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
 				1A2778FA2C5741CF00A02C7E /* TodoGridView.swift in Sources */,
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
