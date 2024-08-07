@@ -29,6 +29,7 @@
 		1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */; };
 		1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */; };
 		1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8B2C5C643600BAFD13 /* TestView.swift */; };
+		1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */; };
 		3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C90390C2C623EFF00025335 /* Date+Extension.swift */; };
 		4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
 		61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D7192C5E443D00C22046 /* ToolBarView.swift */; };
@@ -58,6 +59,7 @@
 		1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCompositeGridView.swift; sourceTree = "<group>"; };
 		1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2E5C8B2C5C643600BAFD13 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
 		3C90390C2C623EFF00025335 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		4F46B28A2C5C7E2100556646 /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
 		61E6D7192C5E443D00C22046 /* ToolBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarView.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				3C90390C2C623EFF00025335 /* Date+Extension.swift */,
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
+				1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
 				1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */,
 				1A0D96882C5A156800784CBA /* TodoView.swift */,
@@ -234,6 +237,7 @@
 				1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */,
 				61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
+				1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
 				4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
