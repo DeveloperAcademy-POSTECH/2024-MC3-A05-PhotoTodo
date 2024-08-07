@@ -41,8 +41,7 @@ struct FolderEditView: View {
                     .font(.headline)
                 Spacer()
                 Button("저장") {
-                    
-                    isSheetPresented = false
+                    addFolders()
                 }
             }
             .padding()
@@ -123,6 +122,9 @@ struct FolderEditView: View {
     }
     
     private func addFolders() {
+        if folderNameInput == "" {
+            return
+        }
         withAnimation {
             let newFolder = Folder(
                 id: UUID(),
@@ -131,6 +133,7 @@ struct FolderEditView: View {
                 todos: []
             )
             modelContext.insert(newFolder)
+            isSheetPresented = false
         }
         
         folderNameInput = ""
