@@ -38,14 +38,15 @@ struct TodoItemView: View {
                         Button{
                             todo.isDoneAt = nil
                             if (todo.isDone) {
-                                withAnimation {
+//                                withAnimation {
                                     todo.isDone.toggle()
-                                }
+//                                }
+                                todo.isDoneAt = nil
                             } else {
-                                todo.isDoneAt = Date()
-                                withAnimation {
+//                                withAnimation {
                                     todo.isDone.toggle()
-                                }
+//                                }
+                                todo.isDoneAt = Date()
                             }
                         } label : {
                             todo.isDone ?
