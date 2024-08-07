@@ -25,6 +25,7 @@ struct TodoGridView: View {
     @State private var editMode: EditMode = .inactive
     @State private var sortOption: SortOption = .byDate
     @State private var isShowingOptions = false
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     
     var todos: [Todo] {
         switch viewType {
@@ -168,8 +169,17 @@ struct TodoGridView: View {
         }
     }
     
+    ///완료함에서 삭제한 경우에 DeletionCount를 삭제한 아이템의 개수만큼 늘려줌
+    private func addDeletionCount() {
+        if viewType != .doneList{
+            return
+        }
+        deletionCount += selectedTodos.count
+        print(deletionCount)
+    }
     
     private func deleteSelectedTodos() {
+        addDeletionCount()
         withAnimation {
             DispatchQueue.main.async{
                 selectedTodos.forEach { id in
