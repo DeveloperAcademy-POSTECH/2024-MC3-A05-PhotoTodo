@@ -54,7 +54,7 @@ struct FolderListView: View {
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
                 //리스트 뷰의 마지막에는 완료함이 위치함
                 NavigationLink {
-                    TodoCompositeGridView(viewType: doneListViewType)
+                    DoneListView()
                 } label : {
                     Text("완료함")
                 }
