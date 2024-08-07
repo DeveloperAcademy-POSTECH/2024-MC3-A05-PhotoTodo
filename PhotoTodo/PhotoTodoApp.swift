@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 @main
+
 struct PhotoTodoApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([

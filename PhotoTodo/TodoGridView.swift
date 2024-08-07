@@ -67,7 +67,7 @@ struct TodoGridView: View {
         case .singleFolder:
             return currentFolder?.name ?? folders[0].name
         case .main:
-            return "메인뷰"
+            return "포토투두"
         case .doneList:
             return "완료함"
         }
