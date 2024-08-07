@@ -18,18 +18,18 @@ func changeStringToColor(colorName: String) -> Color {
     switch colorName {
     case "red":
         return Color.red
-    case "blue":
-        return Color.blue
-    case "green":
-        return Color.green
+    case "orange":
+        return Color.orange
     case "yellow":
         return Color.yellow
-    case "pink":
-        return Color.pink
-    case "cyan":
-        return Color.cyan
+    case "green":
+        return Color.green
+    case "blue":
+        return Color.blue
+    case "purple":
+        return Color.purple
     default:
-        return Color.red
+        return Color.green
     }
 }
 

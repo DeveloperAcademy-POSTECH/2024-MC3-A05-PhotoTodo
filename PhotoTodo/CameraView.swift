@@ -13,15 +13,6 @@ enum CameraCaptureState {
     case single
     case plural
 }
-
-enum FolderColor {
-    case yellow
-    case black
-    case blue
-    case pink
-    case orange
-}
-
 struct CameraView: View {
     
     @Environment(\.dismiss) private var dismiss
@@ -33,10 +24,10 @@ struct CameraView: View {
     @State private var photoData: [Data] = []
     @State private var contentAlarm = Date()
     @State private var memo: String = ""
-    @State private var alarmDataisEmpty: Bool = true  
+    @State private var alarmDataisEmpty: Bool = true
     
     // 폴더 관련
-    @State var chosenFolder: Folder? = nil 
+    @State var chosenFolder: Folder? = nil
     @Query private var folders: [Folder]
     @State private var home: Bool = false
     @State private var lastScale: CGFloat = 1.0
