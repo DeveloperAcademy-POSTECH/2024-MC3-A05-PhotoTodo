@@ -36,12 +36,16 @@ struct TodoItemView: View {
                 //TODO: overlay하고 alignment로 top 주기
                     .overlay(alignment: .topLeading) {
                         Button{
+                            todo.isDoneAt = nil
                             if (todo.isDone) {
-                                todo.isDone.toggle()
-                                todo.isDoneAt = nil
+                                withAnimation {
+                                    todo.isDone.toggle()
+                                }
                             } else {
-                                todo.isDone.toggle()
                                 todo.isDoneAt = Date()
+                                withAnimation {
+                                    todo.isDone.toggle()
+                                }
                             }
                         } label : {
                             todo.isDone ?
@@ -82,7 +86,7 @@ struct TodoItemView: View {
                         } label: {
                             Text("저장")
                         }
-
+                        
                     }
                     .padding()
                     
