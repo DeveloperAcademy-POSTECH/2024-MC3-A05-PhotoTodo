@@ -88,6 +88,7 @@ struct DashboardView: View {
 
 
 private struct DashboardAccomplishmentTotalView: View {
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
             VStack(alignment: .leading, spacing: 8) {
@@ -95,7 +96,7 @@ private struct DashboardAccomplishmentTotalView: View {
                     .font(.callout)
                     .foregroundStyle(.gray)
                     .lineSpacing(-8)
-                Text("개")
+                Text("\(deletionCount)개")
                     .font(.title)
                     .bold()
             }
@@ -104,7 +105,7 @@ private struct DashboardAccomplishmentTotalView: View {
                     .font(.callout)
                     .foregroundStyle(.gray)
                     .lineSpacing(-8)
-                Text("개")
+                Text("\(deletionCount)개")
                     .font(.title)
                     .bold()
             }
@@ -113,7 +114,7 @@ private struct DashboardAccomplishmentTotalView: View {
                     .font(.callout)
                     .foregroundStyle(.gray)
                     .lineSpacing(-8)
-                Text("g")
+                Text("\(String(format: "%.1f", Float(deletionCount)*(5.4)))g")
                     .font(.title)
                     .bold()
             }
