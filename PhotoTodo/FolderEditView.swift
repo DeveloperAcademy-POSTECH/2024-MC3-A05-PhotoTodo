@@ -5,14 +5,25 @@
 //  Created by JiaeShin on 8/5/24.
 //
 import SwiftUI
+import SwiftData
 
 struct FolderEditView: View {
     @Binding var isSheetPresented: Bool
     @Binding var folderNameInput: String
     @Binding var selectedColor: Color?
+    @Query var folders: [Folder]
+    @Environment(\.modelContext) private var modelContext
     
     @State private var showActionSheet = false
     let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple]
+    let colorDictionary: [Color: String] = [
+        .red: "red",
+        .orange: "orange",
+        .yellow: "yellow",
+        .green: "green",
+        .blue: "blue",
+        .purple: "purple"
+    ]
 
     var body: some View {
         VStack (alignment: .leading) {
@@ -30,6 +41,7 @@ struct FolderEditView: View {
                     .font(.headline)
                 Spacer()
                 Button("저장") {
+                    
                     isSheetPresented = false
                 }
             }
@@ -108,5 +120,21 @@ struct FolderEditView: View {
             )
         }
         .interactiveDismissDisabled(!folderNameInput.isEmpty)
+    }
+    
+    private func addFolders() {
+        withAnimation {
+            let newFolder = Folder(
+                id: UUID(),
+                name: folderNameInput,
+                color: selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green",
+                todos: []
+            )
+            modelContext.insert(newFolder)
+        }
+        
+        folderNameInput = ""
+        isSheetPresented = false
+        selectedColor = nil
     }
 }
