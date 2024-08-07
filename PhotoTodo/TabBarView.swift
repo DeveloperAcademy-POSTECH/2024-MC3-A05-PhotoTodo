@@ -5,6 +5,7 @@
 //  Created by leejina on 8/2/24.
 //
 import SwiftUI
+import SwiftData
  
 enum page {
     case main
@@ -16,6 +17,9 @@ struct TabBarView: View {
     @State private var isCameraViewActive = false
     @State private var path: NavigationPath = NavigationPath()
     @State private var page: page = .main
+    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
+    @Environment(\.modelContext) private var modelContext
+    @Query private var folders: [Folder]
     
     var body: some View {
         NavigationStack(path: $path) {
@@ -75,6 +79,22 @@ struct TabBarView: View {
                         }
                         .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
                     }
+                }
+                .onAppear {
+                    //MARK: 최초 1회 실행된 적이 있을 시
+                    if hasBeenLaunched {
+                        return
+                    }
+         
+                    //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
+                    let defaultFolder = Folder(
+                        id: UUID(),
+                        name: "기본",
+                        color: "green",
+                        todos: []
+                    )
+                    modelContext.insert(defaultFolder)
+                    hasBeenLaunched = true
                 }
  
 //                NavigationLink(value: "camera") {
