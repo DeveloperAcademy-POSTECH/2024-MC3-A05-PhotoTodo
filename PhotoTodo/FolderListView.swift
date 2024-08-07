@@ -19,8 +19,13 @@ enum TodoGridViewType {
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
+    @State var isShowingSheet = false
+    @State var folderNameInput = ""
+    @State var selectedColor: Color?
     private var basicViewType: TodoGridViewType = .singleFolder
     private var doneListViewType: TodoGridViewType = .doneList
+    
+    
     
     var body: some View {
         NavigationStack{
@@ -60,11 +65,18 @@ struct FolderListView: View {
                     EditButton()
                 }
                 ToolbarItem {
-                    Button(action: addFolders) {
-                        Label("Add Item", systemImage: "plus")
+                    Button {
+                        isShowingSheet.toggle()
+                    } label : {
+                        Image(systemName: "plus")
                     }
                 }
             }
+            .sheet(isPresented: $isShowingSheet, content: {
+                FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+                    .presentationDetents([.medium, .large])
+                })
+            
         }
     }
        
