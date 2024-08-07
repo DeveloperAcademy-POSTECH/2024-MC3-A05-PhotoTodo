@@ -22,8 +22,6 @@ enum FolderColor {
     case orange
 }
 
-
-
 struct CameraView: View {
     
     @Environment(\.dismiss) private var dismiss
@@ -41,6 +39,7 @@ struct CameraView: View {
     @State var chosenFolder: Folder? = nil 
     @Query private var folders: [Folder]
     @State private var home: Bool = false
+    @State private var lastScale: CGFloat = 1.0
     
     var body: some View {
         VStack(alignment: .center){
@@ -153,6 +152,18 @@ struct CameraView: View {
     private var cameraPreview: some View {
         GeometryReader { geo in
             CameraPreview(cameraVM: cameraVM, frame: CGRect(x: 0, y: 0, width: 353, height: 542))
+                .gesture(
+                    MagnificationGesture()
+                        .onChanged { value in
+                            let delta = value / self.lastScale
+                            self.lastScale = value
+                            let newZoomFactor = cameraVM.zoomFactor * delta
+                            cameraVM.zoomFactor = newZoomFactor
+                        }
+                        .onEnded { _ in
+                            self.lastScale = 1.0
+                        }
+                )
                 .onAppear(){
                     print("열였을 때")
                     cameraVM.requestAccessAndSetup()

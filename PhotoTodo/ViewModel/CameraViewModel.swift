@@ -25,6 +25,23 @@ class CameraViewModel: NSObject, ObservableObject {
     var output = AVCapturePhotoOutput()
     
     @Published var photoData: [Data] = []
+    @Published var zoomFactor: CGFloat = 1.0 {
+            didSet {
+                setZoom(zoomFactor)
+            }
+        }
+    
+    private func setZoom(_ zoomFactor: CGFloat) {
+            guard let device = AVCaptureDevice.default(for: .video) else { return }
+            
+            do {
+                try device.lockForConfiguration()
+                device.videoZoomFactor = max(1.0, min(zoomFactor, device.activeFormat.videoMaxZoomFactor))
+                device.unlockForConfiguration()
+            } catch {
+                print("Error setting zoom factor: \(error.localizedDescription)")
+            }
+        }
     
     private(set) var photoCaptureState: PhotoCaptureState = .notStarted
     func requestAccessAndSetup() {

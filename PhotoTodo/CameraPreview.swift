@@ -24,5 +24,6 @@ struct CameraPreview: UIViewRepresentable {
     
     ///UIViewRepresentable를 사용하기 위한 필수요소, but 구현 시 사용 안함
     func updateUIView(_ uiView: UIViewType, context: Context) {
+        cameraVM.preview.frame = frame
     }
 }
