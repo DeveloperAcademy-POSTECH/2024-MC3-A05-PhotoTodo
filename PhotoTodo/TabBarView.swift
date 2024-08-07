@@ -5,7 +5,6 @@
 //  Created by leejina on 8/2/24.
 //
 import SwiftUI
-import SwiftData
  
 enum page {
     case main
@@ -15,15 +14,11 @@ enum page {
 struct TabBarView: View {
     @State private var selectedTab = 0
     @State private var isCameraViewActive = false
-//    @State private var path: NavigationPath = NavigationPath()
+    @State private var path: NavigationPath = NavigationPath()
     @State private var page: page = .main
-    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
-    @Environment(\.modelContext) private var modelContext
-    @Query private var folders: [Folder]
-    @State private var navigationisActive: Bool = false
     
     var body: some View {
-        NavigationStack/*(path: $path)*/ {
+        NavigationStack(path: $path) {
             ZStack{
                 VStack{
                     if page == .main {
@@ -37,41 +32,32 @@ struct TabBarView: View {
                             page = .main
                         } label: {
                             VStack{
-                                Image(systemName: page == .main ? "square.grid.2x2.fill" : "square.grid.2x2")
+                                Image(page == .main ? "allTodo.fill" : "allTodo")
                                     .resizable()
-                                    .frame(width: 20, height: 20)
+                                    .frame(width: 22, height: 22)
                                 Text("전체투두")
                                     .font(.system(size: 12))
                                     .padding(.top, 2)
                                     .bold()
                             }
                         }
-                        .foregroundStyle(page == .main ? Color.gray : Color.lightGray)
-                        
+                        .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
                         
                         NavigationLink(value: "camera") {
-                            Button {
-                                navigationisActive.toggle()
-                            } label: {
-                                ZStack{
-                                    Circle()
-                                        .frame(width: 70, height: 70)
-                                        .foregroundStyle(Color.white)
-                                        .shadow(color: .lightGray, radius: 10)
-                                    
-                                    Image(systemName: "camera.fill")
-                                        .resizable()
-                                        .frame(width: 40, height: 30)
-                                        .foregroundStyle(Color.green)
-                                }
+                            ZStack{
+                                Circle()
+                                    .frame(width: 70, height: 70)
+                                    .foregroundStyle(Color.white)
+                                    .shadow(color: .lightGray, radius: 10)
+                                
+                                Image("cloverCamera.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 32)
+                                    .foregroundStyle(Color.green)
                             }
-                        }
-                        .navigationDestination(isPresented: $navigationisActive, destination: {
+                        }.navigationDestination(for: String.self) { value in
                             CameraView()
-                        })
-//                        .navigationDestination(for: String.self) { value in
-//                            CameraView()
-//                        }
+                        }
                         .padding(.horizontal, 55)
                         
                         Button {
@@ -87,7 +73,7 @@ struct TabBarView: View {
                                     .bold()
                             }
                         }
-                        .foregroundStyle(page == .folder ? Color.gray : Color.lightGray)
+                        .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
                     }
                 }
  
@@ -110,21 +96,8 @@ struct TabBarView: View {
 //                .offset(y: 290)
             }
         }
-        .onAppear {
-            //MARK: 최초 1회 실행된 적이 있을 시
-            if hasBeenLaunched {
-                return
-            }
- 
-            //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
-            let defaultFolder = Folder(
-                id: UUID(),
-                name: "기본",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(defaultFolder)
-            hasBeenLaunched = true
+        .navigationDestination(for: String.self) { value in
+            CameraView()
         }
     }
 }

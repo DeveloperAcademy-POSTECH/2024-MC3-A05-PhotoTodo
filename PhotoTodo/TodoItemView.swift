@@ -45,15 +45,15 @@ struct TodoItemView: View {
                             }
                         } label : {
                             todo.isDone ?
-                            Image(systemName: "circle.fill")
+                            Image("selectedOn")
+                                .resizable()
+                                .frame(width: 36, height: 36)
                                 .padding(4)
-                                .background(Color.black)
-                                .foregroundColor(.white)
                             :
-                            Image(systemName: "circle")
+                            Image("selectedOff")
+                                .resizable()
+                                .frame(width: 36, height: 36)
                                 .padding(4)
-                                .background(Color.black)
-                                .foregroundColor(.white)
                         }
                         .disabled(editMode == .active)
                     }
