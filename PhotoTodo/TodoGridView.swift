@@ -75,70 +75,92 @@ struct TodoGridView: View {
     
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: columns) {
-                //TODO: 각 Todo에 대한 DetailView Link 연결시키기
-                //TODO: 이미지 비율 맞추기
-                
-                ForEach(sortedTodos) { todo in
-                    TodoItemView(editMode: $editMode, todo: todo)
-                        //각 TodoItem에 체크박스를 오버레이하여 보여줌
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
-                        )
-                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                        .onTapGesture {
-                            if editMode == .active {
-                                if selectedTodos.contains(todo.id) {
-                                    selectedTodos.remove(todo.id)
-                                } else {
-                                    selectedTodos.insert(todo.id)
-                                }
-                            }
-                        }
-                }
-            }
-            .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
-                NavigationLink{
-                    CameraView(chosenFolder: currentFolder)
-                } label : {
-                    Text("촬영하기")
-                }
-//                Button("촬영하기"){
-//                    addTodos()
-//                }
-                Button("앨범에서 가져오기"){
-                    print("앨범에서 가져오기")
-                }
-            }
-            .navigationBarTitle(
-                navigationBarTitle
-            )
-            .toolbar {
-                ToolbarItem {
-                    editMode == .active ?
-                    //편집모드에서 다중선택된 아이템 삭제
-                    Button(action: deleteSelectedTodos) {
-                        Label("Delete Item", systemImage: "trash")
-                    } :
-                    //편집모드가 아닐 시 아이템 추가 버튼
-                    Button(action: toggleAddOptions) {
-                        Label("add Item", systemImage: "plus")
+        VStack{
+            if todos.isEmpty {
+                Spacer()
+                VStack{
+                    Image("mainEmptyIcon")
+                        .resizable()
+                        .frame(width: 56, height: 56)
+                    VStack{
+                        Text("새로운 사진을 추가하여")
+                        Text("포토투두를 만들어보세요!")
                     }
+                    .padding(.top)
+                    .font(.system(size: 20))
+                    .foregroundStyle(Color.gray)
+                    .bold()
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                        .onChange(of: editMode) { newEditMode in
-                        //편집모드 해제시 선택정보 삭제
-                            if newEditMode == .inactive {
-                                selectedTodos.removeAll()
+                Spacer()
+            } else {
+                ScrollView {
+                    VStack{
+                        LazyVGrid(columns: columns) {
+                            //TODO: 각 Todo에 대한 DetailView Link 연결시키기
+                            //TODO: 이미지 비율 맞추기
+                            
+                            ForEach(sortedTodos) { todo in
+                                TodoItemView(editMode: $editMode, todo: todo)
+                                //각 TodoItem에 체크박스를 오버레이하여 보여줌
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
+                                    )
+                                //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                                    .onTapGesture {
+                                        if editMode == .active {
+                                            if selectedTodos.contains(todo.id) {
+                                                selectedTodos.remove(todo.id)
+                                            } else {
+                                                selectedTodos.insert(todo.id)
+                                            }
+                                        }
+                                    }
                             }
                         }
+                    }
+                    
                 }
             }
-            .environment(\.editMode, $editMode)
+        }.confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
+            NavigationLink{
+                CameraView(chosenFolder: currentFolder)
+            } label : {
+                Text("촬영하기")
+            }
+            //                Button("촬영하기"){
+            //                    addTodos()
+            //                }
+            Button("앨범에서 가져오기"){
+                print("앨범에서 가져오기")
+            }
         }
+        .navigationBarTitle(
+            navigationBarTitle
+        )
+        .toolbar {
+            ToolbarItem {
+                editMode == .active ?
+                //편집모드에서 다중선택된 아이템 삭제
+                Button(action: deleteSelectedTodos) {
+                    Label("Delete Item", systemImage: "trash")
+                } :
+                //편집모드가 아닐 시 아이템 추가 버튼
+                Button(action: toggleAddOptions) {
+                    Label("add Item", systemImage: "plus")
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                EditButton()
+                    .onChange(of: editMode) { newEditMode in
+                        //편집모드 해제시 선택정보 삭제
+                        if newEditMode == .inactive {
+                            selectedTodos.removeAll()
+                        }
+                    }
+            }
+        }
+        .environment(\.editMode, $editMode)
     }
     private func toggleAddOptions(){
         isShowingOptions.toggle()
@@ -200,7 +222,7 @@ struct TodoGridView: View {
 //        var viewType: TodoGridViewType = .singleFolder
 //        TodoGridView(defaultStorageFolder: previewFolder, todos: previewFolder.todos, viewType: viewType)
 //    }
-//    
+//
 //    static var previewFolder: Folder {
 //        let sampleTodo = Todo(
 //            id: UUID(),
@@ -212,10 +234,10 @@ struct TodoGridView: View {
 //            ),
 //            isDone: false
 //        )
-//        
+//
 //        return Folder(
 //            id: UUID(),
-//            name: "예제폴더", 
+//            name: "예제폴더",
 //            color: "red",
 //            todos: [sampleTodo]
 //        )
