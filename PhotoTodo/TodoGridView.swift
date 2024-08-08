@@ -15,6 +15,14 @@ enum SortOption {
     case byStatus
 }
 
+enum ToastOption {
+    case none
+    case moveToDone
+    case discoverOrigin
+    case moveToOrigin
+    case discoverDone
+}
+
 struct TodoGridView: View {
     @Environment(\.modelContext) private var modelContext
     @Query var folders: [Folder]
@@ -26,6 +34,10 @@ struct TodoGridView: View {
     @State private var sortOption: SortOption = .byDate
     @State private var isShowingOptions = false
     @AppStorage("deletionCount") var deletionCount: Int = 0
+    
+    // 토글버튼에 따라서 토스트 메시지 설정 변수
+    @State private var toastMassage: Todo? = nil
+    @State private var toastOption: ToastOption = .none
     
     var todos: [Todo] {
         switch viewType {
@@ -75,54 +87,100 @@ struct TodoGridView: View {
     
     
     var body: some View {
-        VStack{
-            if todos.isEmpty {
-                Spacer()
-                VStack{
-                    Image("mainEmptyIcon")
-                        .resizable()
-                        .frame(width: 56, height: 56)
+        ZStack {
+            VStack{
+                if todos.isEmpty {
+                    Spacer()
                     VStack{
-                        Text("새로운 사진을 추가하여")
-                        Text("포토투두를 만들어보세요!")
+                        Image("mainEmptyIcon")
+                            .resizable()
+                            .frame(width: 56, height: 56)
+                        VStack{
+                            Text("새로운 사진을 추가하여")
+                            Text("포토투두를 만들어보세요!")
+                        }
+                        .padding(.top)
+                        .font(.system(size: 20))
+                        .foregroundStyle(Color.gray)
+                        .bold()
                     }
-                    .padding(.top)
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color.gray)
-                    .bold()
-                }
-                Spacer()
-            } else {
-                ScrollView {
-                    VStack{
-                        LazyVGrid(columns: columns) {
-                            //TODO: 각 Todo에 대한 DetailView Link 연결시키기
-                            //TODO: 이미지 비율 맞추기
-                            
-                            ForEach(sortedTodos) { todo in
-                                TodoItemView(editMode: $editMode, todo: todo)
-                                //각 TodoItem에 체크박스를 오버레이하여 보여줌
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
-                                    )
-                                //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                                    .onTapGesture {
-                                        if editMode == .active {
-                                            if selectedTodos.contains(todo.id) {
-                                                selectedTodos.remove(todo.id)
-                                            } else {
-                                                selectedTodos.insert(todo.id)
+                    Spacer()
+                } else {
+                    ScrollView {
+                        VStack{
+                            LazyVGrid(columns: columns) {
+                                //TODO: 각 Todo에 대한 DetailView Link 연결시키기
+                                //TODO: 이미지 비율 맞추기
+                                
+                                ForEach(sortedTodos) { todo in
+                                    TodoItemView(editMode: $editMode, todo: todo, toastMassage: $toastMassage, toastOption: $toastOption)
+                                    //각 TodoItem에 체크박스를 오버레이하여 보여줌
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
+                                        )
+                                    //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                                        .onTapGesture {
+                                            if editMode == .active {
+                                                if selectedTodos.contains(todo.id) {
+                                                    selectedTodos.remove(todo.id)
+                                                } else {
+                                                    selectedTodos.insert(todo.id)
+                                                }
                                             }
                                         }
-                                    }
+                                }
                             }
                         }
+                        
                     }
-                    
                 }
             }
-        }.confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
+            VStack{
+                if toastOption != .none {
+                    if toastOption == .moveToDone {
+                        Button {
+                            
+                        } label: {
+                            RoundedRectangle(cornerRadius: 35)
+                                    .fill(.paleGray)
+                                    .opacity(0.5)
+                                    .frame(width: 200, height: 50)
+                                    .overlay {
+                                        Text("투두가 복구되었어요!")
+                                                .fontWeight(.bold)
+                                                .font(.system(size: 15))
+                                                .foregroundColor(.green)
+                                                .padding()
+                                    }
+                                    .offset(y: 250)
+                        }
+                        
+                    } else if toastOption == .moveToOrigin {
+                        
+                        RoundedRectangle(cornerRadius: 35)
+                                .fill(.paleGray)
+                                .opacity(0.5)
+                                .frame(width: 200, height: 50)
+                                .overlay {
+                                    Text("투두가 완료되었어요!")
+//                                    Text("완료함으로 이동되었어요!")
+                                            .fontWeight(.bold)
+                                            .font(.system(size: 15))
+                                            .foregroundColor(.green)
+                                            .padding()
+                                }
+                                .offset(y: 250)
+                    }
+                    //                if toastMassage == nil {
+                    //                    Text("복구되었을 때")
+                    //                } else {
+                    //                    Text("삭제되었을 때")
+                    //                }
+                }
+            }
+        }
+        .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
             NavigationLink{
                 CameraView(chosenFolder: currentFolder)
             } label : {

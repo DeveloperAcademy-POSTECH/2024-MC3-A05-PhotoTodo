@@ -14,6 +14,7 @@ struct TodoItemView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var editMode: EditMode
     @State private var editTodoisActive: Bool = false
+    
     // TodoGridView에서 해당하는 todo를 넘겨받음
     var todo: Todo
     @State private var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
@@ -22,6 +23,10 @@ struct TodoItemView: View {
     @State private var alarmDataisEmpty: Bool = true
     @State private var path: NavigationPath = NavigationPath()
     @State private var home: Bool = false
+    
+    // 토글 시 토스트 메세지 설정 관련 변수
+    @Binding var toastMassage: Todo?
+    @Binding var toastOption: ToastOption
     
     var body: some View {
         ZStack{
@@ -38,15 +43,35 @@ struct TodoItemView: View {
                         Button{
                             todo.isDoneAt = nil
                             if (todo.isDone) {
+                                // 완료상태 -> 미완료상태로 변경
 //                                withAnimation {
                                     todo.isDone.toggle()
 //                                }
                                 todo.isDoneAt = nil
+//                                toastMassage = todo
+                                toastOption = .moveToDone
+                                DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
+                                    DispatchQueue.main.async {
+//                                        toastMassage = nil
+                                        toastOption = .none
+                                    }
+                                })
+                                print("메인함으로 보내버림")
                             } else {
+                                // 미완료상태 -> 완료상태로 변경
 //                                withAnimation {
                                     todo.isDone.toggle()
 //                                }
                                 todo.isDoneAt = Date()
+//                                toastMassage = nil
+                                toastOption = .moveToOrigin
+                                DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
+                                    DispatchQueue.main.async {
+//                                        toastMassage = todo
+                                        toastOption = .none
+                                    }
+                                })
+                                print("완료함으로 보내버림")
                             }
                         } label : {
                             todo.isDone ?
@@ -119,7 +144,9 @@ struct TodoItemView: View {
     )
     
     @State var editMode: EditMode = .inactive
-    return TodoItemView(editMode: $editMode, todo: newTodo)
+    @State var toastMassage: Todo? = nil
+    @State var toastOption: ToastOption = .none
+    return TodoItemView(editMode: $editMode, todo: newTodo, toastMassage: $toastMassage, toastOption: $toastOption)
 }
 
 
