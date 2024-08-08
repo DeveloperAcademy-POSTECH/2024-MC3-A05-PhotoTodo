@@ -20,6 +20,8 @@ class ShareViewController: SLComposeServiceViewController {
             hostingView.view.frame = view.frame
             view.addSubview(hostingView.view)
         }
+        
+//        let screenCaptureView =
     }
 }
 
@@ -91,6 +93,7 @@ fileprivate struct ShareView: View {
                     if let data, let image = UIImage(data: data), let thumnail = image.preparingThumbnail(of: .init(width: size.width, height: 300)) {
                         // UI는 메인스레드에서 무조건 업데이트 되어야 함
                         DispatchQueue.main.async {
+                            print("Test: \(data)")
                             items.append(.init(imageData: data, previewImage: thumnail))
                         }
                     }
@@ -107,7 +110,7 @@ fileprivate struct ShareView: View {
         ])
         do {
             let context = try ModelContext(.init(for: schema.self))
-            let newTodo = Todo(id: UUID(), image: Data(), createdAt: Date(), options: Options(), isDone: false)
+            let newTodo = Todo(id: UUID(), image: items.first!.imageData, createdAt: Date(), options: Options(), isDone: false)
             context.insert(newTodo)
             try context.save()
             dismiss()
