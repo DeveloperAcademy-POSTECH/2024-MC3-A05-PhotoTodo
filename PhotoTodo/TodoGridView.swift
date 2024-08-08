@@ -25,6 +25,10 @@ struct TodoGridView: View {
     @State private var editMode: EditMode = .inactive
     @State private var sortOption: SortOption = .byDate
     @State private var isShowingOptions = false
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+    @State private var isActive = false
+    @StateObject var cameraVM: CameraViewModel = CameraViewModel()
     @AppStorage("deletionCount") var deletionCount: Int = 0
     
     var todos: [Todo] {
@@ -105,16 +109,16 @@ struct TodoGridView: View {
                 } label : {
                     Text("촬영하기")
                 }
-//                Button("촬영하기"){
-//                    addTodos()
-//                }
                 Button("앨범에서 가져오기"){
-                    print("앨범에서 가져오기")
+                    showingImagePicker.toggle()
                 }
             }
             .navigationBarTitle(
                 navigationBarTitle
             )
+            .navigationDestination(isPresented: $isActive) {
+               //TODO: Navigate 되게 하기
+            }
             .toolbar {
                 ToolbarItem {
                     editMode == .active ?
@@ -137,6 +141,10 @@ struct TodoGridView: View {
                         }
                 }
             }
+            .sheet(isPresented: $showingImagePicker) {
+                ImagePicker(image: $inputImage)
+            }
+            .onChange(of: inputImage) { _ in loadImage() }
             .environment(\.editMode, $editMode)
         }
     }
@@ -190,6 +198,14 @@ struct TodoGridView: View {
                 selectedTodos.removeAll() // Clear selected items after deletion
             }
         }
+    }
+    
+    ///a method that will be called when the ImagePicker view has been dismissed
+    func loadImage() {
+        guard let inputImage = inputImage else { return }
+        cameraVM.photoData.append(inputImage.pngData() ?? Data())
+        print(cameraVM.photoData)
+        isActive = true
     }
 }
 
