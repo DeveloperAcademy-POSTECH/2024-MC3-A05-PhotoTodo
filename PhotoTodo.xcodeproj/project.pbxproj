@@ -14,7 +14,6 @@
 		1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96842C5A150D00784CBA /* CameraPreview.swift */; };
 		1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96862C5A152A00784CBA /* MakeTodoView.swift */; };
 		1A0D96892C5A156800784CBA /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96882C5A156800784CBA /* TodoView.swift */; };
-		1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E02C56395900A02C7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DF2C56395900A02C7E /* ContentView.swift */; };
 		1A2778E42C56395A00A02C7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E32C56395A00A02C7E /* Assets.xcassets */; };
@@ -30,11 +29,40 @@
 		1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */; };
 		1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8B2C5C643600BAFD13 /* TestView.swift */; };
 		1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */; };
+		1A2E5CC82C64B1FA00BAFD13 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5CC72C64B1FA00BAFD13 /* ShareViewController.swift */; };
+		1A2E5CCB2C64B1FA00BAFD13 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1A2E5CCA2C64B1FA00BAFD13 /* Base */; };
+		1A2E5CCF2C64B1FA00BAFD13 /* ShareImage.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1A2E5CC52C64B1FA00BAFD13 /* ShareImage.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1A2E5CD42C64B26A00BAFD13 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5CD32C64B26A00BAFD13 /* PhotoTodoModel.swift */; };
+		1A2E5CD52C64B26A00BAFD13 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5CD32C64B26A00BAFD13 /* PhotoTodoModel.swift */; };
 		3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C90390C2C623EFF00025335 /* Date+Extension.swift */; };
 		4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
 		61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D7192C5E443D00C22046 /* ToolBarView.swift */; };
 		61E6D71C2C5E5EA700C22046 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1A2E5CCD2C64B1FA00BAFD13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A2778D22C56395900A02C7E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A2E5CC42C64B1FA00BAFD13;
+			remoteInfo = ShareImage;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1A2E5CB82C64AFB200BAFD13 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				1A2E5CCF2C64B1FA00BAFD13 /* ShareImage.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		131501CC2C61FCA000AAA4A2 /* AlarmSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingView.swift; sourceTree = "<group>"; };
@@ -44,7 +72,6 @@
 		1A0D96842C5A150D00784CBA /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		1A0D96862C5A152A00784CBA /* MakeTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTodoView.swift; sourceTree = "<group>"; };
 		1A0D96882C5A156800784CBA /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
-		1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoModel.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
 		1A2778DF2C56395900A02C7E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +87,16 @@
 		1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2E5C8B2C5C643600BAFD13 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
+		1A2E5CAF2C64AFB200BAFD13 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		1A2E5CB22C64AFB200BAFD13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		1A2E5CB42C64AFB200BAFD13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A2E5CBF2C64B04000BAFD13 /* PhotoTodo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoTodo.entitlements; sourceTree = "<group>"; };
+		1A2E5CC02C64B05300BAFD13 /* ShareImage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareImage.entitlements; sourceTree = "<group>"; };
+		1A2E5CC52C64B1FA00BAFD13 /* ShareImage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareImage.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A2E5CC72C64B1FA00BAFD13 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		1A2E5CCA2C64B1FA00BAFD13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		1A2E5CCC2C64B1FA00BAFD13 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A2E5CD32C64B26A00BAFD13 /* PhotoTodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoModel.swift; sourceTree = "<group>"; };
 		3C90390C2C623EFF00025335 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		4F46B28A2C5C7E2100556646 /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
 		61E6D7192C5E443D00C22046 /* ToolBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarView.swift; sourceTree = "<group>"; };
@@ -72,6 +109,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A2E5C822C5B557200BAFD13 /* SkeletonUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2E5CC22C64B1FA00BAFD13 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +133,7 @@
 		1A2472A22C57A79C00A135D9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */,
+				1A2E5CD32C64B26A00BAFD13 /* PhotoTodoModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -98,6 +142,8 @@
 			isa = PBXGroup;
 			children = (
 				1A2778DC2C56395900A02C7E /* PhotoTodo */,
+				1A2E5CAE2C64AFB200BAFD13 /* ShareImage */,
+				1A2E5CC62C64B1FA00BAFD13 /* ShareImage */,
 				1A2778DB2C56395900A02C7E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -106,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				1A2778DA2C56395900A02C7E /* PhotoTodo.app */,
+				1A2E5CC52C64B1FA00BAFD13 /* ShareImage.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,6 +160,7 @@
 		1A2778DC2C56395900A02C7E /* PhotoTodo */ = {
 			isa = PBXGroup;
 			children = (
+				1A2E5CBF2C64B04000BAFD13 /* PhotoTodo.entitlements */,
 				3C90390C2C623EFF00025335 /* Date+Extension.swift */,
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
@@ -151,6 +199,27 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		1A2E5CAE2C64AFB200BAFD13 /* ShareImage */ = {
+			isa = PBXGroup;
+			children = (
+				1A2E5CC02C64B05300BAFD13 /* ShareImage.entitlements */,
+				1A2E5CAF2C64AFB200BAFD13 /* ShareViewController.swift */,
+				1A2E5CB12C64AFB200BAFD13 /* MainInterface.storyboard */,
+				1A2E5CB42C64AFB200BAFD13 /* Info.plist */,
+			);
+			path = ShareImage;
+			sourceTree = "<group>";
+		};
+		1A2E5CC62C64B1FA00BAFD13 /* ShareImage */ = {
+			isa = PBXGroup;
+			children = (
+				1A2E5CC72C64B1FA00BAFD13 /* ShareViewController.swift */,
+				1A2E5CC92C64B1FA00BAFD13 /* MainInterface.storyboard */,
+				1A2E5CCC2C64B1FA00BAFD13 /* Info.plist */,
+			);
+			path = ShareImage;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -161,10 +230,12 @@
 				1A2778D62C56395900A02C7E /* Sources */,
 				1A2778D72C56395900A02C7E /* Frameworks */,
 				1A2778D82C56395900A02C7E /* Resources */,
+				1A2E5CB82C64AFB200BAFD13 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				1A2E5CCE2C64B1FA00BAFD13 /* PBXTargetDependency */,
 			);
 			name = PhotoTodo;
 			packageProductDependencies = (
@@ -173,6 +244,23 @@
 			productName = "2024-MC3-A05-PhotoTodo";
 			productReference = 1A2778DA2C56395900A02C7E /* PhotoTodo.app */;
 			productType = "com.apple.product-type.application";
+		};
+		1A2E5CC42C64B1FA00BAFD13 /* ShareImage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A2E5CD02C64B1FA00BAFD13 /* Build configuration list for PBXNativeTarget "ShareImage" */;
+			buildPhases = (
+				1A2E5CC12C64B1FA00BAFD13 /* Sources */,
+				1A2E5CC22C64B1FA00BAFD13 /* Frameworks */,
+				1A2E5CC32C64B1FA00BAFD13 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareImage;
+			productName = ShareImage;
+			productReference = 1A2E5CC52C64B1FA00BAFD13 /* ShareImage.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -185,6 +273,9 @@
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
 					1A2778D92C56395900A02C7E = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					1A2E5CC42C64B1FA00BAFD13 = {
 						CreatedOnToolsVersion = 15.4;
 					};
 				};
@@ -206,6 +297,7 @@
 			projectRoot = "";
 			targets = (
 				1A2778D92C56395900A02C7E /* PhotoTodo */,
+				1A2E5CC42C64B1FA00BAFD13 /* ShareImage */,
 			);
 		};
 /* End PBXProject section */
@@ -217,6 +309,14 @@
 			files = (
 				1A2778E72C56395A00A02C7E /* Preview Assets.xcassets in Resources */,
 				1A2778E42C56395A00A02C7E /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1A2E5CC32C64B1FA00BAFD13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A2E5CCB2C64B1FA00BAFD13 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,9 +343,9 @@
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
 				1A2778FA2C5741CF00A02C7E /* TodoGridView.swift in Sources */,
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
+				1A2E5CD42C64B26A00BAFD13 /* PhotoTodoModel.swift in Sources */,
 				1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */,
 				1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */,
-				1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */,
 				1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */,
 				61E6D71C2C5E5EA700C22046 /* ImagePicker.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
@@ -254,7 +354,43 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1A2E5CC12C64B1FA00BAFD13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A2E5CD52C64B26A00BAFD13 /* PhotoTodoModel.swift in Sources */,
+				1A2E5CC82C64B1FA00BAFD13 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1A2E5CCE2C64B1FA00BAFD13 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A2E5CC42C64B1FA00BAFD13 /* ShareImage */;
+			targetProxy = 1A2E5CCD2C64B1FA00BAFD13 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1A2E5CB12C64AFB200BAFD13 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A2E5CB22C64AFB200BAFD13 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		1A2E5CC92C64B1FA00BAFD13 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A2E5CCA2C64B1FA00BAFD13 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1A2778E82C56395A00A02C7E /* Debug */ = {
@@ -379,12 +515,14 @@
 		1A2778EB2C56395A00A02C7E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PhotoTodo/PhotoTodo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";
@@ -398,7 +536,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "environmentalistsTodo.-024-MC3-A05-PhotoTodo";
+				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -409,12 +547,14 @@
 		1A2778EC2C56395A00A02C7E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = PhotoTodo/PhotoTodo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";
@@ -428,8 +568,62 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "environmentalistsTodo.-024-MC3-A05-PhotoTodo";
+				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		1A2E5CD12C64B1FA00BAFD13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareImage/ShareImage.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareImage/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ShareImage;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo.ShareImage";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A2E5CD22C64B1FA00BAFD13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareImage/ShareImage.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShareImage/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ShareImage;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo.ShareImage";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -453,6 +647,15 @@
 			buildConfigurations = (
 				1A2778EB2C56395A00A02C7E /* Debug */,
 				1A2778EC2C56395A00A02C7E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A2E5CD02C64B1FA00BAFD13 /* Build configuration list for PBXNativeTarget "ShareImage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2E5CD12C64B1FA00BAFD13 /* Debug */,
+				1A2E5CD22C64B1FA00BAFD13 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
