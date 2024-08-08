@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import UIKit
+import PhotosUI
 
 enum SortOption {
     case byDate
@@ -30,6 +31,8 @@ struct TodoGridView: View {
     @State private var isActive = false
     @StateObject var cameraVM: CameraViewModel = CameraViewModel()
     @AppStorage("deletionCount") var deletionCount: Int = 0
+    @State private var selectedItems = [PhotosPickerItem]()
+    @State private var selectedImages = [Image]()
     
     var todos: [Todo] {
         switch viewType {
@@ -113,6 +116,7 @@ struct TodoGridView: View {
                     showingImagePicker.toggle()
                 }
             }
+            .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems)
             .navigationBarTitle(
                 navigationBarTitle
             )
@@ -141,9 +145,10 @@ struct TodoGridView: View {
                         }
                 }
             }
-            .sheet(isPresented: $showingImagePicker) {
-                ImagePicker(image: $inputImage)
-            }
+//            .sheet(isPresented: $showingImagePicker) {
+//                ImagePicker(image: $inputImage)
+////                PhotosPicker("Select images", selection: $selectedItems, matching: .images)
+//            }
             .onChange(of: inputImage) { _ in loadImage() }
             .environment(\.editMode, $editMode)
         }
