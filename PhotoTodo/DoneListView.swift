@@ -15,16 +15,16 @@ struct DoneListView: View {
         NavigationLink{
             DashboardView()
         } label : {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 20)
                 .fill(.white)
-                .shadow(radius: 8)
+                .shadow(color: .paleGray , radius: 8)
                 .frame(minHeight: 25, maxHeight: 75)
                 .overlay(
                     VStack{
                         HStack{
-                            Text("이번달에 네잎클로버 ") +
+                            Text("이번달에 네잎클로버 ").foregroundStyle(.black) +
                             Text("\(deletionCount)개").foregroundStyle(.green) +
-                            Text("를 모았어요!")
+                            Text("를 모았어요!").foregroundStyle(.black)
                             Image(systemName: "chevron.right")
                         }
                     }
