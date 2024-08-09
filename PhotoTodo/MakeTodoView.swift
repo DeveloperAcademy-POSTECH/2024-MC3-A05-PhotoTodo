@@ -31,10 +31,18 @@ struct MakeTodoView: View {
     @State private var memoisActive: Bool = false
     @Binding var memo: String
     @Query private var folders: [Folder]
-    @State private var chosenFolderName: String = "기본폴더"
-    @State private var chosenFolderColor: Color = Color.red
+//    @State private var chosenFolderName: String = "기본폴더"
+//    @State private var chosenFolderColor: Color = Color.red
     @Binding var home: Bool
-
+    
+    
+    var chosenFolderColor : Color{
+        return chosenFolder != nil ? changeStringToColor(colorName: chosenFolder?.color ?? "green") : changeStringToColor(colorName: folders[0].color)
+    }
+    var chosenFolderName : String{
+        return chosenFolder != nil ? chosenFolder!.name : folders[0].name
+    }
+    
     var body: some View {
         
         VStack(alignment: .center){
@@ -67,8 +75,8 @@ struct MakeTodoView: View {
                                 ForEach(folders, id: \.self.id){ folder in
                                     Button(action: {
                                         chosenFolder = folder
-                                        chosenFolderName = folder.name
-                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
+//                                        chosenFolderName = folder.name
+//                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
                                     }) {
                                         Label("\(folder.name)", systemImage: "circle")
                                     }
@@ -188,8 +196,8 @@ struct MakeTodoView: View {
         }
         .onAppear(perform: {
 //            print(chosenFolder.name ??")
-            chosenFolderName = chosenFolder?.name ?? ""
-            chosenFolderColor = changeStringToColor(colorName: chosenFolder?.color ?? "Yellow")
+//            chosenFolderName = chosenFolder?.name ?? ""
+//            chosenFolderColor = changeStringToColor(colorName: chosenFolder?.color ?? "Yellow")
             if startViewType == .edit {
             }
         })
@@ -205,8 +213,12 @@ struct MakeTodoView: View {
 //                    modelContext.insert(newTodo)
 //                }
                 
-                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
-                chosenFolder!.todos.append(newTodo)
+                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: alarmDataisEmpty ? nil : contentAlarm, memo: memo), isDone: false)
+                if let chosenFolder = chosenFolder {
+                    chosenFolder.todos.append(newTodo)
+                } else {
+                    folders[0].todos.append(newTodo)
+                }
                 modelContext.insert(newTodo)
                 home = true
                 dismiss()
