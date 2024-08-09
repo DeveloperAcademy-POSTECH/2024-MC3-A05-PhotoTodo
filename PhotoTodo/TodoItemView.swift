@@ -36,7 +36,8 @@ struct TodoItemView: View {
             } label: {
                 Image(uiImage: UIImage(data: todo.image))
                     .resizable()
-                    .frame(width: 180, height: 200)
+                    .frame(width: 170, height: 170)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                     .scaledToFit()
                 //TODO: overlay하고 alignment로 top 주기
                     .overlay(alignment: .topLeading) {
@@ -92,6 +93,7 @@ struct TodoItemView: View {
             .sheet(isPresented: $editTodoisActive, content: {
                 VStack{
                     HStack{
+                        // 각 아이템을 클릭하면 나오는 디테일 뷰에서 뒤로가기를 할 때 사용되는 버튼
                         Button {
                             editTodoisActive.toggle()
                         } label: {

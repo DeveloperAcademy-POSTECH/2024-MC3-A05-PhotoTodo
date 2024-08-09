@@ -108,16 +108,14 @@ struct TodoGridView: View {
                 } else {
                     ScrollView {
                         VStack{
-                            LazyVGrid(columns: columns) {
-                                //TODO: 각 Todo에 대한 DetailView Link 연결시키기
+                            LazyVGrid(columns: columns, spacing: 12) {
                                 //TODO: 이미지 비율 맞추기
-                                
                                 ForEach(sortedTodos) { todo in
                                     TodoItemView(editMode: $editMode, todo: todo, toastMassage: $toastMassage, toastOption: $toastOption)
                                     //각 TodoItem에 체크박스를 오버레이하여 보여줌
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 8)
-                                                .stroke(selectedTodos.contains(todo.id) ? Color.blue : Color.clear, lineWidth: 2)
+                                            RoundedRectangle(cornerRadius: 20)
+                                                .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
                                         )
                                     //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
                                         .onTapGesture {
@@ -131,7 +129,9 @@ struct TodoGridView: View {
                                         }
                                 }
                             }
+                            .padding(.bottom)
                         }
+                        .padding(.horizontal)
                         
                     }
                 }
