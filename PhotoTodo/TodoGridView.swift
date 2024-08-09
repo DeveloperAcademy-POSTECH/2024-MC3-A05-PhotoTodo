@@ -27,12 +27,12 @@ struct TodoGridView: View {
     @State private var sortOption: SortOption = .byDate
     @State private var isShowingOptions = false
     @State private var showingImagePicker = false
-    @State private var inputImage: UIImage?
     @State private var isActive = false
     @StateObject var cameraVM: CameraViewModel = CameraViewModel()
     @AppStorage("deletionCount") var deletionCount: Int = 0
     @State private var selectedItems = [PhotosPickerItem]()
     @State private var selectedImages = [Image]()
+    @State private var selectedItem: PhotosPickerItem?
     
     var todos: [Todo] {
         switch viewType {
@@ -116,12 +116,13 @@ struct TodoGridView: View {
                     showingImagePicker.toggle()
                 }
             }
-            .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems)
+            .photosPicker(isPresented: $showingImagePicker, selection: $selectedItem)
+            .onChange(of: selectedItem, loadImage)
             .navigationBarTitle(
                 navigationBarTitle
             )
             .navigationDestination(isPresented: $isActive) {
-               //TODO: Navigate 되게 하기
+                MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: .camera)
             }
             .toolbar {
                 ToolbarItem {
@@ -149,7 +150,7 @@ struct TodoGridView: View {
 //                ImagePicker(image: $inputImage)
 ////                PhotosPicker("Select images", selection: $selectedItems, matching: .images)
 //            }
-            .onChange(of: inputImage) { _ in loadImage() }
+
             .environment(\.editMode, $editMode)
         }
     }
@@ -207,11 +208,21 @@ struct TodoGridView: View {
     
     ///a method that will be called when the ImagePicker view has been dismissed
     func loadImage() {
-        guard let inputImage = inputImage else { return }
-        cameraVM.photoData.append(inputImage.pngData() ?? Data())
-        print(cameraVM.photoData)
-        isActive = true
+        Task {
+            guard let imageData = try await selectedItem?.loadTransferable(type: Data.self) else { return }
+//            guard let inputImage = UIImage(data: imageData) else { return }
+            cameraVM.photoData.append(imageData)
+            isActive = true
+        }
     }
+    
+    ///a method that will be called when the ImagePicker view has been dismissed
+//    func loadImage2() {
+//        guard let inputImage = inputImage else { return }
+//        cameraVM.photoData.append(UIImage(selectedImages[0]).pngData() ?? Data())
+//        print(cameraVM.photoData)
+//        isActive = true
+//    }
 }
 
 
