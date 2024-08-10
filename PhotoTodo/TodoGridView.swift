@@ -127,6 +127,7 @@ struct TodoGridView: View {
             .navigationBarTitle(
                 navigationBarTitle
             )
+            //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
             .navigationDestination(isPresented: $isActive) {
                 MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
             }
@@ -152,11 +153,6 @@ struct TodoGridView: View {
                         }
                 }
             }
-//            .sheet(isPresented: $showingImagePicker) {
-//                ImagePicker(image: $inputImage)
-////                PhotosPicker("Select images", selection: $selectedItems, matching: .images)
-//            }
-
             .environment(\.editMode, $editMode)
         }
     }
@@ -216,20 +212,12 @@ struct TodoGridView: View {
     func loadImage() {
         Task {
             guard let imageData = try await selectedItem?.loadTransferable(type: Data.self) else { return }
-//            guard let inputImage = UIImage(data: imageData) else { return }
             cameraVM.photoData.append(imageData)
             selectedItem = nil
             isActive = true
         }
     }
     
-    ///a method that will be called when the ImagePicker view has been dismissed
-//    func loadImage2() {
-//        guard let inputImage = inputImage else { return }
-//        cameraVM.photoData.append(UIImage(selectedImages[0]).pngData() ?? Data())
-//        print(cameraVM.photoData)
-//        isActive = true
-//    }
 }
 
 

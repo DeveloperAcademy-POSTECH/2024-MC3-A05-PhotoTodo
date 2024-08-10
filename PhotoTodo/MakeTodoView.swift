@@ -33,8 +33,6 @@ struct MakeTodoView: View {
     @State private var memoisActive: Bool = false
     @Binding var memo: String?
     @Query private var folders: [Folder]
-//    @State private var chosenFolderName: String = "기본폴더"
-//    @State private var chosenFolderColor: Color = Color.red
     @Binding var home: Bool?
     
     
@@ -196,13 +194,7 @@ struct MakeTodoView: View {
             .scrollContentBackground(.hidden)
             .scrollDisabled(true)
         }
-        .onAppear(perform: {
-//            print(chosenFolder.name ??")
-//            chosenFolderName = chosenFolder?.name ?? ""
-//            chosenFolderColor = changeStringToColor(colorName: chosenFolder?.color ?? "Yellow")
-            if startViewType == .edit {
-            }
-        })
+
         .toolbar(content: {
             Button {
                 //SwiftData 저장 작업
