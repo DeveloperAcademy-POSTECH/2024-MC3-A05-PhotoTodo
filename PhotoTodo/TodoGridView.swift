@@ -89,95 +89,25 @@ struct TodoGridView: View {
     var body: some View {
         ZStack {
             VStack{
-                if todos.isEmpty {
-                    Spacer()
-                    VStack{
-                        Image("mainEmptyIcon")
-                            .resizable()
-                            .frame(width: 56, height: 56)
-                        VStack{
-                            Text("새로운 사진을 추가하여")
-                            Text("포토투두를 만들어보세요!")
-                        }
-                        .padding(.top)
-                        .font(.system(size: 20))
-                        .foregroundStyle(Color.gray)
-                        .bold()
-                    }
-                    Spacer()
-                } else {
-                    ScrollView {
-                        VStack{
-                            LazyVGrid(columns: columns, spacing: 12) {
-                                //TODO: 이미지 비율 맞추기
-                                ForEach(sortedTodos) { todo in
-                                    TodoItemView(editMode: $editMode, todo: todo, toastMassage: $toastMassage, toastOption: $toastOption)
-                                    //각 TodoItem에 체크박스를 오버레이하여 보여줌
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 20)
-                                                .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
-                                        )
-                                    //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                                        .onTapGesture {
-                                            if editMode == .active {
-                                                if selectedTodos.contains(todo.id) {
-                                                    selectedTodos.remove(todo.id)
-                                                } else {
-                                                    selectedTodos.insert(todo.id)
-                                                }
-                                            }
-                                        }
-                                }
-                            }
-                            .padding(.bottom)
-                        }
-                        .padding(.horizontal)
-                        
-                    }
-                }
+                todos.isEmpty && viewType != .doneList
+                ?
+                AnyView(guideLineView)
+                :
+                AnyView(scrollView)
             }
             VStack{
-                if toastOption != .none {
-                    if toastOption == .moveToDone {
-                        Button {
-                            
-                        } label: {
-                            RoundedRectangle(cornerRadius: 35)
-                                    .fill(.paleGray)
-                                    .opacity(0.5)
-                                    .frame(width: 200, height: 50)
-                                    .overlay {
-                                        Text("투두가 복구되었어요!")
-                                                .fontWeight(.bold)
-                                                .font(.system(size: 15))
-                                                .foregroundColor(.green)
-                                                .padding()
-                                    }
-                                    .offset(y: 250)
-                        }
-                        
-                    } else if toastOption == .moveToOrigin {
-                        
-                        RoundedRectangle(cornerRadius: 35)
-                                .fill(.paleGray)
-                                .opacity(0.5)
-                                .frame(width: 200, height: 50)
-                                .overlay {
-                                    Text("투두가 완료되었어요!")
-//                                    Text("완료함으로 이동되었어요!")
-                                            .fontWeight(.bold)
-                                            .font(.system(size: 15))
-                                            .foregroundColor(.green)
-                                            .padding()
-                                }
-                                .offset(y: 250)
-                    }
-                    //                if toastMassage == nil {
-                    //                    Text("복구되었을 때")
-                    //                } else {
-                    //                    Text("삭제되었을 때")
-                    //                }
+                
+                if toastOption == .moveToDone {
+                    toastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
+                    
+                } else if toastOption == .moveToOrigin {
+                    toastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!")
                 }
+                //                if toastMassage == nil {
+                //                    Text("복구되었을 때")
+                //                } else {
+                //                    Text("삭제되었을 때")
+                //                }
             }
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
@@ -220,6 +150,60 @@ struct TodoGridView: View {
         }
         .environment(\.editMode, $editMode)
     }
+    
+    var guideLineView: some View {
+        VStack{
+            Spacer()
+            VStack{
+                Image("mainEmptyIcon")
+                    .resizable()
+                    .frame(width: 56, height: 56)
+                VStack{
+                    Text("새로운 사진을 추가하여")
+                    Text("포토투두를 만들어보세요!")
+                }
+                .padding(.top)
+                .font(.system(size: 20))
+                .foregroundStyle(Color.gray)
+                .bold()
+            }
+            Spacer()
+        }
+    }
+    
+    
+    var scrollView: some View {
+        ScrollView {
+            VStack{
+                LazyVGrid(columns: columns, spacing: 12) {
+                    //TODO: 이미지 비율 맞추기
+                    ForEach(sortedTodos) { todo in
+                        TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMassage, toastOption: $toastOption)
+                        //각 TodoItem에 체크박스를 오버레이하여 보여줌
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                            )
+                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                            .onTapGesture {
+                                if editMode == .active {
+                                    if selectedTodos.contains(todo.id) {
+                                        selectedTodos.remove(todo.id)
+                                    } else {
+                                        selectedTodos.insert(todo.id)
+                                    }
+                                }
+                            }
+                    }
+                }
+                .padding(.bottom)
+            }
+            .padding(.horizontal)
+            
+        }
+    }
+    
+    
     private func toggleAddOptions(){
         isShowingOptions.toggle()
     }
@@ -274,6 +258,30 @@ struct TodoGridView: View {
 }
 
 
+private struct toastView: View {
+    @State var toastOption: ToastOption
+    @State var toastMessage: String
+    
+    var body: some View {
+        Button {
+            
+        } label: {
+            RoundedRectangle(cornerRadius: 35)
+                .fill(.paleGray)
+                .opacity(0.5)
+                .frame(width: 200, height: 50)
+                .overlay {
+                    Text(toastMessage)
+                        .fontWeight(.bold)
+                        .font(.system(size: 15))
+                        .foregroundColor(.green)
+                        .padding()
+                }
+                .offset(y: 250)
+        }
+    }
+    
+}
 
 //struct TodoListView_Previews: PreviewProvider {
 //    static var previews: some View {

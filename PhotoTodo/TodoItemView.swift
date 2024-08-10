@@ -25,7 +25,7 @@ struct TodoItemView: View {
     @State private var home: Bool = false
     
     // 토글 시 토스트 메세지 설정 관련 변수
-    @Binding var toastMassage: Todo?
+    @Binding var toastMessage: Todo?
     @Binding var toastOption: ToastOption
     
     var body: some View {
@@ -146,9 +146,9 @@ struct TodoItemView: View {
     )
     
     @State var editMode: EditMode = .inactive
-    @State var toastMassage: Todo? = nil
+    @State var toastMessage: Todo? = nil
     @State var toastOption: ToastOption = .none
-    return TodoItemView(editMode: $editMode, todo: newTodo, toastMassage: $toastMassage, toastOption: $toastOption)
+    return TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption)
 }
 
 
