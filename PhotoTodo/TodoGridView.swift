@@ -100,6 +100,9 @@ struct TodoGridView: View {
     
     
     var body: some View {
+        VStack{
+            viewType == .main ? AnyView(customNavBar) : AnyView(EmptyView())
+        }
         ZStack {
             VStack{
                 todos.isEmpty && viewType != .doneList
@@ -138,6 +141,7 @@ struct TodoGridView: View {
         .navigationBarTitle(
             navigationBarTitle
         )
+        .navigationBarHidden( viewType == .main ? true : false)
         //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
         .navigationDestination(isPresented: $isActive) {
             MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
@@ -167,6 +171,56 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
+    var customNavBar: some View {
+        VStack{
+            HStack{
+                Spacer()
+                //편집모드에서 다중선택된 아이템 삭제
+                Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
+                    if editMode == .active {
+                          Label("", systemImage: "trash")
+                      } else {
+                          Label("", systemImage: "plus")
+                              
+                      }
+                }
+                .padding(.trailing)
+                EditButton()
+                    .onChange(of: editMode) { newEditMode in
+                        //편집모드 해제시 선택정보 삭제
+                        if newEditMode == .inactive {
+                            selectedTodos.removeAll()
+                        }
+                    }
+                    .padding(.trailing)
+            }
+            .environment(\.editMode, $editMode)
+            VStack{
+                HStack{
+                    Text("해야 할 일이")
+                        .font(.title)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                todos.count == 0 ?
+                HStack{
+                    Text("모두 완료되었어요!")
+                        .font(.title)
+                        .bold()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                :
+                HStack{
+                    Text("\(todos.count)").font(.title2).bold().foregroundStyle(.green) +
+                    Text("장 남았어요").font(.title).bold()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                }
+            
+            .padding()
+        }
+    }
+    
+     
     var guideLineView: some View {
         VStack{
             Spacer()
