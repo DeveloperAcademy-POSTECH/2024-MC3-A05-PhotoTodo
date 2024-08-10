@@ -61,15 +61,13 @@ struct FolderListView: View {
             }
             .navigationBarTitle("폴더")
             .toolbar {
+                ToolbarItem {
+                    Button(action: toggleShowingSheet) {
+                        Label("add a folder", systemImage: "plus")
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
-                }
-                ToolbarItem {
-                    Button {
-                        isShowingSheet.toggle()
-                    } label : {
-                        Image(systemName: "plus")
-                    }
                 }
             }
             .sheet(isPresented: $isShowingSheet, content: {
@@ -78,6 +76,10 @@ struct FolderListView: View {
                 })
             
         }
+    }
+    
+    private func toggleShowingSheet(){
+        isShowingSheet.toggle()
     }
        
     
