@@ -50,7 +50,7 @@ struct TodoItemView: View {
 //                                }
                                 todo.isDoneAt = nil
 //                                toastMassage = todo
-                                toastOption = .moveToDone
+                                toastOption = .moveToOrigin
                                 DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
                                     DispatchQueue.main.async {
 //                                        toastMassage = nil
@@ -65,7 +65,7 @@ struct TodoItemView: View {
 //                                }
                                 todo.isDoneAt = Date()
 //                                toastMassage = nil
-                                toastOption = .moveToOrigin
+                                toastOption = .moveToDone
                                 DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
                                     DispatchQueue.main.async {
 //                                        toastMassage = todo
