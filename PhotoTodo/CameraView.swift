@@ -22,14 +22,14 @@ struct CameraView: View {
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var photoData: [Data] = []
-    @State private var contentAlarm = Date()
-    @State private var memo: String = ""
-    @State private var alarmDataisEmpty: Bool = true
+    @State private var contentAlarm: Date? = Date()
+    @State private var memo: String? = ""
+    @State private var alarmDataisEmpty: Bool? = true
     
     // 폴더 관련
     @State var chosenFolder: Folder? = nil
     @Query private var folders: [Folder]
-    @State private var home: Bool = false
+    @State private var home: Bool? = false
     @State private var lastScale: CGFloat = 1.0
     
     var body: some View {
@@ -131,6 +131,7 @@ struct CameraView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: {
+            guard let home = home else {return}
             if home {
                 dismiss()
             }

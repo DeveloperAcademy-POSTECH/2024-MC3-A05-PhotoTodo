@@ -35,10 +35,10 @@ struct TodoGridView: View {
     @State private var selectedItem: PhotosPickerItem?
     
     //새로운 사진 업로드 시 MakeTodoView에서 필요한 상태들
-    @State var contentAlarm = Date()
-    @State var memo: String = ""
-    @State var alarmDataisEmpty: Bool = true
-    @State var home: Bool = false
+    @State var contentAlarm: Date? = nil
+    @State var memo: String? = nil
+    @State var alarmDataisEmpty: Bool? = nil
+    @State var home: Bool? = nil
     
     var todos: [Todo] {
         switch viewType {
@@ -128,7 +128,7 @@ struct TodoGridView: View {
                 navigationBarTitle
             )
             .navigationDestination(isPresented: $isActive) {
-                MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
             }
             .toolbar {
                 ToolbarItem {
@@ -218,6 +218,7 @@ struct TodoGridView: View {
             guard let imageData = try await selectedItem?.loadTransferable(type: Data.self) else { return }
 //            guard let inputImage = UIImage(data: imageData) else { return }
             cameraVM.photoData.append(imageData)
+            selectedItem = nil
             isActive = true
         }
     }
