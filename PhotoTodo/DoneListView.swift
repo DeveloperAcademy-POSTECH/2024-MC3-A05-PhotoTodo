@@ -23,7 +23,7 @@ struct DoneListView: View {
                     VStack{
                         HStack{
                             Text("이번달에 네잎클로버 ").foregroundStyle(.black) +
-                            Text("\(deletionCount)개").foregroundStyle(.green) +
+                            Text("\(deletionCount / 4)개").foregroundStyle(.green) +
                             Text("를 모았어요!").foregroundStyle(.black)
                             Image(systemName: "chevron.right")
                         }

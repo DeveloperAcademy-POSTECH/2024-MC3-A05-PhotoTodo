@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import UIKit
+import PhotosUI
 
 enum SortOption {
     case byDate
@@ -33,7 +34,19 @@ struct TodoGridView: View {
     @State private var editMode: EditMode = .inactive
     @State private var sortOption: SortOption = .byDate
     @State private var isShowingOptions = false
+    @State private var showingImagePicker = false
+    @State private var isActive = false
+    @StateObject var cameraVM: CameraViewModel = CameraViewModel()
     @AppStorage("deletionCount") var deletionCount: Int = 0
+    @State private var selectedItems = [PhotosPickerItem]()
+    @State private var selectedImages = [Image]()
+    @State private var selectedItem: PhotosPickerItem?
+    
+    //새로운 사진 업로드 시 MakeTodoView에서 필요한 상태들
+    @State var contentAlarm: Date? = nil
+    @State var memo: String? = nil
+    @State var alarmDataisEmpty: Bool? = nil
+    @State var home: Bool? = nil
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
     @State private var toastMassage: Todo? = nil
@@ -116,16 +129,19 @@ struct TodoGridView: View {
             } label : {
                 Text("촬영하기")
             }
-            //                Button("촬영하기"){
-            //                    addTodos()
-            //                }
             Button("앨범에서 가져오기"){
-                print("앨범에서 가져오기")
+                showingImagePicker.toggle()
             }
         }
+        .photosPicker(isPresented: $showingImagePicker, selection: $selectedItem)
+        .onChange(of: selectedItem, loadImage)
         .navigationBarTitle(
             navigationBarTitle
         )
+        //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
+        .navigationDestination(isPresented: $isActive) {
+            MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+        }
         .toolbar {
             ToolbarItem {
                 editMode == .active ?
@@ -255,6 +271,17 @@ struct TodoGridView: View {
             }
         }
     }
+    
+    ///a method that will be called when the ImagePicker view has been dismissed
+    func loadImage() {
+        Task {
+            guard let imageData = try await selectedItem?.loadTransferable(type: Data.self) else { return }
+            cameraVM.photoData.append(imageData)
+            selectedItem = nil
+            isActive = true
+        }
+    }
+    
 }
 
 

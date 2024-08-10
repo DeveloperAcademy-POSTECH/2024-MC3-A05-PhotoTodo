@@ -13,6 +13,8 @@ import SwiftData
 enum startViewType {
     case camera
     case edit
+    case gridMain
+    case gridSingleFolder
 }
 
 struct MakeTodoView: View {
@@ -24,17 +26,23 @@ struct MakeTodoView: View {
     var startViewType: startViewType
     
     // 내부 컨텐츠
-    @Binding var contentAlarm: Date
+    @Binding var contentAlarm: Date?
     @State private var folderMenuisActive: Bool = false
     @State private var alarmisActive: Bool = false
-    @Binding var alarmDataisEmpty: Bool
+    @Binding var alarmDataisEmpty: Bool?
     @State private var memoisActive: Bool = false
-    @Binding var memo: String
+    @Binding var memo: String?
     @Query private var folders: [Folder]
-    @State private var chosenFolderName: String = "기본폴더"
-    @State private var chosenFolderColor: Color = Color.red
-    @Binding var home: Bool
-
+    @Binding var home: Bool?
+    
+    
+    var chosenFolderColor : Color{
+        return chosenFolder != nil ? changeStringToColor(colorName: chosenFolder?.color ?? "green") : changeStringToColor(colorName: folders[0].color)
+    }
+    var chosenFolderName : String{
+        return chosenFolder != nil ? chosenFolder!.name : folders[0].name
+    }
+    
     var body: some View {
         
         VStack(alignment: .center){
@@ -67,8 +75,8 @@ struct MakeTodoView: View {
                                 ForEach(folders, id: \.self.id){ folder in
                                     Button(action: {
                                         chosenFolder = folder
-                                        chosenFolderName = folder.name
-                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
+//                                        chosenFolderName = folder.name
+//                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
                                     }) {
                                         Label("\(folder.name)", systemImage: "circle")
                                     }
@@ -110,7 +118,7 @@ struct MakeTodoView: View {
                                 .frame(width: 15, height: 15)
                             Text("알람설정")
                             Spacer()
-                            Text(alarmDataisEmpty ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm))
+                            Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
                         }
                     }
                     .sheet(isPresented: $alarmisActive, content: {
@@ -134,7 +142,7 @@ struct MakeTodoView: View {
                             
                             DatePicker(
                                 "Select Date",
-                                selection: $contentAlarm,
+                                selection: $contentAlarm.withDefault(Date()),
                                 displayedComponents: [.date, .hourAndMinute]
                             )
                             .labelsHidden()
@@ -171,7 +179,7 @@ struct MakeTodoView: View {
                             }
                             
                             VStack{
-                                TextField("메모를 입력해주세요.", text: $memo)
+                                TextField("메모를 입력해주세요.", text: $memo.withDefault(""))
                             }.frame(height: 100, alignment: .top)
                             
                             Spacer()
@@ -186,13 +194,7 @@ struct MakeTodoView: View {
             .scrollContentBackground(.hidden)
             .scrollDisabled(true)
         }
-        .onAppear(perform: {
-//            print(chosenFolder.name ??")
-            chosenFolderName = chosenFolder?.name ?? ""
-            chosenFolderColor = changeStringToColor(colorName: chosenFolder?.color ?? "Yellow")
-            if startViewType == .edit {
-            }
-        })
+
         .toolbar(content: {
             Button {
                 //SwiftData 저장 작업
@@ -205,10 +207,25 @@ struct MakeTodoView: View {
 //                    modelContext.insert(newTodo)
 //                }
                 
-                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
-                chosenFolder!.todos.append(newTodo)
+                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, memo: memo), isDone: false)
+                if let chosenFolder = chosenFolder {
+                    chosenFolder.todos.append(newTodo)
+                } else {
+                    folders[0].todos.append(newTodo)
+                }
                 modelContext.insert(newTodo)
                 home = true
+                
+                if startViewType == .gridMain {  //startViewType이 .gridMain일 경우 (.gridSingleFolder의 경우에는 제외)
+                    chosenFolder = nil //model에 삽입이 끝난 후 chosneFolder를 초기화함
+                }
+                if startViewType == .gridMain || startViewType == .gridSingleFolder {
+                    alarmDataisEmpty = nil //model에 삽입 후 바인딩되어 넘어온 값들을 초기화함 → 다음 추가시 초기화되어 있을 수 있도록
+                    contentAlarm = nil
+                    memo = nil
+                    cameraVM.photoData = []
+                }
+                
                 dismiss()
             } label: {
                 Text("완료")
@@ -218,6 +235,16 @@ struct MakeTodoView: View {
     }
 }
 
+extension Binding {
+  func withDefault<T>(_ defaultValue: T) -> Binding<T> where Value == Optional<T> {
+    return Binding<T>(get: {
+      self.wrappedValue ?? defaultValue
+    }, set: { newValue in
+      self.wrappedValue = newValue
+    })
+  }
+}
+
 #Preview {
     @State var cameraVM = CameraViewModel()
     @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
@@ -225,6 +252,6 @@ struct MakeTodoView: View {
     @State var memo: String = ""
     @State var alarmDataisEmpty: Bool = true
     @State var home: Bool = false
-    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
 }

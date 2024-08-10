@@ -24,7 +24,6 @@ struct DashboardView: View {
     }
     
     var body: some View {
-        NavigationStack{
             ScrollView {
                 VStack(spacing : 0){
                     DashboardAccomplishmentTotalView()
@@ -62,27 +61,11 @@ struct DashboardView: View {
                 .background(
                     Image("dashBoardBackground")
                 )
-                
-            }
             .scrollIndicators(.hidden)
             .navigationBarBackButtonHidden(true)
             .navigationBarItems(leading: backButton)
             
         }
-        //        .navigationTitle("Our resturant")
-        //                    .toolbarBackground(Color.green, for: .navigationBar)
-        //                    .toolbarBackground(.visible, for: .navigationBar)
-        //                    .toolbar {
-        //                        ToolbarItemGroup(placement: .navigationBarLeading) {
-        //                            Button("Request order") {
-        //                                print("Let's request a new order!")
-        //                            }
-        //                            Button("Completed order") {
-        //                                print("Go to your completed order view!")
-        //                            }
-        //                        }
-        //                    }
-        
     }
 }
 
@@ -96,7 +79,7 @@ private struct DashboardAccomplishmentTotalView: View {
                     .font(.callout)
                     .foregroundStyle(.gray)
                     .lineSpacing(-8)
-                Text("\(deletionCount)개")
+                Text("\(deletionCount / 4)개")
                     .font(.title)
                     .bold()
             }
@@ -123,13 +106,14 @@ private struct DashboardAccomplishmentTotalView: View {
 }
 
 private struct FourLeafCloverCardView: View {
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     var body: some View {
         VStack(spacing :20) {
             VStack(spacing : 12) {
                 Text("이번달에 모은 네잎클로버")
                 HStack {
                     Image("fourLeafClover")
-                    Text("개")
+                    Text("\(deletionCount / 4)개")
                         .font(.title2)
                         .bold()
                 }
@@ -150,13 +134,14 @@ private struct FourLeafCloverCardView: View {
 }
 
 private struct FootprintCardView: View {
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     var body: some View {
         VStack(spacing :20) {
             VStack(spacing : 12) {
                 Text("지금까지 줄인 디지털 탄소발자국")
                 HStack{
                     Image("footPrint")
-                    Text("g")
+                    Text("\(String(format: "%.1 f", Float(deletionCount)*(5.4)))g")
                         .font(.title2)
                         .bold()
                 }

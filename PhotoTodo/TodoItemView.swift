@@ -18,11 +18,11 @@ struct TodoItemView: View {
     // TodoGridView에서 해당하는 todo를 넘겨받음
     var todo: Todo
     @State private var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
-    @State private var contentAlarm = Date()
-    @State private var memo: String = ""
-    @State private var alarmDataisEmpty: Bool = true
+    @State private var contentAlarm: Date? = Date()
+    @State private var memo: String? = ""
+    @State private var alarmDataisEmpty: Bool? = true
     @State private var path: NavigationPath = NavigationPath()
-    @State private var home: Bool = false
+    @State private var home: Bool? = false
     
     // 토글 시 토스트 메세지 설정 관련 변수
     @Binding var toastMessage: Todo?
@@ -101,7 +101,7 @@ struct TodoItemView: View {
                         }
                         Spacer()
                         Button {
-                            if !alarmDataisEmpty {
+                            if alarmDataisEmpty != nil && !alarmDataisEmpty! {
                                 let todoData = Todo(folder: chosenFolder, id: todo.id, image: todo.image, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, memo: memo), isDone: todo.isDone)
                                 modelContext.insert(todoData)
                                 print("알람 데이터 있음")
