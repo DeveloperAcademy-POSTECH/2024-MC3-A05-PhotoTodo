@@ -228,7 +228,7 @@ struct MakeTodoView: View {
                 
                 dismiss()
             } label: {
-                Text("Add")
+                Text("완료")
             }
 
         })
