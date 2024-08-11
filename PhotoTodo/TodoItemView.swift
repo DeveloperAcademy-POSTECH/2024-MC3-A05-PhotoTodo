@@ -42,13 +42,14 @@ struct TodoItemView: View {
                     //MARK: 삭제될 날까지의 D-Day 표시
                     .overlay(alignment: .bottomTrailing){
                         RoundedRectangle(cornerRadius: 35)
-                            .fill(.paleGray)
+                            .fill(todo.isDone ? .paleGray : Color.clear)
                             .opacity(0.5)
                             .frame(width: 100, height: 40)
                             .overlay {
                                 Text(todo.isDone ? "\(dayOfYear(from : Date())-dayOfYear(from : todo.isDoneAt ?? Date())+30)일남음" : "")
                                     .font(.callout).foregroundStyle(.green).padding()
                             }
+                            .padding()
                     }
                     //MARK: 체크박스 표시
                     .overlay(alignment: .topLeading) {
