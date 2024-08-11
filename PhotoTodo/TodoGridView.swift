@@ -112,7 +112,6 @@ struct TodoGridView: View {
                 AnyView(scrollView)
             }
             VStack{
-                
                 if toastOption == .moveToDone {
                     toastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
                     
@@ -172,57 +171,35 @@ struct TodoGridView: View {
     }
     
     var customNavBar: some View {
-        VStack{
-            HStack{
-                Spacer()
-                //편집모드에서 다중선택된 아이템 삭제
-                Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
-                    if editMode == .active {
-                          Label("", systemImage: "trash")
-                      } else {
-                          Label("", systemImage: "plus")
-                              
-                      }
+        HStack{
+            Spacer()
+            //편집모드에서 다중선택된 아이템 삭제
+            Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
+                if editMode == .active {
+                    Label("", systemImage: "trash")
+                } else {
+                    Label("", systemImage: "plus")
+                }
+            }
+            .padding(.trailing)
+            EditButton()
+                .onChange(of: editMode) { newEditMode in
+                    //편집모드 해제시 선택정보 삭제
+                    if newEditMode == .inactive {
+                        selectedTodos.removeAll()
+                    }
                 }
                 .padding(.trailing)
-                EditButton()
-                    .onChange(of: editMode) { newEditMode in
-                        //편집모드 해제시 선택정보 삭제
-                        if newEditMode == .inactive {
-                            selectedTodos.removeAll()
-                        }
-                    }
-                    .padding(.trailing)
-            }
-            .environment(\.editMode, $editMode)
-            VStack{
-                HStack{
-                    Text("해야 할 일이")
-                        .font(.title)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                
-                todos.count == 0 ?
-                HStack{
-                    Text("모두 완료되었어요!")
-                        .font(.title)
-                        .bold()
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                :
-                HStack{
-                    Text("\(todos.count)").font(.title2).bold().foregroundStyle(.green) +
-                    Text("장 남았어요").font(.title).bold()
-                }.frame(maxWidth: .infinity, alignment: .leading)
-                }
-            
-            .padding()
         }
+        .environment(\.editMode, $editMode)
     }
     
-     
+    
     var guideLineView: some View {
         VStack{
+            if viewType == .main {
+                customTitle
+            }
             Spacer()
             VStack{
                 Image("mainEmptyIcon")
@@ -244,15 +221,18 @@ struct TodoGridView: View {
     
     var scrollView: some View {
         ScrollView {
+            if viewType == .main {
+                customTitle
+            }
             VStack{
                 LazyVGrid(columns: columns, spacing: 12) {
                     //TODO: 이미지 비율 맞추기
                     ForEach(sortedTodos) { todo in
                         TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMassage, toastOption: $toastOption)
-                        //각 TodoItem에 체크박스를 오버레이하여 보여줌
+                        //tap gesture로 선택되었을 시 라인으로 표시됨
                             .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
                             )
                         //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
                             .onTapGesture {
@@ -271,6 +251,30 @@ struct TodoGridView: View {
             .padding(.horizontal)
             
         }
+    }
+    
+    var customTitle: some View {
+        VStack{
+            HStack{
+                Text("해야 할 일이")
+                    .font(.title)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            
+            todos.count == 0 ?
+            HStack{
+                Text("모두 완료되었어요!")
+                    .font(.title)
+                    .bold()
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            :
+            HStack{
+                Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
+                Text("장 남았어요").font(.title).bold()
+            }.frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding()
     }
     
     
@@ -338,7 +342,6 @@ struct TodoGridView: View {
     
 }
 
-
 private struct toastView: View {
     @State var toastOption: ToastOption
     @State var toastMessage: String
@@ -363,6 +366,9 @@ private struct toastView: View {
     }
     
 }
+
+
+
 
 //struct TodoListView_Previews: PreviewProvider {
 //    static var previews: some View {

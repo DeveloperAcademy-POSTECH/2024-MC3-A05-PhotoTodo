@@ -17,19 +17,19 @@ struct ListItem: Identifiable {
 func changeStringToColor(colorName: String) -> Color {
     switch colorName {
     case "red":
-        return Color.red
-    case "orange":
-        return Color.orange
+        return Color("folder_color/red")
+    case "sky":
+        return Color("folder_color/sky")
     case "yellow":
-        return Color.yellow
+        return Color("folder_color/yellow")
     case "green":
-        return Color.green
+        return Color("folder_color/green")
     case "blue":
-        return Color.blue
+        return Color("folder_color/blue")
     case "purple":
-        return Color.purple
+        return Color("folder_color/purple")
     default:
-        return Color.green
+        return Color("folder_color/green")
     }
 }
 
@@ -37,6 +37,11 @@ struct FolderCarouselView: View {
     @Binding var chosenFolder: Folder?
     @State private var selectedButtonIndex: Int = 0
     @Query private var folders: [Folder]
+    
+    //폴더 추가 시 사용되는 상태들 상태들
+    @State var isShowingSheet = false
+    @State var folderNameInput = ""
+    @State var selectedColor: Color?
     
     var body: some View {
         GeometryReader { geometry in
@@ -76,7 +81,7 @@ struct FolderCarouselView: View {
                         }
                         
                         Button(action: {
-                            
+                            isShowingSheet.toggle()
                         }, label: {
                             HStack{
                                 Image(systemName: "plus")
@@ -93,6 +98,10 @@ struct FolderCarouselView: View {
                 }
             }
         }
+        .sheet(isPresented: $isShowingSheet, content: {
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+                .presentationDetents([.medium, .large])
+        })
     }
 }
 

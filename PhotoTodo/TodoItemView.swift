@@ -36,10 +36,21 @@ struct TodoItemView: View {
             } label: {
                 Image(uiImage: UIImage(data: todo.image))
                     .resizable()
+                    .scaledToFill()
                     .frame(width: 170, height: 170)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .scaledToFit()
-                //TODO: overlay하고 alignment로 top 주기
+                    //MARK: 삭제될 날까지의 D-Day 표시
+                    .overlay(alignment: .bottomTrailing){
+                        RoundedRectangle(cornerRadius: 35)
+                            .fill(.paleGray)
+                            .opacity(0.5)
+                            .frame(width: 100, height: 40)
+                            .overlay {
+                                Text(todo.isDone ? "\(dayOfYear(from : Date())-dayOfYear(from : todo.isDoneAt ?? Date())+30)일남음" : "")
+                                    .font(.callout).foregroundStyle(.green).padding()
+                            }
+                    }
+                    //MARK: 체크박스 표시
                     .overlay(alignment: .topLeading) {
                         Button{
                             todo.isDoneAt = nil
@@ -75,6 +86,8 @@ struct TodoItemView: View {
                                 print("완료함으로 보내버림")
                             }
                         } label : {
+                            editMode == .active ?
+                            nil : //editMode일 때는 체크박스가 보이지 않게 함
                             todo.isDone ?
                             Image("selectedOn")
                                 .resizable()
@@ -88,6 +101,7 @@ struct TodoItemView: View {
                         }
                         .disabled(editMode == .active)
                     }
+
             }
             .disabled(editMode == .active)
             .sheet(isPresented: $editTodoisActive, content: {
@@ -121,6 +135,7 @@ struct TodoItemView: View {
                     MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                 }
             })
+
         }
         .onAppear(perform: {
             chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
@@ -131,6 +146,11 @@ struct TodoItemView: View {
             memo = todo.options.memo ?? ""
         })
     }
+}
+
+func dayOfYear(from date: Date) -> Int {
+    let calendar = Calendar.current
+    return calendar.ordinality(of: .day, in: .year, for: date) ?? 0
 }
 
 #Preview {
