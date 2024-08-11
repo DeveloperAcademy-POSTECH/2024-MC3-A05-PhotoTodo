@@ -34,7 +34,7 @@ struct FolderListView: View {
                 NavigationLink{
                     TodoGridView(currentFolder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
                 } label : {
-                    Text(folders.count > 0 ? folders[0].name : "")
+                    FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
                 }
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
@@ -42,7 +42,7 @@ struct FolderListView: View {
                     NavigationLink {
                         TodoGridView(currentFolder: folders[index], viewType: basicViewType)
                     } label: {
-                        Text(folders[index].name)
+                        FolderRow(folder: folders[index], viewType: basicViewType)
                     }
                 }
                 .onDelete{ indexSet in
@@ -56,7 +56,7 @@ struct FolderListView: View {
                 NavigationLink {
                     DoneListView()
                 } label : {
-                    Text("완료함")
+                    FolderRow(folder: nil, viewType: doneListViewType)
                 }
             }
             .navigationBarTitle("폴더")
@@ -73,7 +73,7 @@ struct FolderListView: View {
             .sheet(isPresented: $isShowingSheet, content: {
                 FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                     .presentationDetents([.medium, .large])
-                })
+            })
             
         }
     }
@@ -81,7 +81,7 @@ struct FolderListView: View {
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
     }
-       
+    
     
     private func addFolders() {
         withAnimation {
@@ -103,6 +103,22 @@ struct FolderListView: View {
         }
     }
 }
+
+
+private struct FolderRow: View {
+    @State var folder: Folder?
+    @State var viewType: TodoGridViewType
+    
+    var body: some View{
+        HStack{
+            Image(systemName: "folder.fill")
+                .foregroundStyle(viewType == .singleFolder ? changeStringToColor(colorName: folder != nil ? folder!.color : "folder-color/green" ) : Color("gray/gray-800"))
+            Text(folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함")
+            Spacer()
+        }
+    }
+}
+
 
 #Preview {
     FolderListView()
