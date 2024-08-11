@@ -36,9 +36,9 @@ struct TodoItemView: View {
             } label: {
                 Image(uiImage: UIImage(data: todo.image))
                     .resizable()
+                    .scaledToFill()
                     .frame(width: 170, height: 170)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                    .scaledToFit()
                 //TODO: overlay하고 alignment로 top 주기
                     .overlay(alignment: .topLeading) {
                         Button{

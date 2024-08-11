@@ -46,9 +46,9 @@ struct MakeTodoView: View {
     var body: some View {
         
         VStack(alignment: .center){
-            
             Image(uiImage: UIImage(data: cameraVM.photoData.first ?? Data()))
                 .resizable()
+                .scaledToFill()
                 .skeleton(with: cameraVM.photoData.isEmpty,
                           animation: .pulse(),
                           appearance: .solid(color: Color.paleGray, background: Color.lightGray),
