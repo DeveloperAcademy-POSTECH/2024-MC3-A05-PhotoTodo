@@ -28,61 +28,91 @@ struct FolderListView: View {
     
     
     var body: some View {
-        NavigationStack{
-            List {
-                //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
-                NavigationLink{
-                    TodoGridView(currentFolder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
-                } label : {
-                    FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
-                }
-                .listRowBackground(Color("gray/gray-200"))
-                
-                //기본 폴더를 제외하고는 모두 삭제 가능
-                ForEach(folders.indices.dropFirst(), id: \.self) { index in
+        VStack {
+//            customNavBar
+            NavigationStack{
+                List {
+                    //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
+                    NavigationLink{
+                        TodoGridView(currentFolder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
+                    } label : {
+                        FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
+                    }
+                    .listRowBackground(Color("gray/gray-200"))
+                    
+                    //기본 폴더를 제외하고는 모두 삭제 가능
+                    ForEach(folders.indices.dropFirst(), id: \.self) { index in
+                        NavigationLink {
+                            TodoGridView(currentFolder: folders[index], viewType: basicViewType)
+                        } label: {
+                            FolderRow(folder: folders[index], viewType: basicViewType)
+                            
+                        }
+                        .listRowBackground(Color("gray/gray-200"))
+                    }
+                    .onDelete{ indexSet in
+                        // Adjust the indices for the deletion process
+                        let adjustedIndices = indexSet.map { $0 + 1 }
+                        let adjustedIndexSet = IndexSet(adjustedIndices)
+                        deleteItems(offsets: adjustedIndexSet)
+                    }
+                    //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
+                    //리스트 뷰의 마지막에는 완료함이 위치함
                     NavigationLink {
-                        TodoGridView(currentFolder: folders[index], viewType: basicViewType)
-                    } label: {
-                        FolderRow(folder: folders[index], viewType: basicViewType)
-                        
+                        DoneListView()
+                    } label : {
+                        FolderRow(folder: nil, viewType: doneListViewType)
                     }
                     .listRowBackground(Color("gray/gray-200"))
                 }
-                .onDelete{ indexSet in
-                    // Adjust the indices for the deletion process
-                    let adjustedIndices = indexSet.map { $0 + 1 }
-                    let adjustedIndexSet = IndexSet(adjustedIndices)
-                    deleteItems(offsets: adjustedIndexSet)
-                }
-                //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
-                //리스트 뷰의 마지막에는 완료함이 위치함
-                NavigationLink {
-                    DoneListView()
-                } label : {
-                    FolderRow(folder: nil, viewType: doneListViewType)
-                }
-                .listRowBackground(Color("gray/gray-200"))
+                .scrollContentBackground(.hidden)
+                //            .background(Color.white.edgesIgnoringSafeArea(.all))
+                .navigationBarTitle("폴더")
+                            .toolbar {
+                                ToolbarItem {
+                                    Button(action: toggleShowingSheet) {
+                                        Label("add a folder", systemImage: "plus")
+                                    }
+                                }
+                                ToolbarItem(placement: .navigationBarTrailing) {
+                                    EditButton()
+                                }
+                            }
+                .sheet(isPresented: $isShowingSheet, content: {
+                    FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+                        .presentationDetents([.medium, .large])
+                })
+                
             }
-            .scrollContentBackground(.hidden)
-//            .background(Color.white.edgesIgnoringSafeArea(.all))
-            .navigationBarTitle("폴더")
-            .toolbar {
-                ToolbarItem {
-                    Button(action: toggleShowingSheet) {
-                        Label("add a folder", systemImage: "plus")
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-            }
-            .sheet(isPresented: $isShowingSheet, content: {
-                FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
-                    .presentationDetents([.medium, .large])
-            })
-            
         }
     }
+    
+//    var customNavBar: some View {
+//        HStack{
+//            Spacer()
+//            //편집모드에서 다중선택된 아이템 삭제
+//            Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
+//                if editMode == .active {
+//                    Label("", systemImage: "trash")
+//                } else {
+//                    Label("", systemImage: "plus")
+//                }
+//            }
+//            .frame(width: 44)
+////            .padding(.trailing)
+//            EditButton()
+//                .frame(width: 50)
+//                .onChange(of: editMode) { newEditMode in
+//                    //편집모드 해제시 선택정보 삭제
+//                    if newEditMode == .inactive {
+//                        selectedTodos.removeAll()
+//                    }
+//                }
+////                .padding(.trailing)
+//        }
+//        .padding(.trailing, 5)
+//        .environment(\.editMode, $editMode)
+//    }
     
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
