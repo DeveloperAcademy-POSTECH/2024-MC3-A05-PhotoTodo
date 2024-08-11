@@ -47,6 +47,7 @@ struct TodoGridView: View {
     @State var memo: String? = nil
     @State var alarmDataisEmpty: Bool? = nil
     @State var home: Bool? = nil
+    @State var alarmID: String? = nil
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
     @State private var toastMassage: Todo? = nil
@@ -144,7 +145,7 @@ struct TodoGridView: View {
         .navigationBarHidden( viewType == .main ? true : false)
         //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
         .navigationDestination(isPresented: $isActive) {
-            MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+            MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
         }
         .toolbar {
             ToolbarItem {

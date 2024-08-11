@@ -29,7 +29,7 @@ class NotificationManager {
         
         if let isAlarmNotiID = UserDefaults.standard.object(forKey: "notiID") as? [String] {
             for noti in isAlarmNotiID {
-                self.deleteNotification(widhID: noti)
+                self.deleteNotification(withID: noti)
             }
         }
         
@@ -61,12 +61,40 @@ class NotificationManager {
             }
         UserDefaults.standard.set(notiID, forKey: "notiID")
         }
-    func makeTodoNotification() {
-        
+    func makeTodoNotification(year: Int, month: Int, day: Int, hour: Int, minute: Int) -> String {
+        let content = UNMutableNotificationContent()
+        content.title = "미완료된 TODO를 확인해보세요!"
+        content.body = "[중요]오늘 꼭 확인해야 하는 TODO가 있어요!"
+        content.sound = UNNotificationSound.default
+
+        var dateComponents = DateComponents()
+                dateComponents.calendar = Calendar.current
+                dateComponents.year = year
+                dateComponents.month = month
+                dateComponents.day = day
+                dateComponents.hour = hour
+                dateComponents.minute = minute
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+            
+            let id  = UUID().uuidString
+            self.notiID.append(id)
+            let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+            
+            let center = UNUserNotificationCenter.current()
+            center.add(request) { error in
+                if let error = error {
+                    print("Error: \(error)")
+                } else {
+                    print("\(id) Notification scheduled for \(year)-\(month)-\(day)-\(hour)-\(minute)")
+                }
+            }
+        return id
     }
     
-    func deleteNotification(widhID: String) {
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [widhID])
+    func deleteNotification(withID: String) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [withID])
+        print("\(withID)")
     }
 }
 
