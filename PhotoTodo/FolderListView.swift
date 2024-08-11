@@ -64,7 +64,7 @@ struct FolderListView: View {
                 .listRowBackground(Color("gray/gray-200"))
             }
             .scrollContentBackground(.hidden)
-//            .background(Color.white.edgesIgnoringSafeArea(.all))
+            //            .background(Color.white.edgesIgnoringSafeArea(.all))
             .navigationBarTitle("폴더")
             .toolbar {
                 ToolbarItem {
@@ -74,16 +74,15 @@ struct FolderListView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
+                        .frame(width: 38)
                 }
             }
             .sheet(isPresented: $isShowingSheet, content: {
                 FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                     .presentationDetents([.medium, .large])
             })
-            
         }
     }
-    
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
     }

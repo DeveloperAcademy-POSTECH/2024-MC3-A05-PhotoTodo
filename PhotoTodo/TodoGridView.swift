@@ -92,7 +92,7 @@ struct TodoGridView: View {
         case .singleFolder:
             return currentFolder?.name ?? folders[0].name
         case .main:
-            return "포토투두"
+            return ""
         case .doneList:
             return "완료함"
         }
@@ -110,6 +110,7 @@ struct TodoGridView: View {
                 AnyView(guideLineView)
                 :
                 AnyView(scrollView)
+
             }
             VStack{
                 if toastOption == .moveToDone {
@@ -137,9 +138,10 @@ struct TodoGridView: View {
         }
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItem)
         .onChange(of: selectedItem, loadImage)
-        .navigationBarTitle(
-            navigationBarTitle
-        )
+        // MARK: 아래 코드를 사용하면 viewType에 따라서 navigationTitle만 on/off 가능, but 사진 촬영 후 첫 folderlist -> todoGrid 접근 시 오류
+        // https://forums.developer.apple.com/forums/thread/722798 고질병이네 이거... 하...
+//        .navigationBarTitle(navigationBarTitle, displayMode: viewType == .main ? .inline : .large)
+        .navigationTitle(navigationBarTitle)
         .navigationBarHidden( viewType == .main ? true : false)
         //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
         .navigationDestination(isPresented: $isActive) {
@@ -150,15 +152,20 @@ struct TodoGridView: View {
                 editMode == .active ?
                 //편집모드에서 다중선택된 아이템 삭제
                 Button(action: deleteSelectedTodos) {
-                    Label("Delete Item", systemImage: "trash")
-                } :
+                    Image(systemName: "trash")
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                }.frame(width: 45) :
                 //편집모드가 아닐 시 아이템 추가 버튼
                 Button(action: toggleAddOptions) {
-                    Label("add Item", systemImage: "plus")
-                }
+                    Image(systemName: "plus")
+                        .resizable()
+                        .frame(width: 18, height: 18)
+                }.frame(width: 45)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
+                    .frame(width: 38)
                     .onChange(of: editMode) { newEditMode in
                         //편집모드 해제시 선택정보 삭제
                         if newEditMode == .inactive {
@@ -176,21 +183,30 @@ struct TodoGridView: View {
             //편집모드에서 다중선택된 아이템 삭제
             Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
                 if editMode == .active {
-                    Label("", systemImage: "trash")
+                    Image(systemName: "trash")
+                        .resizable()
+                        .frame(width: 18, height: 18)
                 } else {
-                    Label("", systemImage: "plus")
+                    Image(systemName: "plus")
+                        .resizable()
+                        .frame(width: 18, height: 18)
                 }
             }
-            .padding(.trailing)
+            .frame(width: 40)
+//            .padding(.trailing)
             EditButton()
+                .frame(width: 50)
                 .onChange(of: editMode) { newEditMode in
                     //편집모드 해제시 선택정보 삭제
                     if newEditMode == .inactive {
                         selectedTodos.removeAll()
                     }
                 }
-                .padding(.trailing)
+//                .padding(.trailing)
         }
+        // 진짜 어이가 없고 기가막힌다.....ㅋ
+        .frame(height: 33.5)
+        .padding(.trailing, 5.7)
         .environment(\.editMode, $editMode)
     }
     
@@ -216,6 +232,7 @@ struct TodoGridView: View {
             }
             Spacer()
         }
+
     }
     
     
