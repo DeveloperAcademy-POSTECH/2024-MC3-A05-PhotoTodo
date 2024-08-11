@@ -15,14 +15,14 @@ struct FolderEditView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var showActionSheet = false
-    let colors: [Color] = [.red, .orange, .yellow, .green, .blue, .purple]
+    let colors: [Color] = [Color("folder_color/red"), Color("folder_color/yellow"), Color("folder_color/sky"), Color("folder_color/green"), Color("folder_color/blue"), Color("folder_color/purple")]
     let colorDictionary: [Color: String] = [
-        .red: "red",
-        .orange: "orange",
-        .yellow: "yellow",
-        .green: "green",
-        .blue: "blue",
-        .purple: "purple"
+        Color("folder_color/red"): "red",
+        Color("folder_color/sky"): "sky",
+        Color("folder_color/yellow"): "yellow",
+        Color("folder_color/green"): "green",
+        Color("folder_color/blue"): "blue",
+        Color("folder_color/purple"): "purple"
     ]
 
     var body: some View {
