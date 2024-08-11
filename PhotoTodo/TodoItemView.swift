@@ -75,6 +75,8 @@ struct TodoItemView: View {
                                 print("완료함으로 보내버림")
                             }
                         } label : {
+                            editMode == .active ?
+                            nil : //editMode일 때는 체크박스가 보이지 않게 함
                             todo.isDone ?
                             Image("selectedOn")
                                 .resizable()
