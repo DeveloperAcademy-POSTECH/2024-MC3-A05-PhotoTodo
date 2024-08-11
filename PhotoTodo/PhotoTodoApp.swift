@@ -29,7 +29,7 @@ struct PhotoTodoApp: App {
     var body: some Scene {
         WindowGroup {
             TabBarView()
-//            MainView()
+//            TestView()
         }
         .modelContainer(sharedModelContainer)
     }
