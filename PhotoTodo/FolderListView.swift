@@ -36,6 +36,7 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
                 }
+                .listRowBackground(Color("gray/gray-200"))
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
                 ForEach(folders.indices.dropFirst(), id: \.self) { index in
@@ -43,7 +44,9 @@ struct FolderListView: View {
                         TodoGridView(currentFolder: folders[index], viewType: basicViewType)
                     } label: {
                         FolderRow(folder: folders[index], viewType: basicViewType)
+                        
                     }
+                    .listRowBackground(Color("gray/gray-200"))
                 }
                 .onDelete{ indexSet in
                     // Adjust the indices for the deletion process
@@ -58,7 +61,10 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: nil, viewType: doneListViewType)
                 }
+                .listRowBackground(Color("gray/gray-200"))
             }
+            .scrollContentBackground(.hidden)
+//            .background(Color.white.edgesIgnoringSafeArea(.all))
             .navigationBarTitle("폴더")
             .toolbar {
                 ToolbarItem {
