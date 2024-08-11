@@ -38,6 +38,11 @@ struct FolderCarouselView: View {
     @State private var selectedButtonIndex: Int = 0
     @Query private var folders: [Folder]
     
+    //폴더 추가 시 사용되는 상태들 상태들
+    @State var isShowingSheet = false
+    @State var folderNameInput = ""
+    @State var selectedColor: Color?
+    
     var body: some View {
         GeometryReader { geometry in
             ScrollViewReader { proxy in
@@ -76,7 +81,7 @@ struct FolderCarouselView: View {
                         }
                         
                         Button(action: {
-                            
+                            isShowingSheet.toggle()
                         }, label: {
                             HStack{
                                 Image(systemName: "plus")
@@ -93,6 +98,10 @@ struct FolderCarouselView: View {
                 }
             }
         }
+        .sheet(isPresented: $isShowingSheet, content: {
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+                .presentationDetents([.medium, .large])
+        })
     }
 }
 
