@@ -112,7 +112,6 @@ struct TodoGridView: View {
                 AnyView(scrollView)
             }
             VStack{
-                
                 if toastOption == .moveToDone {
                     toastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
                     
@@ -198,6 +197,9 @@ struct TodoGridView: View {
     
     var guideLineView: some View {
         VStack{
+            if viewType == .main {
+                customTitle
+            }
             Spacer()
             VStack{
                 Image("mainEmptyIcon")

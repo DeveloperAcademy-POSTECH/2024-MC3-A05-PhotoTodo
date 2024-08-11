@@ -19,7 +19,7 @@ func changeStringToColor(colorName: String) -> Color {
     case "red":
         return Color("folder_color/red")
     case "sky":
-        return Color("Folder_color/sky")
+        return Color("folder_color/sky")
     case "yellow":
         return Color("folder_color/yellow")
     case "green":
