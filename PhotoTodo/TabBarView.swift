@@ -37,7 +37,7 @@ struct TabBarView: View {
                             page = .main
                         } label: {
                             VStack{
-                                Image(systemName: page == .main ? "square.grid.2x2.fill" : "square.grid.2x2")
+                                Image(page == .main ? "allTodo.fill" : "allTodo")
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                 Text("전체투두")
@@ -59,7 +59,7 @@ struct TabBarView: View {
                                         .foregroundStyle(Color.white)
                                         .shadow(color: .lightGray, radius: 10)
                                     
-                                    Image(systemName: "camera.fill")
+                                    Image("cloverCamera.fill")
                                         .resizable()
                                         .frame(width: 40, height: 30)
                                         .foregroundStyle(Color.green)

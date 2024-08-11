@@ -211,7 +211,7 @@ struct TodoGridView: View {
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 :
                 HStack{
-                    Text("\(todos.count)").font(.title2).bold().foregroundStyle(.green) +
+                    Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
                     Text("장 남았어요").font(.title).bold()
                 }.frame(maxWidth: .infinity, alignment: .leading)
                 }
