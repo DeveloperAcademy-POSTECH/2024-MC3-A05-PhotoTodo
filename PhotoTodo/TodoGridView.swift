@@ -256,12 +256,13 @@ struct TodoGridView: View {
             if viewType == .main {
                 customTitle
             }
-            viewType != .main ? 
+            viewType != .main ? //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
             AnyView(gridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)) :
-            AnyView(groupedGridView)
+            AnyView(groupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
         }
     }
     
+    /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     var groupedGridView: some View {
         ForEach(todosGroupedByDate.indices, id: \.self) { groupIndex in
             VStack{
@@ -305,11 +306,12 @@ struct TodoGridView: View {
         return dateFormatter.string(from: date)
     }
     
+    /// 날짜별로 투두 아이템을 그루핑한 배열을 모은 배열을 리턴함
     private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
         if sortedTodos.count == 0 {
-            return [dayOfYear(from : Date()): sortedTodos]
+            return [dayOfYear(from : Date()): sortedTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
         }
-        var groupedTodos: OrderedDictionary<Int, [Todo]> = [:]
+        var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
         var i = 0
         var currDate: Int
         while i != sortedTodos.count {
