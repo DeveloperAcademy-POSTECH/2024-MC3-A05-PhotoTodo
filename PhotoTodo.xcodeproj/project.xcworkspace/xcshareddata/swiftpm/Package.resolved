@@ -1,5 +1,5 @@
 {
-  "originHash" : "720a96f1b624fba16d661f1a429e5e7479d54f039581bba1a2429ac81e55a3fe",
+  "originHash" : "7042574d4113ac7d7a1b93aa70ef901281a77554b94ab353f19492544452d273",
   "pins" : [
     {
       "identity" : "skeletonui",
@@ -11,12 +11,21 @@
       }
     },
     {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "revision" : "3d2dc41a01f9e49d84f0a3925fb858bed64f702d",
+        "version" : "1.1.2"
+      }
+    },
+    {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "c097f955b4e724690f0fc8ffb7a6d4b881c9c4e3",
-        "version" : "1.17.2"
+        "revision" : "6d932a79e7173b275b96c600c86c603cf84f153c",
+        "version" : "1.17.4"
       }
     },
     {

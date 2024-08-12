@@ -9,11 +9,13 @@ import SwiftUI
 import SwiftData
 import UIKit
 import PhotosUI
+import OrderedCollections
 
 enum SortOption {
     case byDate
     case byName
     case byStatus
+    case byDueDate
 }
 
 enum ToastOption {
@@ -50,10 +52,11 @@ struct TodoGridView: View {
     @State var alarmID: String? = nil
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
-    @State private var toastMassage: Todo? = nil
+    @State private var toastMessage: Todo? = nil
     @State private var toastOption: ToastOption = .none
 
     @State private var alarmSetting: Bool = false
+    
     
     var todos: [Todo] {
         switch viewType {
@@ -81,14 +84,17 @@ struct TodoGridView: View {
             return todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
         case .byStatus:
             return todos.sorted { $0.isDone && !$1.isDone }
+        case .byDueDate:
+            return todos.sorted { $0.options.alarm ?? Date() < $1.options.alarm ?? Date() }
+            
         }
     }
     //TODO: folder.todos를 여러 옵션으로 정렬하기
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
+    var todosGroupedByDate: [[Todo]] {
+        return Array(getTodosGroupedByDate().values)
+    }
+    
     
     var navigationBarTitle: String {
         switch viewType {
@@ -250,32 +256,18 @@ struct TodoGridView: View {
             if viewType == .main {
                 customTitle
             }
+            viewType != .main ? 
+            AnyView(gridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)) :
+            AnyView(groupedGridView)
+        }
+    }
+    
+    var groupedGridView: some View {
+        ForEach(todosGroupedByDate.indices, id: \.self) { groupIndex in
             VStack{
-                LazyVGrid(columns: columns, spacing: 12) {
-                    //TODO: 이미지 비율 맞추기
-                    ForEach(sortedTodos) { todo in
-                        TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMassage, toastOption: $toastOption)
-                        //tap gesture로 선택되었을 시 라인으로 표시됨
-                            .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
-                            )
-                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                            .onTapGesture {
-                                if editMode == .active {
-                                    if selectedTodos.contains(todo.id) {
-                                        selectedTodos.remove(todo.id)
-                                    } else {
-                                        selectedTodos.insert(todo.id)
-                                    }
-                                }
-                            }
-                    }
-                }
-                .padding(.bottom)
+                Text(getDateString(todosGroupedByDate[groupIndex][0].createdAt))
+                gridView(sortedTodos: todosGroupedByDate[groupIndex], toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
             }
-            .padding(.horizontal)
-            
         }
     }
     
@@ -303,6 +295,33 @@ struct TodoGridView: View {
         .padding()
     }
     
+    private func getDateString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM월 d일"
+        return dateFormatter.string(from: date)
+    }
+    
+    private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
+        if sortedTodos.count == 0 {
+            return [dayOfYear(from : Date()): sortedTodos]
+        }
+        var groupedTodos: OrderedDictionary<Int, [Todo]> = [:]
+        var i = 0
+        var currDate: Int
+        while i != sortedTodos.count {
+            switch sortOption {
+            case .byDate:
+                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+            case .byDueDate:
+                currDate = dayOfYear(from : sortedTodos[i].options.alarm ?? Date())
+            default:
+                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+            }
+            groupedTodos[currDate, default: []].append(sortedTodos[i])
+            i += 1
+        }
+        return groupedTodos
+    }
     
     private func toggleAddOptions(){
         isShowingOptions.toggle()
@@ -365,7 +384,6 @@ struct TodoGridView: View {
             isActive = true
         }
     }
-    
 }
 
 private struct toastView: View {
@@ -390,7 +408,47 @@ private struct toastView: View {
                 .offset(y: 250)
         }
     }
+}
+
+private struct gridView: View {
+    @State var sortedTodos: [Todo]
+    @Binding var toastMessage: Todo?
+    @Binding var toastOption: ToastOption
+    @Binding var selectedTodos: Set<UUID>
+    @Binding var editMode: EditMode
     
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+    ]
+    
+    var body: some View {
+        VStack{
+            LazyVGrid(columns: columns, spacing: 12) {
+                //TODO: 이미지 비율 맞추기
+                ForEach(sortedTodos) { todo in
+                    TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption)
+                    //tap gesture로 선택되었을 시 라인으로 표시됨
+                        .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                        )
+                    //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                        .onTapGesture {
+                            if editMode == .active {
+                                if selectedTodos.contains(todo.id) {
+                                    selectedTodos.remove(todo.id)
+                                } else {
+                                    selectedTodos.insert(todo.id)
+                                }
+                            }
+                        }
+                }
+            }
+            .padding(.bottom)
+        }
+        .padding(.horizontal)
+    }
 }
 
 
