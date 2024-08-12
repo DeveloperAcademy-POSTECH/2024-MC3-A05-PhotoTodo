@@ -46,7 +46,7 @@ struct TodoItemView: View {
                     .overlay(alignment: .bottomTrailing){
                         RoundedRectangle(cornerRadius: 35)
                             .fill(todo.isDone ? .paleGray : Color.clear)
-                            .opacity(0.5)
+                            .opacity(0.8)
                             .frame(width: 100, height: 40)
                             .overlay {
                                 Text(todo.isDone ? "\(dayOfYear(from : Date())-dayOfYear(from : todo.isDoneAt ?? Date())+30)일남음" : "")
