@@ -8,8 +8,20 @@
 import SwiftUI
 
 struct TestView: View {
+    //    let manager = NotificationManager.instance
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack{
+            Text("")
+            //            Button(action: {
+            //                manager.makeDailyNotification()
+            //            }, label: {
+            //                Text("알림")
+            //            })
+            //        }
+            //        .onAppear(perform: {
+            //            manager.requestAuthorization()
+            //        })
+        }
     }
 }
 

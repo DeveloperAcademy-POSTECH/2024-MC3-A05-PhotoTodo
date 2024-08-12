@@ -21,6 +21,7 @@ struct TabBarView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
     @State private var navigationisActive: Bool = false
+    let manager = NotificationManager.instance
     
     var body: some View {
         NavigationStack/*(path: $path)*/ {
@@ -125,6 +126,8 @@ struct TabBarView: View {
             )
             modelContext.insert(defaultFolder)
             hasBeenLaunched = true
+            
+            manager.requestAuthorization()
         }
     }
 }

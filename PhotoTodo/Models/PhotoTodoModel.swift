@@ -46,10 +46,12 @@ class Options {
 //    }
 
     var alarm: Date?
+    var alarmUUID: String?
     var memo: String?
 
-    init(alarm: Date? = nil, memo: String? = nil) {
+    init(alarm: Date? = nil, alarmUUID: String? = nil, memo: String? = nil) {
         self.alarm = alarm
+        self.alarmUUID = alarmUUID
         self.memo = memo
     }
 

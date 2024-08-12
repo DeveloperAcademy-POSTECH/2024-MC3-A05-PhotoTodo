@@ -47,10 +47,13 @@ struct TodoGridView: View {
     @State var memo: String? = nil
     @State var alarmDataisEmpty: Bool? = nil
     @State var home: Bool? = nil
+    @State var alarmID: String? = nil
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
     @State private var toastMassage: Todo? = nil
     @State private var toastOption: ToastOption = .none
+
+    @State private var alarmSetting: Bool = false
     
     var todos: [Todo] {
         switch viewType {
@@ -138,14 +141,11 @@ struct TodoGridView: View {
         }
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItem)
         .onChange(of: selectedItem, loadImage)
-        // MARK: 아래 코드를 사용하면 viewType에 따라서 navigationTitle만 on/off 가능, but 사진 촬영 후 첫 folderlist -> todoGrid 접근 시 오류
-        // https://forums.developer.apple.com/forums/thread/722798 고질병이네 이거... 하...
-//        .navigationBarTitle(navigationBarTitle, displayMode: viewType == .main ? .inline : .large)
         .navigationTitle(navigationBarTitle)
         .navigationBarHidden( viewType == .main ? true : false)
         //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
         .navigationDestination(isPresented: $isActive) {
-            MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+            MakeTodoView(cameraVM: cameraVM, chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
         }
         .toolbar {
             ToolbarItem {
@@ -179,6 +179,14 @@ struct TodoGridView: View {
     
     var customNavBar: some View {
         HStack{
+            Button(action: {
+                alarmSetting.toggle()
+            }, label: {
+                Image(systemName: "alarm")
+                    .resizable()
+                    .frame(width: 18, height: 18)
+            })
+            .padding(.leading)
             Spacer()
             //편집모드에서 다중선택된 아이템 삭제
             Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
@@ -193,7 +201,6 @@ struct TodoGridView: View {
                 }
             }
             .frame(width: 40)
-//            .padding(.trailing)
             EditButton()
                 .frame(width: 50)
                 .onChange(of: editMode) { newEditMode in
@@ -202,9 +209,11 @@ struct TodoGridView: View {
                         selectedTodos.removeAll()
                     }
                 }
-//                .padding(.trailing)
         }
-        // 진짜 어이가 없고 기가막힌다.....ㅋ
+        .sheet(isPresented: $alarmSetting, content: {
+            AlarmSettingView()
+                .presentationDetents([.height(CGFloat(450))])
+        })
         .frame(height: 33.5)
         .padding(.trailing, 5.7)
         .environment(\.editMode, $editMode)

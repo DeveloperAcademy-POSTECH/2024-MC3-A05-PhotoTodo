@@ -31,6 +31,7 @@
 		1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8B2C5C643600BAFD13 /* TestView.swift */; };
 		1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */; };
 		3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C90390C2C623EFF00025335 /* Date+Extension.swift */; };
+		3CC1139B2C69169B00281EBD /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1139A2C69169A00281EBD /* UserNotification.swift */; };
 		4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
 		61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D7192C5E443D00C22046 /* ToolBarView.swift */; };
 		61E6D71C2C5E5EA700C22046 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */; };
@@ -61,6 +62,7 @@
 		1A2E5C8B2C5C643600BAFD13 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
 		3C90390C2C623EFF00025335 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		3CC1139A2C69169A00281EBD /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
 		4F46B28A2C5C7E2100556646 /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
 		61E6D7192C5E443D00C22046 /* ToolBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarView.swift; sourceTree = "<group>"; };
 		61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				61E6D7192C5E443D00C22046 /* ToolBarView.swift */,
 				61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */,
 				131501CC2C61FCA000AAA4A2 /* AlarmSettingView.swift */,
+				3CC1139A2C69169A00281EBD /* UserNotification.swift */,
 				1A0D96812C5A14CC00784CBA /* ViewModel */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
@@ -234,6 +237,7 @@
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */,
+				3CC1139B2C69169B00281EBD /* UserNotification.swift in Sources */,
 				1A2E5C8C2C5C643600BAFD13 /* TestView.swift in Sources */,
 				61E6D71A2C5E443D00C22046 /* ToolBarView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,

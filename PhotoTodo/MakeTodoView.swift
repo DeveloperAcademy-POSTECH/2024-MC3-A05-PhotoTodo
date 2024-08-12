@@ -27,6 +27,7 @@ struct MakeTodoView: View {
     
     // 내부 컨텐츠
     @Binding var contentAlarm: Date?
+    @Binding var alarmID: String?
     @State private var folderMenuisActive: Bool = false
     @State private var alarmisActive: Bool = false
     @Binding var alarmDataisEmpty: Bool?
@@ -34,6 +35,8 @@ struct MakeTodoView: View {
     @Binding var memo: String?
     @Query private var folders: [Folder]
     @Binding var home: Bool?
+    
+    let manager = NotificationManager.instance
     
     
     var chosenFolderColor : Color{
@@ -124,7 +127,6 @@ struct MakeTodoView: View {
                     .sheet(isPresented: $alarmisActive, content: {
                         VStack{
                             HStack{
-                                Spacer()
                                 Button(action: {
                                     contentAlarm = Date()
                                     alarmDataisEmpty = true
@@ -132,6 +134,7 @@ struct MakeTodoView: View {
                                 }, label: {
                                     Text("리셋")
                                 })
+                                Spacer()
                                 Button(action: {
                                     alarmDataisEmpty = false
                                     alarmisActive.toggle()
@@ -207,7 +210,26 @@ struct MakeTodoView: View {
 //                    modelContext.insert(newTodo)
 //                }
                 
-                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, memo: memo), isDone: false)
+                var id: String = ""
+                // 알람 데이터가 있으면
+                
+                // MARK: 생성 시 만들어 지는 곳 -> 알람 데이터 삭제 필요 없음
+                if alarmDataisEmpty != nil && !alarmDataisEmpty! {
+                    // alarmDataisEmpty == false일 경우 알림을 설정하는 것이기 때문에 데이터가 무조건 있다고 봄
+                    let calendar = Calendar.current
+                    let year = calendar.component(.year, from: contentAlarm!)
+                    let month = calendar.component(.month, from: contentAlarm!)
+                    let day = calendar.component(.day, from: contentAlarm!)
+                    let hour = calendar.component(.hour, from: contentAlarm!)
+                    let minute = calendar.component(.minute, from: contentAlarm!)
+                    
+                    // Notification 알람 생성 및 id Todo에 저장하기
+                    id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
+                }
+                
+                
+                
+                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, alarmUUID: alarmDataisEmpty ?? true ? nil : id,  memo: memo), isDone: false)
                 if let chosenFolder = chosenFolder {
                     chosenFolder.todos.append(newTodo)
                 } else {
@@ -252,6 +274,7 @@ extension Binding {
     @State var memo: String = ""
     @State var alarmDataisEmpty: Bool = true
     @State var home: Bool = false
-    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
+    @State var alarmID = ""
+    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
 }

@@ -25,6 +25,7 @@ struct CameraView: View {
     @State private var contentAlarm: Date? = Date()
     @State private var memo: String? = ""
     @State private var alarmDataisEmpty: Bool? = true
+    @State private var alarmID: String? = ""
     
     // 폴더 관련
     @State var chosenFolder: Folder? = nil
@@ -63,7 +64,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                             }
                         }
 //                        HStack{
@@ -103,7 +104,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                                     .toolbar {
                                         Button("Add") {
                                         }
