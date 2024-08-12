@@ -110,23 +110,23 @@ struct TodoGridView: View {
     
     var body: some View {
         VStack{
-            viewType == .main ? AnyView(customNavBar) : AnyView(EmptyView())
+            viewType == .main ? AnyView(CustomNavBar) : AnyView(EmptyView())
         }
         ZStack {
             VStack{
                 todos.isEmpty && viewType != .doneList
                 ?
-                AnyView(guideLineView)
+                AnyView(GuideLineView)
                 :
-                AnyView(scrollView)
+                AnyView(ScrollView)
 
             }
             VStack{
                 if toastOption == .moveToDone {
-                    toastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
+                    ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
                     
                 } else if toastOption == .moveToOrigin {
-                    toastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!")
+                    ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!")
                 }
                 //                if toastMassage == nil {
                 //                    Text("복구되었을 때")
@@ -183,7 +183,7 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    var customNavBar: some View {
+    var CustomNavBar: some View {
         HStack{
             Button(action: {
                 alarmSetting.toggle()
@@ -226,10 +226,10 @@ struct TodoGridView: View {
     }
     
     
-    var guideLineView: some View {
+    var GuideLineView: some View {
         VStack{
             if viewType == .main {
-                customTitle
+                CustomTitle
             }
             Spacer()
             VStack{
@@ -251,19 +251,19 @@ struct TodoGridView: View {
     }
     
     
-    var scrollView: some View {
-        ScrollView {
+    var ScrollView: some View {
+        SwiftUI.ScrollView {
             if viewType == .main {
-                customTitle
+                CustomTitle
             }
             viewType != .main ? //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
-            AnyView(gridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)) :
-            AnyView(groupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+            AnyView(GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)) :
+            AnyView(GroupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
         }
     }
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
-    var groupedGridView: some View {
+    var GroupedGridView: some View {
         ForEach(todosGroupedByDate.indices, id: \.self) { groupIndex in
             VStack{
                 HStack{
@@ -271,12 +271,12 @@ struct TodoGridView: View {
                         .foregroundStyle(.gray)
                     Spacer()
                 }.padding(.leading)
-                gridView(sortedTodos: todosGroupedByDate[groupIndex], toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
+                GridView(sortedTodos: todosGroupedByDate[groupIndex], toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
             }
         }
     }
     
-    var customTitle: some View {
+    var CustomTitle: some View {
         VStack{
             HStack{
                 Text("해야 할 일이")
@@ -392,7 +392,7 @@ struct TodoGridView: View {
     }
 }
 
-private struct toastView: View {
+private struct ToastView: View {
     @State var toastOption: ToastOption
     @State var toastMessage: String
     
@@ -416,7 +416,7 @@ private struct toastView: View {
     }
 }
 
- struct gridView: View {
+ struct GridView: View {
     var sortedTodos: [Todo]
     @Binding var toastMessage: Todo?
     @Binding var toastOption: ToastOption
