@@ -265,7 +265,11 @@ struct TodoGridView: View {
     var groupedGridView: some View {
         ForEach(todosGroupedByDate.indices, id: \.self) { groupIndex in
             VStack{
-                Text(getDateString(todosGroupedByDate[groupIndex][0].createdAt))
+                HStack{
+                    Text(getDateString(todosGroupedByDate[groupIndex][0].createdAt))
+                        .foregroundStyle(.gray)
+                    Spacer()
+                }.padding(.leading)
                 gridView(sortedTodos: todosGroupedByDate[groupIndex], toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
             }
         }
@@ -314,7 +318,7 @@ struct TodoGridView: View {
                 currDate = dayOfYear(from : sortedTodos[i].createdAt)
             case .byDueDate:
                 currDate = dayOfYear(from : sortedTodos[i].options.alarm ?? Date())
-            default:
+            default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
                 currDate = dayOfYear(from : sortedTodos[i].createdAt)
             }
             groupedTodos[currDate, default: []].append(sortedTodos[i])
@@ -410,8 +414,8 @@ private struct toastView: View {
     }
 }
 
-private struct gridView: View {
-    @State var sortedTodos: [Todo]
+ struct gridView: View {
+    var sortedTodos: [Todo]
     @Binding var toastMessage: Todo?
     @Binding var toastOption: ToastOption
     @Binding var selectedTodos: Set<UUID>
