@@ -9,11 +9,13 @@ import SwiftUI
 import SwiftData
 import UIKit
 import PhotosUI
+import OrderedCollections
 
 enum SortOption {
     case byDate
     case byName
     case byStatus
+    case byDueDate
 }
 
 enum ToastOption {
@@ -50,10 +52,11 @@ struct TodoGridView: View {
     @State var alarmID: String? = nil
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
-    @State private var toastMassage: Todo? = nil
+    @State private var toastMessage: Todo? = nil
     @State private var toastOption: ToastOption = .none
 
     @State private var alarmSetting: Bool = false
+    
     
     var todos: [Todo] {
         switch viewType {
@@ -81,14 +84,17 @@ struct TodoGridView: View {
             return todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
         case .byStatus:
             return todos.sorted { $0.isDone && !$1.isDone }
+        case .byDueDate:
+            return todos.sorted { $0.options.alarm ?? Date() < $1.options.alarm ?? Date() }
+            
         }
     }
     //TODO: folder.todos를 여러 옵션으로 정렬하기
     
-    let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-    ]
+    var todosGroupedByDate: [[Todo]] {
+        return Array(getTodosGroupedByDate().values)
+    }
+    
     
     var navigationBarTitle: String {
         switch viewType {
@@ -104,23 +110,23 @@ struct TodoGridView: View {
     
     var body: some View {
         VStack{
-            viewType == .main ? AnyView(customNavBar) : AnyView(EmptyView())
+            viewType == .main ? AnyView(CustomNavBar) : AnyView(EmptyView())
         }
         ZStack {
             VStack{
                 todos.isEmpty && viewType != .doneList
                 ?
-                AnyView(guideLineView)
+                AnyView(GuideLineView)
                 :
-                AnyView(scrollView)
+                AnyView(ScrollView)
 
             }
             VStack{
                 if toastOption == .moveToDone {
-                    toastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
+                    ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
                     
                 } else if toastOption == .moveToOrigin {
-                    toastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!")
+                    ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!")
                 }
                 //                if toastMassage == nil {
                 //                    Text("복구되었을 때")
@@ -177,7 +183,7 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    var customNavBar: some View {
+    var CustomNavBar: some View {
         HStack{
             Button(action: {
                 alarmSetting.toggle()
@@ -220,10 +226,10 @@ struct TodoGridView: View {
     }
     
     
-    var guideLineView: some View {
+    var GuideLineView: some View {
         VStack{
             if viewType == .main {
-                customTitle
+                CustomTitle
             }
             Spacer()
             VStack{
@@ -245,41 +251,32 @@ struct TodoGridView: View {
     }
     
     
-    var scrollView: some View {
-        ScrollView {
+    var ScrollView: some View {
+        SwiftUI.ScrollView {
             if viewType == .main {
-                customTitle
+                CustomTitle
             }
-            VStack{
-                LazyVGrid(columns: columns, spacing: 12) {
-                    //TODO: 이미지 비율 맞추기
-                    ForEach(sortedTodos) { todo in
-                        TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMassage, toastOption: $toastOption)
-                        //tap gesture로 선택되었을 시 라인으로 표시됨
-                            .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
-                            )
-                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                            .onTapGesture {
-                                if editMode == .active {
-                                    if selectedTodos.contains(todo.id) {
-                                        selectedTodos.remove(todo.id)
-                                    } else {
-                                        selectedTodos.insert(todo.id)
-                                    }
-                                }
-                            }
-                    }
-                }
-                .padding(.bottom)
-            }
-            .padding(.horizontal)
-            
+            viewType != .main ? //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
+            AnyView(GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)) :
+            AnyView(GroupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
         }
     }
     
-    var customTitle: some View {
+    /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
+    var GroupedGridView: some View {
+        ForEach(todosGroupedByDate.indices, id: \.self) { groupIndex in
+            VStack{
+                HStack{
+                    Text(getDateString(todosGroupedByDate[groupIndex][0].createdAt))
+                        .foregroundStyle(.gray)
+                    Spacer()
+                }.padding(.leading)
+                GridView(sortedTodos: todosGroupedByDate[groupIndex], toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
+            }
+        }
+    }
+    
+    var CustomTitle: some View {
         VStack{
             HStack{
                 Text("해야 할 일이")
@@ -303,6 +300,34 @@ struct TodoGridView: View {
         .padding()
     }
     
+    private func getDateString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM월 d일"
+        return dateFormatter.string(from: date)
+    }
+    
+    /// 날짜별로 투두 아이템을 그루핑한 배열을 모은 배열을 리턴함
+    private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
+        if sortedTodos.count == 0 {
+            return [dayOfYear(from : Date()): sortedTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
+        }
+        var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
+        var i = 0
+        var currDate: Int
+        while i != sortedTodos.count {
+            switch sortOption {
+            case .byDate:
+                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+            case .byDueDate:
+                currDate = dayOfYear(from : sortedTodos[i].options.alarm ?? Date())
+            default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
+                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+            }
+            groupedTodos[currDate, default: []].append(sortedTodos[i])
+            i += 1
+        }
+        return groupedTodos
+    }
     
     private func toggleAddOptions(){
         isShowingOptions.toggle()
@@ -365,10 +390,9 @@ struct TodoGridView: View {
             isActive = true
         }
     }
-    
 }
 
-private struct toastView: View {
+private struct ToastView: View {
     @State var toastOption: ToastOption
     @State var toastMessage: String
     
@@ -390,7 +414,47 @@ private struct toastView: View {
                 .offset(y: 250)
         }
     }
+}
+
+ struct GridView: View {
+    var sortedTodos: [Todo]
+    @Binding var toastMessage: Todo?
+    @Binding var toastOption: ToastOption
+    @Binding var selectedTodos: Set<UUID>
+    @Binding var editMode: EditMode
     
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+    ]
+    
+    var body: some View {
+        VStack{
+            LazyVGrid(columns: columns, spacing: 12) {
+                //TODO: 이미지 비율 맞추기
+                ForEach(sortedTodos) { todo in
+                    TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption)
+                    //tap gesture로 선택되었을 시 라인으로 표시됨
+                        .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                        )
+                    //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                        .onTapGesture {
+                            if editMode == .active {
+                                if selectedTodos.contains(todo.id) {
+                                    selectedTodos.remove(todo.id)
+                                } else {
+                                    selectedTodos.insert(todo.id)
+                                }
+                            }
+                        }
+                }
+            }
+            .padding(.bottom)
+        }
+        .padding(.horizontal)
+    }
 }
 
 
