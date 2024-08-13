@@ -15,7 +15,7 @@ struct AlarmSettingView: View {
     
     var body: some View {
         ZStack{
-            Color("gray-200")
+            Color("gray/gray-200")
                 .ignoresSafeArea()
             
             VStack{
