@@ -28,7 +28,6 @@ struct FolderListView: View {
     
     
     var body: some View {
-        NavigationStack{
             List {
                 //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
                 NavigationLink{
@@ -81,7 +80,6 @@ struct FolderListView: View {
                 FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                     .presentationDetents([.medium, .large])
             })
-        }
     }
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
