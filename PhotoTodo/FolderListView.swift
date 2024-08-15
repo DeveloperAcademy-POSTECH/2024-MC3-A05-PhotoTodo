@@ -38,21 +38,16 @@ struct FolderListView: View {
                 .listRowBackground(Color("gray/gray-200"))
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
-                ForEach(folders.indices.dropFirst(), id: \.self) { index in
+                ForEach(folders.dropFirst()) { folder in
                     NavigationLink {
-                        TodoGridView(currentFolder: folders[index], viewType: basicViewType)
+                        TodoGridView(currentFolder: folder, viewType: basicViewType)
                     } label: {
-                        FolderRow(folder: folders[index], viewType: basicViewType)
+                        FolderRow(folder: folder, viewType: basicViewType)
                         
                     }
                     .listRowBackground(Color("gray/gray-200"))
                 }
-                .onDelete{ indexSet in
-                    // Adjust the indices for the deletion process
-                    let adjustedIndices = indexSet.map { $0 + 1 }
-                    let adjustedIndexSet = IndexSet(adjustedIndices)
-                    deleteItems(offsets: adjustedIndexSet)
-                }
+                .onDelete(perform: deleteItems)
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
                 //리스트 뷰의 마지막에는 완료함이 위치함
                 NavigationLink {
@@ -101,7 +96,7 @@ struct FolderListView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(folders[index])
+                modelContext.delete(folders[index+1])
             }
         }
     }
