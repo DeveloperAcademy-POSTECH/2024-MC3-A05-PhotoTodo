@@ -132,12 +132,10 @@ struct CameraView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: {
-            guard let home = home else {return}
-            if home {
-                dismiss()
-            }
-            // MARK: Preview에 생성이 안되있어서 오류가 날 뿐, 디폴드 폴더는 삭제가 안되게 구현 예정이여서 문제 없습니다.
-            chosenFolder = folders.count != 0 ? folders.first! : nil
+            if home == nil { return }
+            if home! == false { return }
+            home = false
+            dismiss()
         })
         
     }
