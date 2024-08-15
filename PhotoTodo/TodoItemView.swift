@@ -42,6 +42,14 @@ struct TodoItemView: View {
                     .scaledToFill()
                     .frame(width: 170, height: 170)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
+                    //MARK: 다중선택 여부 표시
+                    .overlay(alignment: . bottomLeading){
+                        Image(systemName: "square.on.square")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                            .padding(4)
+                            .foregroundColor(todo.images.count > 1 ? .paleGray : Color.clear)
+                    }
                     //MARK: 삭제될 날까지의 D-Day 표시
                     .overlay(alignment: .bottomTrailing){
                         RoundedRectangle(cornerRadius: 35)
