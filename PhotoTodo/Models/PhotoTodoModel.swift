@@ -22,16 +22,16 @@ class Folder {
 class Todo {
     var folder: Folder?
     @Attribute(.unique) let id: UUID
-    @Attribute(.externalStorage) var image: Data
+    @Attribute(.externalStorage) var images: [Data]
     var createdAt: Date
     var options: Options
     var isDone: Bool
     var isDoneAt: Date?
     
-    init(folder: Folder? = nil, id: UUID, image: Data, createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil) {
+    init(folder: Folder? = nil, id: UUID, images: [Data], createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil) {
         self.folder = folder
         self.id = id
-        self.image = image
+        self.images = images
         self.createdAt = createdAt
         self.options = options
         self.isDone = isDone
@@ -48,11 +48,13 @@ class Options {
     var alarm: Date?
     var alarmUUID: String?
     var memo: String?
+    var tags: [String]?
 
-    init(alarm: Date? = nil, alarmUUID: String? = nil, memo: String? = nil) {
+    init(alarm: Date? = nil, alarmUUID: String? = nil, memo: String? = nil, tags: [String]? = nil) {
         self.alarm = alarm
         self.alarmUUID = alarmUUID
         self.memo = memo
+        self.tags = tags
     }
 
 //    required init(from decoder: Decoder) throws {

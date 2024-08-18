@@ -35,13 +35,21 @@ struct TodoItemView: View {
         ZStack{
             Button {
                 editTodoisActive.toggle()
-                cameraVM.photoData = [todo.image]
+                cameraVM.photoData = todo.images
             } label: {
-                Image(uiImage: UIImage(data: todo.image))
+                Image(uiImage: UIImage(data: todo.images[0]))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 170, height: 170)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
+                    //MARK: 다중선택 여부 표시
+                    .overlay(alignment: . bottomLeading){
+                        Image(systemName: "square.on.square")
+                            .resizable()
+                            .frame(width: 25, height: 25)
+                            .padding(4)
+                            .foregroundColor(todo.images.count > 1 ? .paleGray : Color.clear)
+                    }
                     //MARK: 삭제될 날까지의 D-Day 표시
                     .overlay(alignment: .bottomTrailing){
                         RoundedRectangle(cornerRadius: 35)
@@ -136,11 +144,11 @@ struct TodoItemView: View {
                                 // Notification 알람 생성 및 id Todo에 저장하기
                                 let id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
                                 
-                                let todoData = Todo(folder: chosenFolder, id: todo.id, image: todo.image, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
+                                let todoData = Todo(folder: chosenFolder, id: todo.id, images: todo.images, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
                                 modelContext.insert(todoData)
                                 print("알람 데이터 있음")
                             } else {
-                                let todoData = Todo(folder: chosenFolder, id: todo.id, image: todo.image, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
+                                let todoData = Todo(folder: chosenFolder, id: todo.id, images: todo.images, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
                                 modelContext.insert(todoData)
                                 print("알람 데이터 없음")
                             }
@@ -177,7 +185,7 @@ func dayOfYear(from date: Date) -> Int {
 #Preview {
     var newTodo = Todo(
         id: UUID(),
-        image: UIImage(systemName: "star")?.pngData() ?? Data(),
+        images: [UIImage(systemName: "star")?.pngData() ?? Data()],
         createdAt: Date(),
         options: Options(
             alarm: nil,

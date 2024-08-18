@@ -49,17 +49,25 @@ struct MakeTodoView: View {
     var body: some View {
         
         VStack(alignment: .center){
-            Image(uiImage: UIImage(data: cameraVM.photoData.first ?? Data()))
-                .resizable()
-                .scaledToFill()
-                .skeleton(with: cameraVM.photoData.isEmpty,
-                          animation: .pulse(),
-                          appearance: .solid(color: Color.paleGray, background: Color.lightGray),
-                          shape: .rectangle,
-                          lines: 1,
-                          scales: [1: 1])
-                .frame(width: 350, height: 500)
-                .clipShape(RoundedRectangle(cornerRadius: 25))
+            TabView {
+                ForEach(cameraVM.photoData.indices, id: \.self) { index in
+                    let imageData: Data = cameraVM.photoData[index]
+                    let uiImage = UIImage(data: imageData)
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFill()
+                        .skeleton(with: cameraVM.photoData.isEmpty,
+                                  animation: .pulse(),
+                                  appearance: .solid(color: Color.paleGray, background: Color.lightGray),
+                                  shape: .rectangle,
+                                  lines: 1,
+                                  scales: [1: 1])
+                        .frame(width: 350, height: 500)
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                }
+            }
+            .tabViewStyle(PageTabViewStyle())
+            .frame(width: 350, height: 500)
             
             List {
                 Section{
@@ -78,15 +86,15 @@ struct MakeTodoView: View {
                                 ForEach(folders, id: \.self.id){ folder in
                                     Button(action: {
                                         chosenFolder = folder
-//                                        chosenFolderName = folder.name
-//                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
+                                        //                                        chosenFolderName = folder.name
+                                        //                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
                                     }) {
                                         Label("\(folder.name)", systemImage: "circle")
                                     }
                                 }
                             } label: {
                                 Text("\(chosenFolderName)")
-//                                Text(chosenFolder.name)
+                                //                                Text(chosenFolder.name)
                                 Image(systemName: "chevron.up.chevron.down")
                                     .resizable()
                                     .frame(width: 10, height: 15)
@@ -96,22 +104,22 @@ struct MakeTodoView: View {
                         }
                     }
                     
-//                    HStack{
-//                        Image(systemName: "alarm")
-//                            .resizable()
-//                            .frame(width: 15, height: 15)
-//                        Text("알람설정")
-//                        Spacer()
-//                        DatePicker(
-//                            "Select Date",
-//                            selection: $contentAlarm,
-//                            displayedComponents: [.date, .hourAndMinute]
-//                        )
-//                        .labelsHidden()
-//                        .datePickerStyle(.compact)
-//                    }
-//                    
-//                    
+                    //                    HStack{
+                    //                        Image(systemName: "alarm")
+                    //                            .resizable()
+                    //                            .frame(width: 15, height: 15)
+                    //                        Text("알람설정")
+                    //                        Spacer()
+                    //                        DatePicker(
+                    //                            "Select Date",
+                    //                            selection: $contentAlarm,
+                    //                            displayedComponents: [.date, .hourAndMinute]
+                    //                        )
+                    //                        .labelsHidden()
+                    //                        .datePickerStyle(.compact)
+                    //                    }
+                    //
+                    //
                     Button {
                         alarmisActive.toggle()
                     } label: {
@@ -197,18 +205,18 @@ struct MakeTodoView: View {
             .scrollContentBackground(.hidden)
             .scrollDisabled(true)
         }
-
+        
         .toolbar(content: {
             Button {
                 //SwiftData 저장 작업
                 // 알람 데이터 없을 때
-//                if alarmDataisEmpty {
-//                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options( memo: memo), isDone: false)
-//                    modelContext.insert(newTodo)
-//                } else { // 알람 데이터 있을 때
-//                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
-//                    modelContext.insert(newTodo)
-//                }
+                //                if alarmDataisEmpty {
+                //                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options( memo: memo), isDone: false)
+                //                    modelContext.insert(newTodo)
+                //                } else { // 알람 데이터 있을 때
+                //                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
+                //                    modelContext.insert(newTodo)
+                //                }
                 
                 var id: String = ""
                 // 알람 데이터가 있으면
@@ -229,7 +237,7 @@ struct MakeTodoView: View {
                 
                 
                 
-                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, alarmUUID: alarmDataisEmpty ?? true ? nil : id,  memo: memo), isDone: false)
+                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), images: cameraVM.photoData, createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, alarmUUID: alarmDataisEmpty ?? true ? nil : id,  memo: memo), isDone: false)
                 if let chosenFolder = chosenFolder {
                     chosenFolder.todos.append(newTodo)
                 } else {
@@ -252,19 +260,19 @@ struct MakeTodoView: View {
             } label: {
                 Text("완료")
             }
-
+            
         })
     }
 }
 
 extension Binding {
-  func withDefault<T>(_ defaultValue: T) -> Binding<T> where Value == Optional<T> {
-    return Binding<T>(get: {
-      self.wrappedValue ?? defaultValue
-    }, set: { newValue in
-      self.wrappedValue = newValue
-    })
-  }
+    func withDefault<T>(_ defaultValue: T) -> Binding<T> where Value == Optional<T> {
+        return Binding<T>(get: {
+            self.wrappedValue ?? defaultValue
+        }, set: { newValue in
+            self.wrappedValue = newValue
+        })
+    }
 }
 
 #Preview {

@@ -42,7 +42,7 @@ struct TodoGridView: View {
     @AppStorage("deletionCount") var deletionCount: Int = 0
     @State private var selectedItems = [PhotosPickerItem]()
     @State private var selectedImages = [Image]()
-    @State private var selectedItem: PhotosPickerItem?
+//    @State private var selectedItem: PhotosPickerItem?
     
     //새로운 사진 업로드 시 MakeTodoView에서 필요한 상태들
     @State var contentAlarm: Date? = nil
@@ -142,11 +142,12 @@ struct TodoGridView: View {
                 Text("촬영하기")
             }
             Button("앨범에서 가져오기"){
+                cameraVM.photoData.removeAll()
                 showingImagePicker.toggle()
             }
         }
-        .photosPicker(isPresented: $showingImagePicker, selection: $selectedItem)
-        .onChange(of: selectedItem, loadImage)
+        .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10, matching: .not(.videos))
+        .onChange(of: selectedItems, loadImage)
         .navigationTitle(navigationBarTitle)
         .navigationBarHidden( viewType == .main ? true : false)
         //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
@@ -338,7 +339,7 @@ struct TodoGridView: View {
             let newTodo = Todo(
                 folder: currentFolder,
                 id: UUID(),
-                image: UIImage(contentsOfFile: "filledCoffee")?.pngData() ?? Data(),
+                images: [Data()],
                 createdAt: Date(),
                 options: Options(
                     alarm : nil,
@@ -384,9 +385,12 @@ struct TodoGridView: View {
     ///a method that will be called when the ImagePicker view has been dismissed
     func loadImage() {
         Task {
-            guard let imageData = try await selectedItem?.loadTransferable(type: Data.self) else { return }
-            cameraVM.photoData.append(imageData)
-            selectedItem = nil
+            for item in selectedItems {
+                if let imageData = try? await item.loadTransferable(type: Data.self) {
+                    cameraVM.photoData.append(imageData)
+                }
+            }
+            selectedItems.removeAll()
             isActive = true
         }
     }
