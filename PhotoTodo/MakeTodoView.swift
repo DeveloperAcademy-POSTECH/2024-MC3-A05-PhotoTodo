@@ -36,6 +36,9 @@ struct MakeTodoView: View {
     @Query private var folders: [Folder]
     @Binding var home: Bool?
     
+    // 이미지 처리관련
+    @State private var imageClickisActive: Bool = false
+    
     let manager = NotificationManager.instance
     
     
@@ -53,21 +56,26 @@ struct MakeTodoView: View {
                 ForEach(cameraVM.photoData.indices, id: \.self) { index in
                     let imageData: Data = cameraVM.photoData[index]
                     let uiImage = UIImage(data: imageData)
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                        .skeleton(with: cameraVM.photoData.isEmpty,
-                                  animation: .pulse(),
-                                  appearance: .solid(color: Color.paleGray, background: Color.lightGray),
-                                  shape: .rectangle,
-                                  lines: 1,
-                                  scales: [1: 1])
-                        .frame(width: 350, height: 500)
-                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                    Button(action: {
+                        imageClickisActive = true
+                    }, label: {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .skeleton(with: cameraVM.photoData.isEmpty,
+                                      animation: .pulse(),
+                                      appearance: .solid(color: Color.paleGray, background: Color.lightGray),
+                                      shape: .rectangle,
+                                      lines: 1,
+                                      scales: [1: 1])
+                            .frame(width: 350, height: 500)
+                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                    })
                 }
             }
             .tabViewStyle(PageTabViewStyle())
             .frame(width: 350, height: 500)
+            .clipShape(RoundedRectangle(cornerRadius: 25))
             
             List {
                 Section{
