@@ -50,29 +50,24 @@ struct TabBarView: View {
                         .foregroundStyle(page == .main ? Color.gray : Color.lightGray)
                         
                         
-                        NavigationLink(value: "camera") {
-                            Button {
-                                navigationisActive.toggle()
-                            } label: {
-                                ZStack{
-                                    Circle()
-                                        .frame(width: 70, height: 70)
-                                        .foregroundStyle(Color.white)
-                                        .shadow(color: .lightGray, radius: 10)
-                                    
-                                    Image("cloverCamera.fill")
-                                        .resizable()
-                                        .frame(width: 40, height: 30)
-                                        .foregroundStyle(Color.green)
-                                }
+                        NavigationLink  {
+                            CameraView()
+                        } label: {
+                            ZStack{
+                                Circle()
+                                    .frame(width: 70, height: 70)
+                                    .foregroundStyle(Color.white)
+                                    .shadow(color: .lightGray, radius: 10)
+                                
+                                Image("cloverCamera.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 30)
+                                    .foregroundStyle(Color.green)
                             }
                         }
-                        .navigationDestination(isPresented: $navigationisActive, destination: {
-                            CameraView()
-                        })
-//                        .navigationDestination(for: String.self) { value in
-//                            CameraView()
-//                        }
+                        //                        .navigationDestination(for: String.self) { value in
+                        //                            CameraView()
+                        //                        }
                         .padding(.horizontal, 55)
                         
                         Button {
