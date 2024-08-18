@@ -9,6 +9,7 @@ import SwiftUI
 import SkeletonUI
 import UIKit
 import SwiftData
+import Photos
 
 enum startViewType {
     case camera
@@ -16,6 +17,19 @@ enum startViewType {
     case gridMain
     case gridSingleFolder
 }
+
+struct SharedImage: Transferable {
+    static var transferRepresentation: some TransferRepresentation {
+        ProxyRepresentation(exporting: \.image)
+    }
+    
+    public var image: Image
+    
+    init(image: Image) {
+        self.image = image
+    }
+}
+
 
 struct MakeTodoView: View {
     
@@ -40,12 +54,14 @@ struct MakeTodoView: View {
     @State private var imageClickisActive: Bool = false
     @State private var clickedImage: UIImage?
     @State private var imageScale: CGFloat = 1.0
-     private var magnification: some Gesture {
+    private var magnification: some Gesture {
         MagnifyGesture()
-             .onChanged { value in
-                 imageScale = value.magnification
-                   }
-     }
+            .onChanged { value in
+                imageScale = value.magnification
+            }
+    }
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     let manager = NotificationManager.instance
     
@@ -64,22 +80,38 @@ struct MakeTodoView: View {
                     ForEach(cameraVM.photoData.indices, id: \.self) { index in
                         let imageData: Data = cameraVM.photoData[index]
                         let uiImage = UIImage(data: imageData)
-                        Button(action: {
-                            imageClickisActive = true
-                            clickedImage = uiImage
-                        }, label: {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .skeleton(with: cameraVM.photoData.isEmpty,
-                                          animation: .pulse(),
-                                          appearance: .solid(color: Color.paleGray, background: Color.lightGray),
-                                          shape: .rectangle,
-                                          lines: 1,
-                                          scales: [1: 1])
-                                .frame(width: 350, height: 500)
-                                .clipShape(RoundedRectangle(cornerRadius: 25))
-                        })
+                        ZStack{
+                            Button(action: {
+                                imageClickisActive = true
+                                clickedImage = uiImage
+                            }, label: {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .skeleton(with: cameraVM.photoData.isEmpty,
+                                              animation: .pulse(),
+                                              appearance: .solid(color: Color.paleGray, background: Color.lightGray),
+                                              shape: .rectangle,
+                                              lines: 1,
+                                              scales: [1: 1])
+                                    .frame(width: 350, height: 500)
+                                    .clipShape(RoundedRectangle(cornerRadius: 25))
+                            })
+                            Button {
+                                if let shareImage = uiImage {
+                                    saveImageToAlbum(image: shareImage)
+                                }
+                            } label: {
+                                Image(systemName: "square.and.arrow.up")
+                                    .resizable()
+                                    .frame(width: 20, height: 30)
+                            }
+                            .alert(isPresented: $showAlert) {
+                                Alert(title: Text("이미지 저장완료"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                            }
+                            .offset(x: 150, y: -220)
+                            
+                        }
                     }
                 }
                 .tabViewStyle(PageTabViewStyle())
@@ -310,6 +342,23 @@ struct MakeTodoView: View {
             }
             
         })
+    }
+    
+    func saveImageToAlbum(image: UIImage) {
+        PHPhotoLibrary.requestAuthorization { status in
+            if status == .authorized {
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                DispatchQueue.main.async {
+                    alertMessage = "이미지가 앨범에 저장되었습니다!"
+                    showAlert = true
+                }
+            } else {
+                DispatchQueue.main.async {
+                    alertMessage = "설정에서 앨범 저장 권한을 허용해주세요!"
+                    showAlert = true
+                }
+            }
+        }
     }
 }
 
