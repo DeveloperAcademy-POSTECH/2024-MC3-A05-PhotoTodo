@@ -64,6 +64,7 @@
 		1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
 		3C90390C2C623EFF00025335 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		3CC1139A2C69169A00281EBD /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
+		3CC113B42C72036100281EBD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F46B28A2C5C7E2100556646 /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
 		61E6D7192C5E443D00C22046 /* ToolBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBarView.swift; sourceTree = "<group>"; };
 		61E6D71B2C5E5EA700C22046 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -117,6 +118,7 @@
 		1A2778DC2C56395900A02C7E /* PhotoTodo */ = {
 			isa = PBXGroup;
 			children = (
+				3CC113B42C72036100281EBD /* Info.plist */,
 				3C90390C2C623EFF00025335 /* Date+Extension.swift */,
 				1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */,
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
@@ -392,10 +394,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PhotoTodo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -422,10 +427,13 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = 4RG9LBF3XF;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PhotoTodo/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "TodoItem을 업로드하기 위해 카메라 사용이 필요합니다";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
