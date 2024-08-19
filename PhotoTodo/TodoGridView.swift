@@ -314,20 +314,30 @@ struct TodoGridView: View {
         }
         var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
         var i = 0
-        var currDate: Int
+        var curr: Int
         while i != sortedTodos.count {
             switch sortOption {
             case .byDate:
-                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
             case .byDueDate:
-                currDate = dayOfYear(from : sortedTodos[i].options.alarm ?? Date())
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].options.alarm ?? Date())
             default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
-                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
             }
-            groupedTodos[currDate, default: []].append(sortedTodos[i])
+            groupedTodos[curr, default: []].append(sortedTodos[i])
             i += 1
         }
         return groupedTodos
+    }
+    
+    func daysPassedSinceJanuaryFirst2024(from date: Date) -> Int {
+        return dayOfYear(from : date) + (extractYear(from : date)-2024)*365
+    }
+    
+    func extractYear(from date: Date) -> Int {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        return year
     }
     
     private func toggleAddOptions(){
