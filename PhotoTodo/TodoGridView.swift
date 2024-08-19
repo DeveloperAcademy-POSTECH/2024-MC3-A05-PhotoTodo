@@ -91,8 +91,8 @@ struct TodoGridView: View {
     }
     //TODO: folder.todos를 여러 옵션으로 정렬하기
     
-    var todosGroupedByDate: [[Todo]] {
-        return Array(getTodosGroupedByDate().values)
+    var todosGroupedByDate: OrderedDictionary<Int, [Todo]> {
+        return getTodosGroupedByDate()
     }
     
     
@@ -265,14 +265,14 @@ struct TodoGridView: View {
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     var GroupedGridView: some View {
-        ForEach(todosGroupedByDate.indices, id: \.self) { groupIndex in
+        ForEach(todosGroupedByDate.elements, id: \.key) { element in
             VStack{
                 HStack{
-                    Text(getDateString(todosGroupedByDate[groupIndex][0].createdAt))
+                    Text(getDateString(element.value[0].createdAt))
                         .foregroundStyle(.gray)
                     Spacer()
                 }.padding(.leading)
-                GridView(sortedTodos: todosGroupedByDate[groupIndex], toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
+                GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
             }
         }
     }
