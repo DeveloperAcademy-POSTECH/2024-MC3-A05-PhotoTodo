@@ -105,6 +105,7 @@ struct TabBarView: View {
 ////                }
 //                .offset(y: 290)
             }
+            .ignoresSafeArea(.keyboard)
         }
         .onAppear {
             //MARK: 최초 1회 실행된 적이 있을 시

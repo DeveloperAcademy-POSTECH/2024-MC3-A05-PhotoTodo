@@ -91,8 +91,8 @@ struct TodoGridView: View {
     }
     //TODO: folder.todos를 여러 옵션으로 정렬하기
     
-    var todosGroupedByDate: [[Todo]] {
-        return Array(getTodosGroupedByDate().values)
+    var todosGroupedByDate: OrderedDictionary<Int, [Todo]> {
+        return getTodosGroupedByDate()
     }
     
     
@@ -265,14 +265,14 @@ struct TodoGridView: View {
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     var GroupedGridView: some View {
-        ForEach(todosGroupedByDate.indices, id: \.self) { groupIndex in
+        ForEach(todosGroupedByDate.elements, id: \.key) { element in
             VStack{
                 HStack{
-                    Text(getDateString(todosGroupedByDate[groupIndex][0].createdAt))
+                    Text(getDateString(element.value[0].createdAt))
                         .foregroundStyle(.gray)
                     Spacer()
                 }.padding(.leading)
-                GridView(sortedTodos: todosGroupedByDate[groupIndex], toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
+                GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
             }
         }
     }
@@ -314,20 +314,30 @@ struct TodoGridView: View {
         }
         var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
         var i = 0
-        var currDate: Int
+        var curr: Int
         while i != sortedTodos.count {
             switch sortOption {
             case .byDate:
-                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
             case .byDueDate:
-                currDate = dayOfYear(from : sortedTodos[i].options.alarm ?? Date())
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].options.alarm ?? Date())
             default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
-                currDate = dayOfYear(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
             }
-            groupedTodos[currDate, default: []].append(sortedTodos[i])
+            groupedTodos[curr, default: []].append(sortedTodos[i])
             i += 1
         }
         return groupedTodos
+    }
+    
+    func daysPassedSinceJanuaryFirst2024(from date: Date) -> Int {
+        return dayOfYear(from : date) + (extractYear(from : date)-2024)*365
+    }
+    
+    func extractYear(from date: Date) -> Int {
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: date)
+        return year
     }
     
     private func toggleAddOptions(){

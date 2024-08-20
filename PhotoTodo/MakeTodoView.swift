@@ -239,7 +239,7 @@ struct MakeTodoView: View {
                                 }
                                 
                                 VStack{
-                                    TextField("메모를 입력해주세요.", text: $memo.withDefault(""))
+                                    TextField("메모를 입력해주세요.", text: $memo.withDefault(""), axis: .vertical	)
                                 }.frame(height: 100, alignment: .top)
                                 
                                 Spacer()
