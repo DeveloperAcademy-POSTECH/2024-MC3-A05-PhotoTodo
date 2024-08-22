@@ -286,6 +286,7 @@ struct MakeTodoView: View {
                 }
             }
         }
+        .toolbar(startViewType == .camera ? .visible : .hidden)
         .toolbar(content: {
             Button {
                 //SwiftData 저장 작업
@@ -342,6 +343,22 @@ struct MakeTodoView: View {
             }
             
         })
+        .toolbar{
+            ToolbarItemGroup(placement: .bottomBar) {
+                //TODO: 업로드 창에서 선택 후 이미지 넣기
+                Button {
+                    print("tap first button")
+//                    showingImagePicker = true
+                } label : {
+                    Image(systemName: "photo.on.rectangle")
+                }
+                NavigationLink {
+//                        CameraView()
+                }label: {
+                    Image(systemName: "camera")
+                }
+            }
+        }
     }
     
     func saveImageToAlbum(image: UIImage) {
