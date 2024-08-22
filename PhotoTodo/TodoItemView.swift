@@ -160,8 +160,9 @@ struct TodoItemView: View {
                             
                         }
                         .padding()
-                        
-                        MakeTodoView(chosenFolder: $chosenFolder, startViewType: .edit, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                        ScrollView{
+                            MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .edit, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                        }
                     }
                 }
                     

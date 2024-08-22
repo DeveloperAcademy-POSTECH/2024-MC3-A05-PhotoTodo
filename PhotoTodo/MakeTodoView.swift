@@ -253,6 +253,7 @@ struct MakeTodoView: View {
                 }
                 .scrollContentBackground(.hidden)
                 .scrollDisabled(true)
+                .frame(minHeight: 180)
             }
             if imageClickisActive {
                 ZStack{
