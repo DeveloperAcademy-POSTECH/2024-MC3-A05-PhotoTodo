@@ -69,4 +69,3 @@ class Options {
 //        try container.encodeIfPresent(memo, forKey: .memo)
 //    }
 }
-
