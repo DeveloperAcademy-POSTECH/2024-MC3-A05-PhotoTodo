@@ -35,7 +35,7 @@ struct MakeTodoView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject var cameraVM: CameraViewModel
+    @ObservedObject private var cameraVM = CameraViewModel.shared
     @Binding var chosenFolder: Folder?
     var startViewType: startViewType
     
@@ -62,6 +62,7 @@ struct MakeTodoView: View {
     }
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
     
     let manager = NotificationManager.instance
     
@@ -380,6 +381,6 @@ extension Binding {
     @State var alarmDataisEmpty: Bool = true
     @State var home: Bool = false
     @State var alarmID = ""
-    return MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
+    return MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
 }
