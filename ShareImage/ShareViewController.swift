@@ -25,7 +25,7 @@ class ShareViewController: SLComposeServiceViewController {
     }
 }
 
-fileprivate struct ShareView: View {
+struct ShareView: View {
     @Environment(\.modelContext) private var modelContext
     var itemProviders: [NSItemProvider]
     var extensionContext: NSExtensionContext?
@@ -37,16 +37,49 @@ fileprivate struct ShareView: View {
         GeometryReader {
             let size = $0.size
             VStack{
-                Text("이미지 Todo 추가")
-                    .font(.title3.bold())
-                    .frame(maxWidth: .infinity)
-                    .overlay(alignment: .leading) {
-                        Button("취소"){
-                            dismiss()
-                        }
-                        .tint(.red)
+                HStack{
+                    Button("취소"){
+                        dismiss()
                     }
-                    .padding(.bottom, 10)
+                    .tint(.red)
+                    Spacer()
+                    Text("이미지 Todo 추가")
+                        .font(.title3.bold())
+                    Spacer()
+                    Button {
+                        saveItems()
+                    } label: {
+                        Text("저장")
+                            .tint(.blue)
+                            .fontWeight(.semibold)
+                    }
+                }
+                .padding(.vertical, 10)
+                .frame(maxWidth: .infinity)
+                
+                
+//                Text("이미지 Todo 추가")
+//                    .font(.title3.bold())
+//                    .frame(maxWidth: .infinity)
+//                    .overlay(alignment: .leading) {
+//                        HStack{
+//                            Button("취소"){
+//                                dismiss()
+//                            }
+//                            .tint(.red)
+//                            Spacer()
+//                            Button {
+//                                saveItems()
+//                            } label: {
+//                                Text("저장")
+//                                    .font(.title3)
+//                                    .fontWeight(.semibold)
+//                                    .padding(.vertical, 10)
+//                                    .frame(maxWidth: .infinity)
+//                            }
+//                        }
+//                    }
+//                    .padding(.bottom, 10)
                 
                 ScrollView(.horizontal) {
                     HStack {
@@ -63,17 +96,6 @@ fileprivate struct ShareView: View {
                 .frame(height: 300) // 이미지 사진 크기를 줄일 때 사용됨
                 .scrollIndicators(.hidden)
                 
-                Button {
-                    saveItems()
-                } label: {
-                    Text("저장")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .padding(.vertical, 10)
-                        .frame(maxWidth: .infinity)
-                }
-                
-                
                 Spacer(minLength: 0)
             }
             .padding(15)
@@ -83,6 +105,9 @@ fileprivate struct ShareView: View {
                 //                defaultFolder = folders.first ?? Folder(id: UUID(), name: "임시저장폴더", color: "green", todos: [])
             })
         }
+        .onAppear(perform: {
+            print("폴더 : \(folders)")
+        })
     }
     
     func extractItems(size: CGSize) {
@@ -114,7 +139,10 @@ fileprivate struct ShareView: View {
             for i in items {
                 imageData.append(i.imageData)
             }
-            let newTodo = Todo(id: UUID(), images: imageData, createdAt: Date(), options: Options(), isDone: false)
+            // SwiftData에 저장된 Folder의 기본폴더로 초기화 저장됨
+            let fetchDescriptor = FetchDescriptor<Folder>()
+            let result = try context.fetch(fetchDescriptor)
+            let newTodo = Todo(folder: result.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(), isDone: false)
             context.insert(newTodo)
             try context.save()
             dismiss()
