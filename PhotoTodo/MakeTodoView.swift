@@ -287,7 +287,7 @@ struct MakeTodoView: View {
                 }
             }
         }
-        .toolbar(startViewType == .camera ? .visible : .hidden)
+        .toolbar(startViewType == .edit ? .hidden : .visible)
         .toolbar(content: {
             Button {
                 //SwiftData 저장 작업
