@@ -63,9 +63,7 @@ struct MakeTodoView: View {
     
     //이미지 추가 관련 변수들
     @State private var showingImagePicker = false
-    @State private var inputImage: UIImage?
     @State private var selectedItems = [PhotosPickerItem]()
-    @State private var isDoneSelecting: Bool = false
     
     //알람 설정 관련
     @State private var showAlert = false
@@ -398,7 +396,6 @@ struct MakeTodoView: View {
                 }
             }
             selectedItems.removeAll()
-            isDoneSelecting = true
         }
     }
 }
