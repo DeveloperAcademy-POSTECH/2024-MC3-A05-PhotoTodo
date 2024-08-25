@@ -284,7 +284,7 @@ struct MakeTodoView: View {
                         Spacer()
                         Image(uiImage: clickedImage)
                             .resizable()
-                            .scaledToFill()
+                            .aspectRatio(contentMode: .fit)
                             .frame(width: 350, height: 500)
                             .clipShape(RoundedRectangle(cornerRadius: 25))
                             .scaleEffect(imageScale >= 1.0 ? imageScale : 1.0)
