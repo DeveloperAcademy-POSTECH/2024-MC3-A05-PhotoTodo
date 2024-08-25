@@ -33,6 +33,7 @@ struct TodoItemView: View {
     
     var body: some View {
         ZStack{
+            //TodoItemView는 하나의 버튼임
             Button {
                 editTodoisActive.toggle()
                 cameraVM.photoData = todo.images
@@ -127,8 +128,8 @@ struct TodoItemView: View {
                                 Text("취소")
                             }
                             Spacer()
+                            // 저장 버튼
                             Button {
-                                
                                 if todo.options.alarmUUID != nil {
                                     manager.deleteNotification(withID: alarmID!)
                                 }
@@ -145,11 +146,11 @@ struct TodoItemView: View {
                                     // Notification 알람 생성 및 id Todo에 저장하기
                                     let id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
                                     
-                                    let todoData = Todo(folder: chosenFolder, id: todo.id, images: todo.images, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
+                                    let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
                                     modelContext.insert(todoData)
                                     print("알람 데이터 있음")
                                 } else {
-                                    let todoData = Todo(folder: chosenFolder, id: todo.id, images: todo.images, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
+                                    let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
                                     modelContext.insert(todoData)
                                     print("알람 데이터 없음")
                                 }
@@ -177,6 +178,7 @@ struct TodoItemView: View {
             }
             memo = todo.options.memo ?? ""
             alarmID = todo.options.alarmUUID ?? ""
+            cameraVM.photoData = todo.images
         })
     }
 }

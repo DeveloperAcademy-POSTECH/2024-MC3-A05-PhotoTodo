@@ -9,7 +9,7 @@ import SwiftUI
 import SkeletonUI
 import UIKit
 import SwiftData
-import Photos
+import PhotosUI
 
 enum startViewType {
     case camera
@@ -60,6 +60,14 @@ struct MakeTodoView: View {
                 imageScale = value.magnification
             }
     }
+    
+    //이미지 추가 관련 변수들
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+    @State private var selectedItems = [PhotosPickerItem]()
+    @State private var isDoneSelecting: Bool = false
+    
+    //알람 설정 관련
     @State private var showAlert = false
     @State private var alertMessage = ""
     
@@ -287,8 +295,11 @@ struct MakeTodoView: View {
                 }
             }
         }
+        .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10-cameraVM.photoData.count, matching: .not(.videos))
+        .onChange(of: selectedItems, loadImage)
         .toolbar(startViewType == .edit ? .hidden : .visible)
         .toolbar(content: {
+            // 완료 및 저장 버튼
             Button {
                 //SwiftData 저장 작업
                 // 알람 데이터 없을 때
@@ -348,8 +359,7 @@ struct MakeTodoView: View {
             ToolbarItemGroup(placement: .bottomBar) {
                 //TODO: 업로드 창에서 선택 후 이미지 넣기
                 Button {
-                    print("tap first button")
-//                    showingImagePicker = true
+                    showingImagePicker = true
                 } label : {
                     Image(systemName: "photo.on.rectangle")
                 }
@@ -376,6 +386,19 @@ struct MakeTodoView: View {
                     showAlert = true
                 }
             }
+        }
+    }
+    
+    ///a method that will be called when the ImagePicker view has been dismissed
+    func loadImage() {
+        Task {
+            for item in selectedItems {
+                if let imageData = try? await item.loadTransferable(type: Data.self) {
+                    cameraVM.photoData.append(imageData)
+                }
+            }
+            selectedItems.removeAll()
+            isDoneSelecting = true
         }
     }
 }
