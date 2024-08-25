@@ -353,6 +353,7 @@ struct MakeTodoView: View {
             }
             
         })
+        .toolbar(.visible, for: .bottomBar)
         .toolbar{
             ToolbarItemGroup(placement: .bottomBar) {
                 //TODO: 업로드 창에서 선택 후 이미지 넣기
