@@ -18,7 +18,7 @@ struct CameraView: View {
     @Environment(\.dismiss) private var dismiss
     
     // 카메라 촬영 관련
-    @StateObject private var cameraVM: CameraViewModel = CameraViewModel()
+    @ObservedObject private var cameraVM = CameraViewModel.shared
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var photoData: [Data] = []
@@ -64,7 +64,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                             }
                         }
 //                        HStack{
@@ -104,7 +104,7 @@ struct CameraView: View {
                                 }
                             }
                             .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                                     .toolbar {
                                         Button("Add") {
                                         }

@@ -10,7 +10,7 @@ import UIKit
 import SwiftData
 
 struct TodoItemView: View {
-    @StateObject private var cameraVM: CameraViewModel = CameraViewModel()
+    @ObservedObject private var cameraVM = CameraViewModel.shared
     @Environment(\.modelContext) private var modelContext
     @Binding var editMode: EditMode
     @State private var editTodoisActive: Bool = false
@@ -38,7 +38,7 @@ struct TodoItemView: View {
                 editTodoisActive.toggle()
                 cameraVM.photoData = todo.images
             } label: {
-                Image(uiImage: UIImage(data: todo.images[0]))
+                Image(uiImage: UIImage(data: todo.images.count > 0 ? todo.images[0] : Data()))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 170, height: 170)
@@ -162,7 +162,7 @@ struct TodoItemView: View {
                         }
                         .padding()
                         ScrollView{
-                            MakeTodoView(cameraVM: cameraVM, chosenFolder: $chosenFolder, startViewType: .edit, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                            MakeTodoView(chosenFolder: $chosenFolder, startViewType: .edit, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                         }
                     }
                 }

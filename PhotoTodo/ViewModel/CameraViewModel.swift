@@ -20,6 +20,8 @@ class CameraViewModel: NSObject, ObservableObject {
         case finished(Data)
     }
     
+    static let shared = CameraViewModel()
+    
     var session = AVCaptureSession()
     var preview = AVCaptureVideoPreviewLayer()
     var output = AVCapturePhotoOutput()
