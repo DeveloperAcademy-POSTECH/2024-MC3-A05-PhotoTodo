@@ -37,7 +37,7 @@ struct TodoItemView: View {
                 editTodoisActive.toggle()
                 cameraVM.photoData = todo.images
             } label: {
-                Image(uiImage: UIImage(data: todo.images[0]))
+                Image(uiImage: UIImage(data:todo.images.count != 0 ? todo.images[0] : Data()))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 170, height: 170)

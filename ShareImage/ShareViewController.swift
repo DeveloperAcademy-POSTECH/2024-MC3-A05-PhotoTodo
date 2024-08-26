@@ -8,6 +8,7 @@ import SwiftUI
 import UIKit
 import Social
 import SwiftData
+import UniformTypeIdentifiers
 
 class ShareViewController: SLComposeServiceViewController {
     override func viewDidLoad() {
@@ -20,7 +21,6 @@ class ShareViewController: SLComposeServiceViewController {
             hostingView.view.frame = view.frame
             view.addSubview(hostingView.view)
         }
-        
 //        let screenCaptureView =
     }
 }
@@ -112,21 +112,33 @@ struct ShareView: View {
     
     func extractItems(size: CGSize) {
         guard items.isEmpty else { return }
+
         DispatchQueue.global(qos: .userInteractive).async {
             for provider in itemProviders {
-                let _ = provider.loadDataRepresentation(for: .image) { data, error in
-                    if let data, let image = UIImage(data: data), let thumnail = image.preparingThumbnail(of: .init(width: size.width, height: 300)) {
-                        // UI는 메인스레드에서 무조건 업데이트 되어야 함
+                // Attempt to load the item as a UIImage first (screenshots might be UIImages)
+                provider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { item, error in
+                    if let image = item as? UIImage {
                         DispatchQueue.main.async {
-                            print("Test: \(data)")
-                            items.append(.init(imageData: data, previewImage: thumnail))
+                            // Generate a thumbnail
+                            if let thumbnail = image.preparingThumbnail(of: .init(width: size.width, height: 300)) {
+                                items.append(.init(imageData: image.pngData() ?? Data(), previewImage: thumbnail))
+                            }
+                        }
+                    } else {
+                        // Fallback to loading data representation if it's not a direct UIImage
+                        provider.loadDataRepresentation(for: .image) { data, error in
+                            if let data, let image = UIImage(data: data), let thumbnail = image.preparingThumbnail(of: .init(width: size.width, height: 300)) {
+                                DispatchQueue.main.async {
+                                    items.append(.init(imageData: data, previewImage: thumbnail))
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
-    
+
     func saveItems() {
         let schema = Schema([
             Folder.self,
