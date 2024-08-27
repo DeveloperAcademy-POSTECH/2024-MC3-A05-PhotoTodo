@@ -276,7 +276,7 @@ struct MakeTodoView: View {
                 }
             }
         }
-        .sheet(isPresented: $isCameraSheetOn.withDefault(false), content: {
+        .sheet(isPresented: $isCameraSheetOn, content: {
             NavigationStack{
                 CameraView(isCameraSheetOn: $isCameraSheetOn)
             }
@@ -340,6 +340,7 @@ struct MakeTodoView: View {
                 } label : {
                     Image(systemName: "photo.on.rectangle")
                 }
+                .disabled(10 <= cameraVM.photoData.count)
                 Button {
                     if cameraVM.photoData.count < 10 {
                         isCameraSheetOn = true
@@ -350,6 +351,7 @@ struct MakeTodoView: View {
                 }label: {
                     Image(systemName: "camera")
                 }
+                .disabled(10 <= cameraVM.photoData.count)
             }
         }
     }
