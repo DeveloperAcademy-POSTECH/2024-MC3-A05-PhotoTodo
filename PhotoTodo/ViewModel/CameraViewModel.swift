@@ -61,7 +61,7 @@ class CameraViewModel: NSObject, ObservableObject {
     
     private func setup() {
         // 촬영 시마다 사진 데이터 초기화
-        self.photoData = []
+//        self.photoData = []
         session.beginConfiguration()
         session.sessionPreset = AVCaptureSession.Preset.photo
         

@@ -32,7 +32,6 @@ struct SharedImage: Transferable {
 
 
 struct MakeTodoView: View {
-    
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var cameraVM = CameraViewModel.shared
@@ -68,6 +67,8 @@ struct MakeTodoView: View {
     //알람 설정 관련
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
+    @State var isCameraSheetOn: Bool = false
     
     
     let manager = NotificationManager.instance
@@ -156,8 +157,7 @@ struct MakeTodoView: View {
                                 
                                 
                             }
-                        }
-
+                        }                        
                         Button {
                             alarmisActive.toggle()
                         } label: {
@@ -276,6 +276,11 @@ struct MakeTodoView: View {
                 }
             }
         }
+        .sheet(isPresented: $isCameraSheetOn.withDefault(false), content: {
+            NavigationStack{
+                CameraView(isCameraSheetOn: $isCameraSheetOn)
+            }
+        })
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10-cameraVM.photoData.count, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
         .toolbar(startViewType == .edit ? .hidden : .visible)
@@ -321,10 +326,10 @@ struct MakeTodoView: View {
                 }
                 
                 dismiss()
+                
             } label: {
                 Text("완료")
             }
-            
         })
         .toolbar(.visible, for: .bottomBar)
         .toolbar{
@@ -335,14 +340,20 @@ struct MakeTodoView: View {
                 } label : {
                     Image(systemName: "photo.on.rectangle")
                 }
-                NavigationLink {
-//                        CameraView()
+                Button {
+                    if cameraVM.photoData.count < 10 {
+                        isCameraSheetOn = true
+                    } else {
+                        //TODO: 토스트 메세지 출력하기
+                        print("이미지는 10장 이상 추가할 수 없습니다.")
+                    }
                 }label: {
                     Image(systemName: "camera")
                 }
             }
         }
     }
+
     
     func saveImageToAlbum(image: UIImage) {
         PHPhotoLibrary.requestAuthorization { status in

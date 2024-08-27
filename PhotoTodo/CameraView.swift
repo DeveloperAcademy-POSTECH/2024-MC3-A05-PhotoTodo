@@ -21,7 +21,6 @@ struct CameraView: View {
     @ObservedObject private var cameraVM = CameraViewModel.shared
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
-    @State private var photoData: [Data] = []
     @State private var contentAlarm: Date? = Date()
     @State private var memo: String? = ""
     @State private var alarmDataisEmpty: Bool? = true
@@ -33,16 +32,21 @@ struct CameraView: View {
     @State private var home: Bool? = false
     @State private var lastScale: CGFloat = 1.0
     
+    //이미지 추가 관련
+    @Binding var isCameraSheetOn: Bool
+    
     var body: some View {
         VStack(alignment: .center){
             cameraPreview
                 .frame(width: 353, height: 542)
                 .clipShape(RoundedRectangle(cornerRadius: 25))
             
-            FolderCarouselView(chosenFolder: $chosenFolder)
-                .frame(height: 34)
-                .padding(.top)
-
+          
+            if isCameraSheetOn {
+                EmptyView()
+            } else {
+                FolderCarouselView(chosenFolder: $chosenFolder)
+            }
             
             if cameraCaptureState == .single {
                 HStack(alignment: .center) {
@@ -51,6 +55,7 @@ struct CameraView: View {
                             Button {
                                 cameraVM.takePhoto()
                                 cameraCaptureisActive.toggle()
+                                isCameraSheetOn = false
                             } label: {
                                 ZStack{
                                     Circle().frame(width: 80, height: 80)
@@ -91,6 +96,7 @@ struct CameraView: View {
                             Button {
                                 cameraVM.takePhoto()
                                 cameraCaptureisActive.toggle()
+                                isCameraSheetOn = false
                             } label: {
                                 ZStack{
                                     Circle().frame(width: 80, height: 80)
@@ -132,12 +138,16 @@ struct CameraView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: {
+            if isCameraSheetOn == false {
+                cameraVM.photoData = []
+            }
+            // true일 때는 photoData를 그대로 보존함
+            // 네비게이션 되돌아가는 로직
             if home == nil { return }
             if home! == false { return }
             home = false
             dismiss()
-        })
-        
+        })        
     }
     
     private var cameraPreview: some View {
@@ -168,6 +178,6 @@ struct CameraView: View {
     }
 }
 
-#Preview {
-    CameraView()
-}
+//#Preview {
+//    CameraView()
+//}
