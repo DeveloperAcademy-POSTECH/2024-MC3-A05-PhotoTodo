@@ -53,8 +53,9 @@ struct TodoGridView: View {
     @State private var alarmSetting: Bool = false
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
-    @State private var toastMessage: Todo? = nil
+    @State private var toastMessage: String? = nil
     @State private var toastOption: ToastOption = .none
+    @State private var recentlyDoneTodo: Todo? = nil
 
     /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
     @State var isCameraSheetOn: Bool = false
@@ -125,10 +126,10 @@ struct TodoGridView: View {
             }
             VStack{
                 if toastOption == .moveToDone {
-                    ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!")
+                    ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
                     
                 } else if toastOption == .moveToOrigin {
-                    ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!")
+                    ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
                 }
                 //                if toastMassage == nil {
                 //                    Text("복구되었을 때")
@@ -260,7 +261,7 @@ struct TodoGridView: View {
                 CustomTitle
             }
             viewType != .main ? //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
-            AnyView(GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)) :
+            AnyView(GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)) :
             AnyView(GroupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
         }
     }
@@ -274,7 +275,7 @@ struct TodoGridView: View {
                         .foregroundStyle(.gray)
                     Spacer()
                 }.padding(.leading)
-                GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, selectedTodos: $selectedTodos, editMode: $editMode)
+                GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)
             }
         }
     }
@@ -408,34 +409,12 @@ struct TodoGridView: View {
     }
 }
 
-private struct ToastView: View {
-    @State var toastOption: ToastOption
-    @State var toastMessage: String
-    
-    var body: some View {
-        Button {
-            
-        } label: {
-            RoundedRectangle(cornerRadius: 35)
-                .fill(.paleGray)
-                .opacity(0.5)
-                .frame(width: 200, height: 50)
-                .overlay {
-                    Text(toastMessage)
-                        .fontWeight(.bold)
-                        .font(.system(size: 15))
-                        .foregroundColor(.green)
-                        .padding()
-                }
-                .offset(y: 250)
-        }
-    }
-}
 
  struct GridView: View {
     var sortedTodos: [Todo]
-    @Binding var toastMessage: Todo?
+    @Binding var toastMessage: String?
     @Binding var toastOption: ToastOption
+    @Binding var recentlyDoneTodo: Todo?
     @Binding var selectedTodos: Set<UUID>
     @Binding var editMode: EditMode
     
@@ -449,7 +428,7 @@ private struct ToastView: View {
             LazyVGrid(columns: columns, spacing: 12) {
                 //TODO: 이미지 비율 맞추기
                 ForEach(sortedTodos) { todo in
-                    TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption)
+                    TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
                     //tap gesture로 선택되었을 시 라인으로 표시됨
                         .overlay(
                                 RoundedRectangle(cornerRadius: 20)
