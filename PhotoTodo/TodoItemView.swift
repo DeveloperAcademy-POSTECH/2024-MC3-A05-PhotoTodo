@@ -130,35 +130,10 @@ struct TodoItemView: View {
                             Spacer()
                             // 저장 버튼
                             Button {
-                                if todo.options.alarmUUID != nil {
-                                    manager.deleteNotification(withID: alarmID!)
-                                }
-                                
-                                if alarmDataisEmpty != nil && !alarmDataisEmpty! {
-                                    // 알람 생성
-                                    let calendar = Calendar.current
-                                    let year = calendar.component(.year, from: contentAlarm!)
-                                    let month = calendar.component(.month, from: contentAlarm!)
-                                    let day = calendar.component(.day, from: contentAlarm!)
-                                    let hour = calendar.component(.hour, from: contentAlarm!)
-                                    let minute = calendar.component(.minute, from: contentAlarm!)
-                                    
-                                    // Notification 알람 생성 및 id Todo에 저장하기
-                                    let id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
-                                    
-                                    let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
-                                    modelContext.insert(todoData)
-                                    print("알람 데이터 있음")
-                                } else {
-                                    let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
-                                    modelContext.insert(todoData)
-                                    print("알람 데이터 없음")
-                                }
-                                editTodoisActive.toggle()
+                                saveTodoItem()
                             } label: {
                                 Text("저장")
                             }
-                            
                         }
                         .padding()
                         ScrollView{
@@ -181,6 +156,35 @@ struct TodoItemView: View {
             cameraVM.photoData = todo.images
         })
     }
+    
+    func saveTodoItem() {
+            if todo.options.alarmUUID != nil {
+                manager.deleteNotification(withID: alarmID!)
+            }
+            
+            if alarmDataisEmpty != nil && !alarmDataisEmpty! {
+                // 알람 생성
+                let calendar = Calendar.current
+                let year = calendar.component(.year, from: contentAlarm!)
+                let month = calendar.component(.month, from: contentAlarm!)
+                let day = calendar.component(.day, from: contentAlarm!)
+                let hour = calendar.component(.hour, from: contentAlarm!)
+                let minute = calendar.component(.minute, from: contentAlarm!)
+                
+                // Notification 알람 생성 및 id Todo에 저장하기
+                let id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
+                
+                let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
+                modelContext.insert(todoData)
+                print("알람 데이터 있음")
+            } else {
+                let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
+                modelContext.insert(todoData)
+                print("알람 데이터 없음")
+            }
+            editTodoisActive.toggle()
+        }
+    
 }
 
 func dayOfYear(from date: Date) -> Int {
