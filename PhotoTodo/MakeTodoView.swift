@@ -142,8 +142,6 @@ struct MakeTodoView: View {
                                     ForEach(folders, id: \.self.id){ folder in
                                         Button(action: {
                                             chosenFolder = folder
-                                            //                                        chosenFolderName = folder.name
-                                            //                                        chosenFolderColor = changeStringToColor(colorName: folder.color)
                                         }) {
                                             Label("\(folder.name)", systemImage: "circle")
                                         }
@@ -159,23 +157,7 @@ struct MakeTodoView: View {
                                 
                             }
                         }
-                        
-                        //                    HStack{
-                        //                        Image(systemName: "alarm")
-                        //                            .resizable()
-                        //                            .frame(width: 15, height: 15)
-                        //                        Text("알람설정")
-                        //                        Spacer()
-                        //                        DatePicker(
-                        //                            "Select Date",
-                        //                            selection: $contentAlarm,
-                        //                            displayedComponents: [.date, .hourAndMinute]
-                        //                        )
-                        //                        .labelsHidden()
-                        //                        .datePickerStyle(.compact)
-                        //                    }
-                        //
-                        //
+
                         Button {
                             alarmisActive.toggle()
                         } label: {
@@ -300,16 +282,6 @@ struct MakeTodoView: View {
         .toolbar(content: {
             // 완료 및 저장 버튼
             Button {
-                //SwiftData 저장 작업
-                // 알람 데이터 없을 때
-                //                if alarmDataisEmpty {
-                //                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options( memo: memo), isDone: false)
-                //                    modelContext.insert(newTodo)
-                //                } else { // 알람 데이터 있을 때
-                //                    let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), image: cameraVM.photoData.first ?? Data(), createdAt: Date(), options: Options(alarm: contentAlarm, memo: memo), isDone: false)
-                //                    modelContext.insert(newTodo)
-                //                }
-                
                 var id: String = ""
                 // 알람 데이터가 있으면
                 
