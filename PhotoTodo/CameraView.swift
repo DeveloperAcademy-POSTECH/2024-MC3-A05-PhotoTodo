@@ -72,20 +72,6 @@ struct CameraView: View {
                                 MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                             }
                         }
-//                        HStack{
-//                            Spacer()
-//                            Button(action: {
-//                                cameraCaptureState = .plural
-//                            }, label: {
-//                                VStack{
-//                                    Image(systemName: "square.stack.3d.down.right")
-//                                        .resizable()
-//                                        .frame(width: 48, height: 52)
-//                                    Text("다중촬영")
-//                                }
-//                            })
-//                            .padding(.trailing, 35)
-//                        }
                     }
                 }
                 .padding(.top)
