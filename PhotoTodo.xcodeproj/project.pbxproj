@@ -26,6 +26,7 @@
 		1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */; };
 		1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */; };
 		1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */; };
+		1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A619E492C7DC68A0082FD5C /* ToastView.swift */; };
 		1AFB127E2C69C22D00952121 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 1AFB127D2C69C22D00952121 /* Collections */; };
 		1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12A32C77243A00952121 /* ShareViewController.swift */; };
 		1AFB12A72C77243A00952121 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1AFB12A62C77243A00952121 /* Base */; };
@@ -81,6 +82,7 @@
 		1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCompositeGridView.swift; sourceTree = "<group>"; };
 		1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
+		1A619E492C7DC68A0082FD5C /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		1AFB12A12C77243A00952121 /* ShareImage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareImage.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AFB12A32C77243A00952121 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		1AFB12A62C77243A00952121 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				1A2778F72C5741BD00A02C7E /* MainView.swift */,
 				1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
+				1A619E492C7DC68A0082FD5C /* ToastView.swift */,
 				1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */,
 				1A0D96882C5A156800784CBA /* TodoView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
@@ -308,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */,
+				1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */,
 				1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */,
 				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
