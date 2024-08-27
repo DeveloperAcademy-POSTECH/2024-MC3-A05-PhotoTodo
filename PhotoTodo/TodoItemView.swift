@@ -26,8 +26,9 @@ struct TodoItemView: View {
     @State private var home: Bool? = false
     
     // 토글 시 토스트 메세지 설정 관련 변수
-    @Binding var toastMessage: Todo?
+    @Binding var toastMessage: String?
     @Binding var toastOption: ToastOption
+    @Binding var recentlyDoneTodo: Todo?
     
     let manager = NotificationManager.instance
     
@@ -75,6 +76,7 @@ struct TodoItemView: View {
                                 todo.isDoneAt = nil
 //                                toastMassage = todo
                                 toastOption = .moveToOrigin
+                                recentlyDoneTodo = todo
                                 DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
                                     DispatchQueue.main.async {
 //                                        toastMassage = nil
@@ -90,6 +92,7 @@ struct TodoItemView: View {
                                 todo.isDoneAt = Date()
 //                                toastMassage = nil
                                 toastOption = .moveToDone
+                                recentlyDoneTodo = todo
                                 DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
                                     DispatchQueue.main.async {
 //                                        toastMassage = todo
@@ -205,9 +208,11 @@ func dayOfYear(from date: Date) -> Int {
     )
     
     @State var editMode: EditMode = .inactive
-    @State var toastMessage: Todo? = nil
+    @State var toastMessage: String? = nil
     @State var toastOption: ToastOption = .none
-    return TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption)
+    @State var recentlyDoneTodo: Todo? = nil
+    return TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption,
+        recentlyDoneTodo: $recentlyDoneTodo)
 }
 
 
