@@ -287,46 +287,7 @@ struct MakeTodoView: View {
         .toolbar(content: {
             // 완료 및 저장 버튼
             Button {
-                var id: String = ""
-                // 알람 데이터가 있으면
-                
-                // MARK: 생성 시 만들어 지는 곳 -> 알람 데이터 삭제 필요 없음
-                if alarmDataisEmpty != nil && !alarmDataisEmpty! {
-                    // alarmDataisEmpty == false일 경우 알림을 설정하는 것이기 때문에 데이터가 무조건 있다고 봄
-                    let calendar = Calendar.current
-                    let year = calendar.component(.year, from: contentAlarm!)
-                    let month = calendar.component(.month, from: contentAlarm!)
-                    let day = calendar.component(.day, from: contentAlarm!)
-                    let hour = calendar.component(.hour, from: contentAlarm!)
-                    let minute = calendar.component(.minute, from: contentAlarm!)
-                    
-                    // Notification 알람 생성 및 id Todo에 저장하기
-                    id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
-                }
-                
-                
-                
-                let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), images: cameraVM.photoData, createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, alarmUUID: alarmDataisEmpty ?? true ? nil : id,  memo: memo), isDone: false)
-                if let chosenFolder = chosenFolder {
-                    chosenFolder.todos.append(newTodo)
-                } else {
-                    folders[0].todos.append(newTodo)
-                }
-                modelContext.insert(newTodo)
-                home = true
-                
-                if startViewType == .gridMain {  //startViewType이 .gridMain일 경우 (.gridSingleFolder의 경우에는 제외)
-                    chosenFolder = nil //model에 삽입이 끝난 후 chosneFolder를 초기화함
-                }
-                if startViewType == .gridMain || startViewType == .gridSingleFolder {
-                    alarmDataisEmpty = nil //model에 삽입 후 바인딩되어 넘어온 값들을 초기화함 → 다음 추가시 초기화되어 있을 수 있도록
-                    contentAlarm = nil
-                    memo = nil
-                    cameraVM.photoData = []
-                }
-                
-                dismiss()
-                
+                saveTodoItem()
             } label: {
                 Text("완료")
             }
@@ -354,6 +315,49 @@ struct MakeTodoView: View {
                 .disabled(10 <= cameraVM.photoData.count)
             }
         }
+    }
+    
+    func saveTodoItem() {
+        var id: String = ""
+        // 알람 데이터가 있으면
+        
+        // MARK: 생성 시 만들어 지는 곳 -> 알람 데이터 삭제 필요 없음
+        if alarmDataisEmpty != nil && !alarmDataisEmpty! {
+            // alarmDataisEmpty == false일 경우 알림을 설정하는 것이기 때문에 데이터가 무조건 있다고 봄
+            let calendar = Calendar.current
+            let year = calendar.component(.year, from: contentAlarm!)
+            let month = calendar.component(.month, from: contentAlarm!)
+            let day = calendar.component(.day, from: contentAlarm!)
+            let hour = calendar.component(.hour, from: contentAlarm!)
+            let minute = calendar.component(.minute, from: contentAlarm!)
+            
+            // Notification 알람 생성 및 id Todo에 저장하기
+            id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
+        }
+        
+        
+        
+        let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), images: cameraVM.photoData, createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, alarmUUID: alarmDataisEmpty ?? true ? nil : id,  memo: memo), isDone: false)
+        if let chosenFolder = chosenFolder {
+            chosenFolder.todos.append(newTodo)
+        } else {
+            folders[0].todos.append(newTodo)
+        }
+        modelContext.insert(newTodo)
+        home = true
+        
+        if startViewType == .gridMain {  //startViewType이 .gridMain일 경우 (.gridSingleFolder의 경우에는 제외)
+            chosenFolder = nil //model에 삽입이 끝난 후 chosneFolder를 초기화함
+        }
+        if startViewType == .gridMain || startViewType == .gridSingleFolder {
+            alarmDataisEmpty = nil //model에 삽입 후 바인딩되어 넘어온 값들을 초기화함 → 다음 추가시 초기화되어 있을 수 있도록
+            contentAlarm = nil
+            memo = nil
+            cameraVM.photoData = []
+        }
+        
+        dismiss()
+        
     }
 
     

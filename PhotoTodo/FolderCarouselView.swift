@@ -98,6 +98,8 @@ struct FolderCarouselView: View {
                 }
             }
         }
+        .frame(height: 34)
+        .padding(.top)
         .sheet(isPresented: $isShowingSheet, content: {
             FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                 .presentationDetents([.medium, .large])
