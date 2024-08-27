@@ -50,13 +50,13 @@ struct TodoGridView: View {
     @State var alarmDataisEmpty: Bool? = nil
     @State var home: Bool? = nil
     @State var alarmID: String? = nil
+    @State private var alarmSetting: Bool = false
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
     @State private var toastMessage: Todo? = nil
     @State private var toastOption: ToastOption = .none
 
-    @State private var alarmSetting: Bool = false
-    
+    /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
     @State var isCameraSheetOn: Bool = false
     
     
