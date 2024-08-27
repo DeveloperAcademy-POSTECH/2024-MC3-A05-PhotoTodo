@@ -22,6 +22,7 @@ struct TabBarView: View {
     @Query private var folders: [Folder]
     @State private var navigationisActive: Bool = false
     let manager = NotificationManager.instance
+    @State var isCameraSheetOn: Bool = false
     
     var body: some View {
         NavigationStack/*(path: $path)*/ {
@@ -51,8 +52,8 @@ struct TabBarView: View {
                         
                         
                         NavigationLink  {
-                            CameraView()
-                        } label: {
+                            CameraView(isCameraSheetOn: $isCameraSheetOn)
+                        } label:  {
                             ZStack{
                                 Circle()
                                     .frame(width: 70, height: 70)

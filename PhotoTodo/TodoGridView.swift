@@ -57,6 +57,8 @@ struct TodoGridView: View {
 
     @State private var alarmSetting: Bool = false
     
+    @State var isCameraSheetOn: Bool = false
+    
     
     var todos: [Todo] {
         switch viewType {
@@ -137,7 +139,7 @@ struct TodoGridView: View {
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
             NavigationLink{
-                CameraView(chosenFolder: currentFolder)
+                CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn)
             } label : {
                 Text("촬영하기")
             }
