@@ -59,7 +59,7 @@ struct TodoItemView: View {
                             .opacity(0.8)
                             .frame(width: 100, height: 40)
                             .overlay {
-                                Text(todo.isDone ? "\(dayOfYear(from : Date())-dayOfYear(from : todo.isDoneAt ?? Date())+30)일남음" : "")
+                                Text(todo.isDone ? "\(daysLeft())일남음" : "")
                                     .font(.callout).foregroundStyle(.green).padding()
                             }
                             .padding()
@@ -187,11 +187,10 @@ struct TodoItemView: View {
             editTodoisActive.toggle()
         }
     
-}
-
-func dayOfYear(from date: Date) -> Int {
-    let calendar = Calendar.current
-    return calendar.ordinality(of: .day, in: .year, for: date) ?? 0
+    ///삭제되기까지 남은 기간을 계산하는 함수
+    func daysLeft() -> Int {
+        return 30-daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date())
+    }
 }
 
 #Preview {
