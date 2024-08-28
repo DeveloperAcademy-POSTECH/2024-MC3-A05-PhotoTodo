@@ -12,7 +12,6 @@
 		1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96822C5A14F300784CBA /* CameraViewModel.swift */; };
 		1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96842C5A150D00784CBA /* CameraPreview.swift */; };
 		1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96862C5A152A00784CBA /* MakeTodoView.swift */; };
-		1A0D96892C5A156800784CBA /* TodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96882C5A156800784CBA /* TodoView.swift */; };
 		1A2472A42C57A7CF00A135D9 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E42C56395A00A02C7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E32C56395A00A02C7E /* Assets.xcassets */; };
@@ -40,7 +39,6 @@
 		1A0D96822C5A14F300784CBA /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		1A0D96842C5A150D00784CBA /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		1A0D96862C5A152A00784CBA /* MakeTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTodoView.swift; sourceTree = "<group>"; };
-		1A0D96882C5A156800784CBA /* TodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoView.swift; sourceTree = "<group>"; };
 		1A2472A32C57A7CF00A135D9 /* PhotoTodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoModel.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
@@ -118,7 +116,6 @@
 				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
 				1A619E472C7DB8590082FD5C /* ToastView.swift */,
 				1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */,
-				1A0D96882C5A156800784CBA /* TodoView.swift */,
 				1A2778F32C57415900A02C7E /* CameraView.swift */,
 				1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */,
 				1A0D96862C5A152A00784CBA /* MakeTodoView.swift */,
@@ -227,7 +224,6 @@
 				1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */,
 				1A619E482C7DB8590082FD5C /* ToastView.swift in Sources */,
 				1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */,
-				1A0D96892C5A156800784CBA /* TodoView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */,
 				3CC1139B2C69169B00281EBD /* UserNotification.swift in Sources */,
