@@ -189,7 +189,7 @@ struct TodoItemView: View {
     
     ///삭제되기까지 남은 기간을 계산하는 함수
     func daysLeft() -> Int {
-        return 30-daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date())
+        return 30-(daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date()))
     }
 }
 
