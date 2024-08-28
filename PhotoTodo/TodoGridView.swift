@@ -12,7 +12,8 @@ import PhotosUI
 import OrderedCollections
 
 enum SortOption {
-    case byDate
+    case byDateIncreasing
+    case byDateDecreasing
     case byName
     case byStatus
     case byDueDate
@@ -34,7 +35,7 @@ struct TodoGridView: View {
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
-    @State private var sortOption: SortOption = .byDate
+    @State private var sortOption: SortOption = .byDateIncreasing
     @State private var isShowingOptions = false
     @State private var showingImagePicker = false
     @State private var isDoneSelecting = false
@@ -81,8 +82,10 @@ struct TodoGridView: View {
     
     var sortedTodos: [Todo] {
         switch sortOption {
-        case .byDate:
+        case .byDateIncreasing:
             return todos.sorted { $0.createdAt < $1.createdAt }
+        case .byDateDecreasing:
+            return todos.sorted { $0.createdAt > $1.createdAt }
         case .byName:
             return todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
         case .byStatus:
@@ -224,17 +227,38 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
+    var sortMenu: some View {
+        HStack {
+            Spacer()
+            Menu {
+                Picker("정렬", selection: $sortOption) {
+                    Text("최신순").tag(SortOption.byDateDecreasing)
+                    Text("오래된순").tag(SortOption.byDateIncreasing)
+                }
+            } label: {
+                HStack {
+                    Text("정렬")
+                        .tint(Color.black)
+                    Image(systemName: "chevron.down")
+                        .tint(Color.black)
+                }
+                .padding(.horizontal)
+            }
+        }
+    }
 
     var scrollableGridView: some View {
         ScrollView {
             if viewType == .main {
                 CustomTitle(todos: todos)
             }
+            sortMenu
             viewType != .main ? //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
             AnyView(GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)) :
             AnyView(groupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
         }
     }
+    
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     var groupedGridView: some View {
@@ -321,7 +345,7 @@ extension TodoGridView {
         var curr: Int
         while i != sortedTodos.count {
             switch sortOption {
-            case .byDate:
+            case .byDateIncreasing:
                 curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
             case .byDueDate:
                 curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].options.alarm ?? Date())
