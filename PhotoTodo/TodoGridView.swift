@@ -113,15 +113,15 @@ struct TodoGridView: View {
     
     var body: some View {
         VStack{
-            viewType == .main ? AnyView(CustomNavBar) : AnyView(EmptyView())
+            viewType == .main ? AnyView(customNavBar) : AnyView(EmptyView())
         }
         ZStack {
             VStack{
                 todos.isEmpty && viewType != .doneList
                 ?
-                AnyView(GuideLineView)
+                AnyView(GuideLineView(viewType: viewType, todos: todos))
                 :
-                AnyView(ScrollView)
+                AnyView(scrollableGridView)
 
             }
             VStack{
@@ -182,7 +182,7 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    var CustomNavBar: some View {
+    var customNavBar: some View {
         HStack{
             Button(action: {
                 alarmSetting.toggle()
@@ -224,45 +224,20 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    
-    var GuideLineView: some View {
-        VStack{
-            if viewType == .main {
-                CustomTitle
-            }
-            Spacer()
-            VStack{
-                Image("mainEmptyIcon")
-                    .resizable()
-                    .frame(width: 56, height: 56)
-                VStack{
-                    Text("새로운 사진을 추가하여")
-                    Text("포토투두를 만들어보세요!")
-                }
-                .padding(.top)
-                .font(.system(size: 20))
-                .foregroundStyle(Color.gray)
-                .bold()
-            }
-            Spacer()
-        }
 
-    }
-    
-    
-    var ScrollView: some View {
-        SwiftUI.ScrollView {
+    var scrollableGridView: some View {
+        ScrollView {
             if viewType == .main {
-                CustomTitle
+                CustomTitle(todos: todos)
             }
             viewType != .main ? //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
             AnyView(GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)) :
-            AnyView(GroupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+            AnyView(groupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
         }
     }
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
-    var GroupedGridView: some View {
+    var groupedGridView: some View {
         ForEach(todosGroupedByDate.elements, id: \.key) { element in
             VStack{
                 HStack{
@@ -275,58 +250,6 @@ struct TodoGridView: View {
         }
     }
     
-    var CustomTitle: some View {
-        VStack{
-            HStack{
-                Text("해야 할 일이")
-                    .font(.title)
-                    .bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            
-            todos.count == 0 ?
-            HStack{
-                Text("모두 완료되었어요!")
-                    .font(.title)
-                    .bold()
-            }.frame(maxWidth: .infinity, alignment: .leading)
-            :
-            HStack{
-                Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
-                Text("장 남았어요").font(.title).bold()
-            }.frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding()
-    }
-    
-    private func getDateString(_ date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM월 d일"
-        return dateFormatter.string(from: date)
-    }
-    
-    /// 날짜별로 투두 아이템을 그루핑한 배열을 모은 배열을 리턴함
-    private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
-        if sortedTodos.count == 0 {
-            return [dayOfYear(from : Date()): sortedTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
-        }
-        var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
-        var i = 0
-        var curr: Int
-        while i != sortedTodos.count {
-            switch sortOption {
-            case .byDate:
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
-            case .byDueDate:
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].options.alarm ?? Date())
-            default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
-            }
-            groupedTodos[curr, default: []].append(sortedTodos[i])
-            i += 1
-        }
-        return groupedTodos
-    }
     
     private func toggleAddOptions(){
         isShowingOptions.toggle()
@@ -379,6 +302,37 @@ struct TodoGridView: View {
             }
         }
     }
+}
+
+extension TodoGridView {
+    private func getDateString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM월 d일"
+        return dateFormatter.string(from: date)
+    }
+    
+    /// 날짜별로 투두 아이템을 그루핑한 배열을 모은 배열을 리턴함
+    private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
+        if sortedTodos.count == 0 {
+            return [dayOfYear(from : Date()): sortedTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
+        }
+        var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
+        var i = 0
+        var curr: Int
+        while i != sortedTodos.count {
+            switch sortOption {
+            case .byDate:
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
+            case .byDueDate:
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].options.alarm ?? Date())
+            default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
+                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
+            }
+            groupedTodos[curr, default: []].append(sortedTodos[i])
+            i += 1
+        }
+        return groupedTodos
+    }
     
     ///a method that will be called when the ImagePicker view has been dismissed
     func loadImage() {
@@ -393,6 +347,7 @@ struct TodoGridView: View {
         }
     }
 }
+
 
 
  struct GridView: View {
@@ -434,6 +389,62 @@ struct TodoGridView: View {
             .padding(.bottom)
         }
         .padding(.horizontal)
+    }
+}
+
+private struct GuideLineView: View {
+    var viewType: TodoGridViewType
+    var todos: [Todo]
+    
+    var body: some View {
+        VStack{
+            if viewType == .main {
+                CustomTitle(todos: todos)
+            }
+            Spacer()
+            VStack{
+                Image("mainEmptyIcon")
+                    .resizable()
+                    .frame(width: 56, height: 56)
+                VStack{
+                    Text("새로운 사진을 추가하여")
+                    Text("포토투두를 만들어보세요!")
+                }
+                .padding(.top)
+                .font(.system(size: 20))
+                .foregroundStyle(Color.gray)
+                .bold()
+            }
+            Spacer()
+        }
+    }
+}
+
+private struct CustomTitle: View{
+    var todos: [Todo]
+    
+    var body: some View {
+        VStack{
+            HStack{
+                Text("해야 할 일이")
+                    .font(.title)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            
+            todos.count == 0 ?
+            HStack{
+                Text("모두 완료되었어요!")
+                    .font(.title)
+                    .bold()
+            }.frame(maxWidth: .infinity, alignment: .leading)
+            :
+            HStack{
+                Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
+                Text("장 남았어요").font(.title).bold()
+            }.frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding()
     }
 }
 
