@@ -15,3 +15,18 @@ extension Date {
         return formatter.string(from: alarmData)
     }
 }
+
+func dayOfYear(from date: Date) -> Int {
+    let calendar = Calendar.current
+    return calendar.ordinality(of: .day, in: .year, for: date) ?? 0
+}
+          
+func daysPassedSinceJanuaryFirst2024(from date: Date) -> Int {
+  return dayOfYear(from : date) + (extractYear(from : date)-2024)*365
+}
+
+func extractYear(from date: Date) -> Int {
+  let calendar = Calendar.current
+  let year = calendar.component(.year, from: date)
+  return year
+}
