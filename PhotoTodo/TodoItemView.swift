@@ -156,7 +156,6 @@ struct TodoItemView: View {
             }
             memo = todo.options.memo ?? ""
             alarmID = todo.options.alarmUUID ?? ""
-            cameraVM.photoData = todo.images
         })
     }
     
