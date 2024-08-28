@@ -43,7 +43,7 @@ struct TodoGridView: View {
     @AppStorage("deletionCount") var deletionCount: Int = 0
     @State private var selectedItems = [PhotosPickerItem]()
     @State private var selectedImages = [Image]()
-//    @State private var selectedItem: PhotosPickerItem?
+    //    @State private var selectedItem: PhotosPickerItem?
     
     //새로운 사진 업로드 시 MakeTodoView에서 필요한 상태들
     @State var contentAlarm: Date? = nil
@@ -57,7 +57,7 @@ struct TodoGridView: View {
     @State private var toastMessage: String? = nil
     @State private var toastOption: ToastOption = .none
     @State private var recentlyDoneTodo: Todo? = nil
-
+    
     /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
     @State var isCameraSheetOn: Bool = false
     
@@ -116,23 +116,24 @@ struct TodoGridView: View {
     
     var body: some View {
         VStack{
-            viewType == .main ? AnyView(customNavBar) : AnyView(EmptyView())
-        }
-        ZStack {
-            VStack{
-                todos.isEmpty && viewType != .doneList
-                ?
-                AnyView(GuideLineView(viewType: viewType, todos: todos))
-                :
-                AnyView(scrollableGridView)
-
+            if viewType == .main {
+                customNavBar
             }
-            VStack{
-                if toastOption == .moveToDone {
-                    ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
-                    
-                } else if toastOption == .moveToOrigin {
-                    ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
+            ZStack {
+                VStack{
+                    if todos.isEmpty && viewType != .doneList {
+                        GuideLineView(viewType: viewType, todos: todos)
+                    } else {
+                        scrollableGridView
+                    }
+                }
+                VStack{
+                    if toastOption == .moveToDone {
+                        ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
+                        
+                    } else if toastOption == .moveToOrigin {
+                        ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
+                    }
                 }
             }
         }
@@ -246,16 +247,18 @@ struct TodoGridView: View {
             }
         }
     }
-
+    
     var scrollableGridView: some View {
         ScrollView {
             if viewType == .main {
                 CustomTitle(todos: todos)
             }
             sortMenu
-            viewType != .main ? //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
-            AnyView(GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)) :
-            AnyView(groupedGridView)  //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+            if viewType != .main {
+                GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
+            } else {
+                groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+            }
         }
     }
     
@@ -374,7 +377,7 @@ extension TodoGridView {
 
 
 
- struct GridView: View {
+struct GridView: View {
     var sortedTodos: [Todo]
     @Binding var toastMessage: String?
     @Binding var toastOption: ToastOption
@@ -395,8 +398,8 @@ extension TodoGridView {
                     TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
                     //tap gesture로 선택되었을 시 라인으로 표시됨
                         .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
                         )
                     //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
                         .onTapGesture {
