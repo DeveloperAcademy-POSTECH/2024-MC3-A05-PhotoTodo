@@ -131,11 +131,6 @@ struct TodoGridView: View {
                 } else if toastOption == .moveToOrigin {
                     ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
                 }
-                //                if toastMassage == nil {
-                //                    Text("복구되었을 때")
-                //                } else {
-                //                    Text("삭제되었을 때")
-                //                }
             }
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
