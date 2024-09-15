@@ -415,6 +415,7 @@ struct GridView: View {
             }
             .padding(.bottom)
         }
+        .ignoresSafeArea(.keyboard)
         .padding(.horizontal)
     }
 }
