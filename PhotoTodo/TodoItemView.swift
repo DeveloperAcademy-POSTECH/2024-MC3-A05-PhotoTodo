@@ -36,8 +36,18 @@ struct TodoItemView: View {
         ZStack{
             //TodoItemView는 하나의 버튼임
             Button {
-                editTodoisActive.toggle()
+                //버튼 클릭 시 상태값 세팅
+                chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+                if (todo.options.alarm != nil) {
+                    contentAlarm = todo.options.alarm!
+                    alarmDataisEmpty = false
+                }
+                memo = todo.options.memo ?? ""
+                alarmID = todo.options.alarmUUID ?? ""
                 cameraVM.photoData = todo.images
+                
+                //MakeTodoView로 Navigate하기
+                editTodoisActive.toggle()
             } label: {
                 Image(uiImage: UIImage(data: todo.images.count > 0 ? todo.images[0] : Data()))
                     .resizable()
@@ -148,15 +158,6 @@ struct TodoItemView: View {
             })
 
         }
-        .onAppear(perform: {
-            chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
-            if (todo.options.alarm != nil) {
-                contentAlarm = todo.options.alarm!
-                alarmDataisEmpty = false
-            }
-            memo = todo.options.memo ?? ""
-            alarmID = todo.options.alarmUUID ?? ""
-        })
     }
     
     func saveTodoItem() {
