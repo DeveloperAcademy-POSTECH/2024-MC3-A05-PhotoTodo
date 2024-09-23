@@ -11,7 +11,7 @@ import UIKit
 import PhotosUI
 import OrderedCollections
 
-enum SortOption {
+enum SortOption: String, CaseIterable {
     case byDateIncreasing
     case byDateDecreasing
     case byName
@@ -35,7 +35,7 @@ struct TodoGridView: View {
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
-    @State private var sortOption: SortOption = .byDateIncreasing
+    @AppStorage("sortOption") private var sortOption: SortOption = .byDateIncreasing
     @State private var isShowingOptions = false
     @State private var showingImagePicker = false
     @State private var isDoneSelecting = false
