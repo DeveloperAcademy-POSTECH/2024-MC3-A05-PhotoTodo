@@ -18,6 +18,7 @@ enum TodoGridViewType {
 
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
+    @State private var editMode: EditMode = .inactive
     @Query private var folders: [Folder]
     @State var isShowingSheet = false
     @State var folderNameInput = ""
@@ -57,15 +58,20 @@ struct FolderListView: View {
                 }
                 .listRowBackground(Color("gray/gray-200"))
             }
+
             .scrollContentBackground(.hidden)
             //            .background(Color.white.edgesIgnoringSafeArea(.all))
             .navigationBarTitle("폴더")
             .toolbar {
+
                 ToolbarItem {
-                    Button(action: toggleShowingSheet) {
-                        Label("add a folder", systemImage: "plus")
+                    if editMode == .inactive {
+                        Button(action: toggleShowingSheet) {
+                            Label("add a folder", systemImage: "plus")
+                        }
                     }
                 }
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                         .frame(width: 38)
@@ -75,6 +81,7 @@ struct FolderListView: View {
                 FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                     .presentationDetents([.medium, .large])
             })
+            .environment(\.editMode, $editMode)
     }
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
