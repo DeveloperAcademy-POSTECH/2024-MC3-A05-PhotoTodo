@@ -36,7 +36,7 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
                 }
-                .listRowBackground(Color("gray/gray-200"))
+
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
                 ForEach(folders.dropFirst()) { folder in
@@ -44,9 +44,7 @@ struct FolderListView: View {
                         TodoGridView(currentFolder: folder, viewType: basicViewType)
                     } label: {
                         FolderRow(folder: folder, viewType: basicViewType)
-                        
                     }
-                    .listRowBackground(Color("gray/gray-200"))
                 }
                 .onDelete(perform: deleteItems)
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
@@ -56,7 +54,6 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: nil, viewType: doneListViewType)
                 }
-                .listRowBackground(Color("gray/gray-200"))
             }
 
             .scrollContentBackground(.hidden)

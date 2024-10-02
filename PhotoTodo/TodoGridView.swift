@@ -11,7 +11,7 @@ import UIKit
 import PhotosUI
 import OrderedCollections
 
-enum SortOption {
+enum SortOption: String, CaseIterable {
     case byDateIncreasing
     case byDateDecreasing
     case byName
@@ -35,7 +35,7 @@ struct TodoGridView: View {
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
-    @State private var sortOption: SortOption = .byDateIncreasing
+    @AppStorage("sortOption") private var sortOption: SortOption = .byDateIncreasing
     @State private var isShowingOptions = false
     @State private var showingImagePicker = false
     @State private var isDoneSelecting = false
@@ -392,29 +392,32 @@ struct GridView: View {
     
     var body: some View {
         VStack{
-            LazyVGrid(columns: columns, spacing: 12) {
-                //TODO: 이미지 비율 맞추기
-                ForEach(sortedTodos) { todo in
-                    TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
-                    //tap gesture로 선택되었을 시 라인으로 표시됨
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
-                        )
-                    //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                        .onTapGesture {
-                            if editMode == .active {
-                                if selectedTodos.contains(todo.id) {
-                                    selectedTodos.remove(todo.id)
-                                } else {
-                                    selectedTodos.insert(todo.id)
+            ScrollView{
+                LazyVGrid(columns: columns, spacing: 12) {
+                    //TODO: 이미지 비율 맞추기
+                    ForEach(sortedTodos) { todo in
+                        TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
+                        //tap gesture로 선택되었을 시 라인으로 표시됨
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                            )
+                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                            .onTapGesture {
+                                if editMode == .active {
+                                    if selectedTodos.contains(todo.id) {
+                                        selectedTodos.remove(todo.id)
+                                    } else {
+                                        selectedTodos.insert(todo.id)
+                                    }
                                 }
                             }
-                        }
+                    }
                 }
+                .padding(.bottom)
             }
-            .padding(.bottom)
         }
+        .ignoresSafeArea(.keyboard)
         .padding(.horizontal)
     }
 }
