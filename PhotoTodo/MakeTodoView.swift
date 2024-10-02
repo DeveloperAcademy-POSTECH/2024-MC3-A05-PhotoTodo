@@ -124,6 +124,7 @@ struct MakeTodoView: View {
                     }
                 }
                 .tabViewStyle(PageTabViewStyle())
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 .frame(width: 350, height: 500)
                 .clipShape(RoundedRectangle(cornerRadius: 25))
                 
