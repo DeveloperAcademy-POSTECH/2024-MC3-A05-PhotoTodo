@@ -18,6 +18,7 @@ enum TodoGridViewType {
 
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
+    @State private var editMode: EditMode = .inactive
     @Query private var folders: [Folder]
     @State var isShowingSheet = false
     @State var folderNameInput = ""
@@ -35,7 +36,7 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
                 }
-                .listRowBackground(Color("gray/gray-200"))
+
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
                 ForEach(folders.dropFirst()) { folder in
@@ -43,9 +44,7 @@ struct FolderListView: View {
                         TodoGridView(currentFolder: folder, viewType: basicViewType)
                     } label: {
                         FolderRow(folder: folder, viewType: basicViewType)
-                        
                     }
-                    .listRowBackground(Color("gray/gray-200"))
                 }
                 .onDelete(perform: deleteItems)
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
@@ -55,17 +54,21 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: nil, viewType: doneListViewType)
                 }
-                .listRowBackground(Color("gray/gray-200"))
             }
+
             .scrollContentBackground(.hidden)
             //            .background(Color.white.edgesIgnoringSafeArea(.all))
             .navigationBarTitle("폴더")
             .toolbar {
+
                 ToolbarItem {
-                    Button(action: toggleShowingSheet) {
-                        Label("add a folder", systemImage: "plus")
+                    if editMode == .inactive {
+                        Button(action: toggleShowingSheet) {
+                            Label("add a folder", systemImage: "plus")
+                        }
                     }
                 }
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                         .frame(width: 38)
@@ -75,6 +78,7 @@ struct FolderListView: View {
                 FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                     .presentationDetents([.medium, .large])
             })
+            .environment(\.editMode, $editMode)
     }
     private func toggleShowingSheet(){
         isShowingSheet.toggle()

@@ -46,6 +46,7 @@ struct MakeTodoView: View {
     @Binding var alarmDataisEmpty: Bool?
     @State private var memoisActive: Bool = false
     @Binding var memo: String?
+    @State var newMemo: String = ""
     @Query private var folders: [Folder]
     @Binding var home: Bool?
     
@@ -123,6 +124,7 @@ struct MakeTodoView: View {
                     }
                 }
                 .tabViewStyle(PageTabViewStyle())
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
                 .frame(width: 350, height: 500)
                 .clipShape(RoundedRectangle(cornerRadius: 25))
                 
@@ -204,6 +206,7 @@ struct MakeTodoView: View {
                         
                         Button(action: {
                             memoisActive.toggle()
+                            newMemo = memo ?? ""
                         }, label: {
                             HStack{
                                 Image(systemName: "pencil")
@@ -222,13 +225,14 @@ struct MakeTodoView: View {
                                     Spacer()
                                     Button(action: {
                                         memoisActive.toggle()
+                                        memo = newMemo
                                     }, label: {
                                         Text("완료")
                                     })
                                 }
                                 
                                 VStack{
-                                    TextField("메모를 입력해주세요.", text: $memo.withDefault(""), axis: .vertical	)
+                                    TextField("메모를 입력해주세요.", text: $newMemo, axis: .vertical	)
                                 }.frame(height: 100, alignment: .top)
                                 
                                 Spacer()
