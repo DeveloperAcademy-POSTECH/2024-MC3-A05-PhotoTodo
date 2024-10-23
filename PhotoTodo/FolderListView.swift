@@ -25,21 +25,21 @@ struct FolderListView: View {
     @State var selectedColor: Color?
     private var basicViewType: TodoGridViewType = .singleFolder
     private var doneListViewType: TodoGridViewType = .doneList
-    
+    @AppStorage("defaultFolderID") private var defaultFolderID: String?
     
     
     var body: some View {
             List {
                 //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
                 NavigationLink{
-                    TodoGridView(currentFolder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
+                    TodoGridView(currentFolder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
                 } label : {
-                    FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
+                    FolderRow(folder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
                 }
 
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
-                ForEach(folders.dropFirst()) { folder in
+                ForEach(folders.filter({$0.id.uuidString != defaultFolderID})) { folder in
                     NavigationLink {
                         TodoGridView(currentFolder: folder, viewType: basicViewType)
                     } label: {
@@ -54,6 +54,12 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: nil, viewType: doneListViewType)
                 }
+            }
+            .onAppear {
+                if defaultFolderID != nil {
+                    return
+                }
+                defaultFolderID = folders.first(where: {$0.name == "기본"})?.id.uuidString
             }
 
             .scrollContentBackground(.hidden)
