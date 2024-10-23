@@ -178,11 +178,18 @@ struct TodoItemView: View {
                 let id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
                 
                 let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
-                modelContext.insert(todoData)
+                DispatchQueue.main.async{
+                        modelContext.delete(todo)
+                        modelContext.insert(todoData)
+                }
+                
                 print("알람 데이터 있음")
             } else {
                 let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
-                modelContext.insert(todoData)
+                DispatchQueue.main.async{
+                        modelContext.delete(todo)
+                        modelContext.insert(todoData)
+                }
                 print("알람 데이터 없음")
             }
             editTodoisActive.toggle()
