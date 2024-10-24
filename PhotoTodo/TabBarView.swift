@@ -23,6 +23,9 @@ struct TabBarView: View {
     @State private var navigationisActive: Bool = false
     let manager = NotificationManager.instance
     @State var isCameraSheetOn: Bool = false
+    // 온보딩뷰
+    @Environment(\.presentationMode) var presentationMode
+    @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
     
     var body: some View {
         NavigationStack/*(path: $path)*/ {
@@ -92,6 +95,9 @@ struct TabBarView: View {
                 }
             }
             .ignoresSafeArea(.keyboard)
+        }
+        .fullScreenCover(isPresented: $isOnboarindViewActive) {
+            OnboardingView()
         }
         .onAppear {
             //MARK: 최초 1회 실행된 적이 있을 시
