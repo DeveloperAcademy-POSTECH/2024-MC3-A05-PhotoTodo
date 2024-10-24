@@ -126,6 +126,9 @@ struct TodoItemView: View {
                                 .padding(4)
                         }
                         .disabled(editMode == .active)
+                        .sensoryFeedback(.success, trigger: todo.isDone) { oldValue, newValue in
+                            return todo.isDone == true
+                        }
                     }
                 
             }
