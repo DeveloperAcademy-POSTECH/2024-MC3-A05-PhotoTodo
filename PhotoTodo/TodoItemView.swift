@@ -62,6 +62,7 @@ struct TodoItemView: View {
                                 .foregroundColor(todo.images.count > 1 ? .paleGray : Color.clear)
                         }
                         .frame(width: 44, height: 44)
+                        .padding(8)
                     }
                     //MARK: 삭제될 날까지의 D-Day 표시
                     .overlay(alignment: .bottomTrailing){
@@ -71,9 +72,9 @@ struct TodoItemView: View {
                             .frame(width: 100, height: 40)
                             .overlay {
                                 Text(todo.isDone ? "\(daysLeft())일남음" : "")
-                                    .font(.callout).foregroundStyle(.green).padding()
+                                    .font(.subheadline).foregroundStyle(.green).padding()
                             }
-                            .padding()
+                            .padding(12)
                     }
                     //MARK: 체크박스 표시
                     .overlay(alignment: .topLeading) {
@@ -113,18 +114,20 @@ struct TodoItemView: View {
                                 print("완료함으로 보내버림")
                             }
                         } label : {
-                            editMode == .active ?
-                            nil : //editMode일 때는 체크박스가 보이지 않게 함
-                            todo.isDone ?
-                            Image("selectedOn")
-                                .resizable()
-                                .frame(width: 36, height: 36)
-                                .padding(4)
-                            :
-                            Image("selectedOff")
-                                .resizable()
-                                .frame(width: 36, height: 36)
-                                .padding(4)
+                            VStack{
+                                editMode == .active ?
+                                nil : //editMode일 때는 체크박스가 보이지 않게 함
+                                todo.isDone ?
+                                Image("selectedOn")
+                                    .resizable()
+                                    .frame(width: 36, height: 36)
+                                :
+                                Image("selectedOff")
+                                    .resizable()
+                                    .frame(width: 36, height: 36)
+                            }
+                            .frame(width: 44, height: 44)
+                                .padding(8)
                         }
                         .disabled(editMode == .active)
                     }
