@@ -18,7 +18,7 @@ struct TodoItemView: View {
     // TodoGridView에서 해당하는 todo를 넘겨받음
     var todo: Todo
     @State private var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
-    @State private var contentAlarm: Date? = Date()
+    @State private var contentAlarm: Date? = nil
     @State private var alarmID: String? = ""
     @State private var memo: String? = ""
     @State private var alarmDataisEmpty: Bool? = true
@@ -54,7 +54,7 @@ struct TodoItemView: View {
                     .scaledToFill()
                     .frame(width: 170, height: 170)
                     .clipShape(RoundedRectangle(cornerRadius: 20))
-                    //MARK: 다중선택 여부 표시
+                //MARK: 다중선택 여부 표시
                     .overlay(alignment: . bottomLeading){
                         Image(systemName: "square.on.square")
                             .resizable()
@@ -62,7 +62,7 @@ struct TodoItemView: View {
                             .padding(15)
                             .foregroundColor(todo.images.count > 1 ? .paleGray : Color.clear)
                     }
-                    //MARK: 삭제될 날까지의 D-Day 표시
+                //MARK: 삭제될 날까지의 D-Day 표시
                     .overlay(alignment: .bottomTrailing){
                         RoundedRectangle(cornerRadius: 35)
                             .fill(todo.isDone ? .paleGray : Color.clear)
@@ -74,38 +74,38 @@ struct TodoItemView: View {
                             }
                             .padding()
                     }
-                    //MARK: 체크박스 표시
+                //MARK: 체크박스 표시
                     .overlay(alignment: .topLeading) {
                         Button{
                             todo.isDoneAt = nil
                             if (todo.isDone) {
                                 // 완료상태 -> 미완료상태로 변경
-//                                withAnimation {
-                                    todo.isDone.toggle()
-//                                }
+                                //                                withAnimation {
+                                todo.isDone.toggle()
+                                //                                }
                                 todo.isDoneAt = nil
-//                                toastMassage = todo
+                                //                                toastMassage = todo
                                 toastOption = .moveToOrigin
                                 recentlyDoneTodo = todo
                                 DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
                                     DispatchQueue.main.async {
-//                                        toastMassage = nil
+                                        //                                        toastMassage = nil
                                         toastOption = .none
                                     }
                                 })
                                 print("메인함으로 보내버림")
                             } else {
                                 // 미완료상태 -> 완료상태로 변경
-//                                withAnimation {
-                                    todo.isDone.toggle()
-//                                }
+                                //                                withAnimation {
+                                todo.isDone.toggle()
+                                //                                }
                                 todo.isDoneAt = Date()
-//                                toastMassage = nil
+                                //                                toastMassage = nil
                                 toastOption = .moveToDone
                                 recentlyDoneTodo = todo
                                 DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
                                     DispatchQueue.main.async {
-//                                        toastMassage = todo
+                                        //                                        toastMassage = todo
                                         toastOption = .none
                                     }
                                 })
@@ -127,7 +127,7 @@ struct TodoItemView: View {
                         }
                         .disabled(editMode == .active)
                     }
-
+                
             }
             .disabled(editMode == .active)
             .sheet(isPresented: $editTodoisActive, content: {
@@ -154,46 +154,41 @@ struct TodoItemView: View {
                         }
                     }
                 }
-                    
+                
             })
-
+            
         }
     }
     
     func saveTodoItem() {
-            if todo.options.alarmUUID != nil {
-                manager.deleteNotification(withID: alarmID!)
-            }
-            
-            if alarmDataisEmpty != nil && !alarmDataisEmpty! {
-                // 알람 생성
-                let calendar = Calendar.current
-                let year = calendar.component(.year, from: contentAlarm!)
-                let month = calendar.component(.month, from: contentAlarm!)
-                let day = calendar.component(.day, from: contentAlarm!)
-                let hour = calendar.component(.hour, from: contentAlarm!)
-                let minute = calendar.component(.minute, from: contentAlarm!)
-                
-                // Notification 알람 생성 및 id Todo에 저장하기
-                let id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
-                
-                let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(alarm: contentAlarm, alarmUUID: id, memo: memo), isDone: todo.isDone)
-                DispatchQueue.main.async{
-                        modelContext.delete(todo)
-                        modelContext.insert(todoData)
-                }
-                
-                print("알람 데이터 있음")
-            } else {
-                let todoData = Todo(folder: chosenFolder, id: todo.id, images: cameraVM.photoData, createdAt: todo.createdAt, options: Options(memo: memo), isDone: todo.isDone)
-                DispatchQueue.main.async{
-                        modelContext.delete(todo)
-                        modelContext.insert(todoData)
-                }
-                print("알람 데이터 없음")
-            }
-            editTodoisActive.toggle()
+        if todo.options.alarmUUID != nil {
+            manager.deleteNotification(withID: alarmID!)
         }
+        
+        var id: String? = nil
+        if alarmDataisEmpty != nil && !alarmDataisEmpty! {
+            print("알람 데이터 있음")
+            // 알람 생성
+            let calendar = Calendar.current
+            let year = calendar.component(.year, from: contentAlarm!)
+            let month = calendar.component(.month, from: contentAlarm!)
+            let day = calendar.component(.day, from: contentAlarm!)
+            let hour = calendar.component(.hour, from: contentAlarm!)
+            let minute = calendar.component(.minute, from: contentAlarm!)
+            
+            // Notification 알람 생성 및 id Todo에 저장하기
+            id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
+        } else {
+            print("알람 데이터 없음")
+            contentAlarm = nil
+            alarmDataisEmpty = true
+        }
+        //현재 화면에 노출된 변경 가능한 상태들의 현재 상태가 그대로 반영되도록 설 정하기
+        todo.folder = chosenFolder
+        todo.images = cameraVM.photoData
+        todo.options = Options(alarm: contentAlarm, alarmUUID: id, memo: memo)
+        editTodoisActive.toggle()
+    }
     
     ///삭제되기까지 남은 기간을 계산하는 함수
     func daysLeft() -> Int {
@@ -218,7 +213,7 @@ struct TodoItemView: View {
     @State var toastOption: ToastOption = .none
     @State var recentlyDoneTodo: Todo? = nil
     return TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption,
-        recentlyDoneTodo: $recentlyDoneTodo)
+                        recentlyDoneTodo: $recentlyDoneTodo)
 }
 
 
