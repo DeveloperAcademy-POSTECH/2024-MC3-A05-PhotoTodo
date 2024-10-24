@@ -414,6 +414,7 @@ struct GridView: View {
                             }
                     }
                 }
+                .padding(.top, 4)
                 .padding(.bottom)
             }
         }
