@@ -9,10 +9,13 @@ import SwiftUI
 import SwiftData
 
 @main
+
 struct PhotoTodoApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Folder.self,
+            Todo.self,
+            Options.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -22,10 +25,21 @@ struct PhotoTodoApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    init(){
+        UIView.appearance(for: UITraitCollection(userInterfaceStyle: .light),
+          whenContainedInInstancesOf: [UIAlertController.self])
+            .tintColor = UIColor(Color("AccentColor"))
+
+        UIView.appearance(for: UITraitCollection(userInterfaceStyle: .dark),
+          whenContainedInInstancesOf: [UIAlertController.self])
+            .tintColor = UIColor(Color("AccentColor"))
+    }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabBarView()
+//            TestView()
         }
         .modelContainer(sharedModelContainer)
     }
