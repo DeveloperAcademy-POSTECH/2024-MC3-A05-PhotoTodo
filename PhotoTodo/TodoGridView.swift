@@ -222,6 +222,7 @@ struct TodoGridView: View {
         .sheet(isPresented: $alarmSetting, content: {
             AlarmSettingView()
                 .presentationDetents([.height(CGFloat(450))])
+                .presentationDragIndicator(.visible)
         })
         .frame(height: 33.5)
         .padding(.trailing, 5.7)
