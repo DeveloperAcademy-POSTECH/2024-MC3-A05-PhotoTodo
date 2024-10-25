@@ -55,7 +55,7 @@ struct TabBarView: View {
                                     .bold()
                             }
                         }
-                        .foregroundStyle(page == .main ? Color.gray : Color.lightGray)
+                        .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
                         
                         
                         NavigationLink  {
@@ -91,7 +91,7 @@ struct TabBarView: View {
                                     .bold()
                             }
                         }
-                        .foregroundStyle(page == .folder ? Color.gray : Color.lightGray)
+                        .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
                         Spacer()
                     }.background(Color(.white))
                 }
