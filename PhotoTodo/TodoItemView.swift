@@ -205,7 +205,11 @@ struct TodoItemView: View {
 }
 
 #Preview {
-    var newTodo = Todo(
+    @Previewable @State var toastMessage: String? = nil
+    @Previewable @State var editMode: EditMode = .inactive
+    @Previewable @State var toastOption: ToastOption = .none
+    @Previewable @State var recentlyDoneTodo: Todo? = nil
+    let newTodo = Todo(
         id: UUID(),
         images: [UIImage(systemName: "star")?.pngData() ?? Data()],
         createdAt: Date(),
@@ -215,11 +219,6 @@ struct TodoItemView: View {
         ),
         isDone: false
     )
-    
-    @State var editMode: EditMode = .inactive
-    @State var toastMessage: String? = nil
-    @State var toastOption: ToastOption = .none
-    @State var recentlyDoneTodo: Todo? = nil
     return TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption,
                         recentlyDoneTodo: $recentlyDoneTodo)
 }
