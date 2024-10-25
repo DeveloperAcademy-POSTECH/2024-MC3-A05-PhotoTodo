@@ -120,6 +120,7 @@ struct TodoGridView: View {
                 customNavBar
             }
             ZStack {
+                Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if todos.isEmpty && viewType != .doneList {
                         GuideLineView(viewType: viewType, todos: todos)
