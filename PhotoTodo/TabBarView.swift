@@ -20,12 +20,14 @@ struct TabBarView: View {
     @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
+    @Query private var todos: [Todo]
     @State private var navigationisActive: Bool = false
     let manager = NotificationManager.instance
     @State var isCameraSheetOn: Bool = false
     // 온보딩뷰
     @Environment(\.presentationMode) var presentationMode
     @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     
     var body: some View {
         NavigationStack/*(path: $path)*/ {
@@ -100,6 +102,9 @@ struct TabBarView: View {
             OnboardingView()
         }
         .onAppear {
+            //MARK: 30일 초과한 아이템을 지움
+            removeTodoItemsPastDueDate()
+            
             //MARK: 최초 1회 실행된 적이 있을 시
             if hasBeenLaunched {
                 return
@@ -117,6 +122,26 @@ struct TabBarView: View {
             
             manager.requestAuthorization()
         }
+    }
+    
+    private func removeTodoItemsPastDueDate() -> Void {
+        let todoItemsPastDueDate: [Todo] = todos.filter{
+            isPastDueDate(todo: $0)
+        }
+        
+        for todo in todoItemsPastDueDate {
+            if let todo = todos.first(where: { $0.id == todo.id }) {
+                modelContext.delete(todo)
+                deletionCount += 1
+            }
+        }
+    }
+    
+    func isPastDueDate(todo: Todo) -> Bool {
+        if 30 < daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date()) {
+            return true
+        }
+        return false
     }
 }
 
