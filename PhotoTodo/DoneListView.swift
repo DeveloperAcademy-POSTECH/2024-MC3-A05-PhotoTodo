@@ -23,9 +23,9 @@ struct DoneListView: View {
                     HStack{
                         VStack{
                             HStack{
-                                Text("이번달에 네잎클로버 ").foregroundStyle(.black).bold() +
-                                Text("\(deletionCount / 4)개").foregroundStyle(.green).bold() +
-                                Text("를 모았어요!").foregroundStyle(.black).bold()
+                                Text("이번달에 네잎클로버 ").foregroundStyle(.black).bold().font(.system(size: 20)) +
+                                Text("\(deletionCount / 4)개").foregroundStyle(.green).bold().font(.system(size: 20)) +
+                                Text("를 모았어요!").foregroundStyle(.black).bold().font(.system(size: 20))
                                 Spacer()
                             }.padding(.leading, 12)
                             HStack{
@@ -34,6 +34,7 @@ struct DoneListView: View {
                                     
                                 Text("완료한 사진을 지우면 탄소배출을 줄일 수 있어요").foregroundStyle(Color("gray/gray-700"))
                                     .font(.callout)
+                                
                             }
                         }
                         Image(systemName: "chevron.right")
