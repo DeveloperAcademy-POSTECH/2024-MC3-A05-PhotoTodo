@@ -39,10 +39,10 @@ struct ToastView: View {
 
 
 #Preview {
-    @State var editMode: EditMode = .inactive
-    @State var toastMessage: String = ""
-    @State var toastOption: ToastOption = .none
-    @State var recentlyDoneTodo: Todo? = nil
+    @Previewable @State var editMode: EditMode = .inactive
+    @Previewable @State var toastMessage: String = ""
+    @Previewable @State var toastOption: ToastOption = .none
+    @Previewable @State var recentlyDoneTodo: Todo? = nil
     
     return ToastView(toastOption: toastOption, toastMessage: toastMessage, recentlyDoneTodo: $recentlyDoneTodo)
 }

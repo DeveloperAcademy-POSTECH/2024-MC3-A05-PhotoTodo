@@ -410,13 +410,13 @@ extension Binding {
 }
 
 #Preview {
-    @State var cameraVM = CameraViewModel()
-    @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
-    @State var contentAlarm = Date()
-    @State var memo: String = ""
-    @State var alarmDataisEmpty: Bool = true
-    @State var home: Bool = false
-    @State var alarmID = ""
+    @Previewable @State var cameraVM = CameraViewModel()
+    @Previewable @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    @Previewable @State var contentAlarm = Date()
+    @Previewable @State var memo: String = ""
+    @Previewable @State var alarmDataisEmpty: Bool = true
+    @Previewable @State var home: Bool = false
+    @Previewable @State var alarmID = ""
     return MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
 }

@@ -176,7 +176,7 @@ struct TodoGridView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
                     .frame(width: 38)
-                    .onChange(of: editMode) { newEditMode in
+                    .onChange(of: editMode) { _, newEditMode in
                         //편집모드 해제시 선택정보 삭제
                         if newEditMode == .inactive {
                             selectedTodos.removeAll()
@@ -213,7 +213,7 @@ struct TodoGridView: View {
             .frame(width: 40)
             EditButton()
                 .frame(width: 50)
-                .onChange(of: editMode) { newEditMode in
+                .onChange(of: editMode) { _, newEditMode in
                     //편집모드 해제시 선택정보 삭제
                     if newEditMode == .inactive {
                         selectedTodos.removeAll()
@@ -223,6 +223,7 @@ struct TodoGridView: View {
         .sheet(isPresented: $alarmSetting, content: {
             AlarmSettingView()
                 .presentationDetents([.height(CGFloat(450))])
+                .presentationDragIndicator(.visible)
         })
         .frame(height: 33.5)
         .padding(.trailing, 5.7)
