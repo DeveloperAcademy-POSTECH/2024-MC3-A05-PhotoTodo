@@ -33,6 +33,7 @@
 		1AFB12B12C77245500952121 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12B02C77245500952121 /* PhotoTodoModel.swift */; };
 		1AFB12B22C77245500952121 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12B02C77245500952121 /* PhotoTodoModel.swift */; };
 		3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C90390C2C623EFF00025335 /* Date+Extension.swift */; };
+		3CB22B5D2CC8EA3B00337F9E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB22B5C2CC8EA3B00337F9E /* OnboardingView.swift */; };
 		3CC1139B2C69169B00281EBD /* UserNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1139A2C69169A00281EBD /* UserNotification.swift */; };
 		4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
 /* End PBXBuildFile section */
@@ -89,6 +90,7 @@
 		1AFB12B32C7724B000952121 /* ShareImage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareImage.entitlements; sourceTree = "<group>"; };
 		1AFB12B42C7724BC00952121 /* PhotoTodo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoTodo.entitlements; sourceTree = "<group>"; };
 		3C90390C2C623EFF00025335 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		3CB22B5C2CC8EA3B00337F9E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		3CC1139A2C69169A00281EBD /* UserNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotification.swift; sourceTree = "<group>"; };
 		3CC113B42C72036100281EBD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F46B28A2C5C7E2100556646 /* FolderEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderEditView.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				4F46B28A2C5C7E2100556646 /* FolderEditView.swift */,
 				131501CC2C61FCA000AAA4A2 /* AlarmSettingView.swift */,
 				3CC1139A2C69169A00281EBD /* UserNotification.swift */,
+				3CB22B5C2CC8EA3B00337F9E /* OnboardingView.swift */,
 				1A0D96812C5A14CC00784CBA /* ViewModel */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
@@ -261,11 +264,12 @@
 			};
 			buildConfigurationList = 1A2778D52C56395900A02C7E /* Build configuration list for PBXProject "PhotoTodo" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 1A2778D12C56395900A02C7E;
 			packageReferences = (
@@ -313,6 +317,7 @@
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */,
 				3CC1139B2C69169B00281EBD /* UserNotification.swift in Sources */,
+				3CB22B5D2CC8EA3B00337F9E /* OnboardingView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
 				1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
@@ -490,7 +495,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoTodo/Info.plist;
@@ -527,7 +532,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoTodo/Info.plist;
