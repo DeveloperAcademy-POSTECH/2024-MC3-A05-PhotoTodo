@@ -14,8 +14,7 @@ struct ToastView: View {
     
     var body: some View {
         RoundedRectangle(cornerRadius: 35)
-            .fill(.paleGray)
-            .opacity(0.5)
+            .fill(Color("green/green-500"))
             .frame(width: 200, height: 50)
             .overlay {
                 HStack{
@@ -25,11 +24,12 @@ struct ToastView: View {
                         toastOption = .none
                     } label : {
                         Image(systemName: "arrow.uturn.backward")
+                            .foregroundColor(.paleGray)
                     }
                     Text(toastMessage)
                         .fontWeight(.bold)
                         .font(.system(size: 15))
-                        .foregroundColor(.green)
+                        .foregroundColor(.paleGray)
                         .padding()
                 }
             }
