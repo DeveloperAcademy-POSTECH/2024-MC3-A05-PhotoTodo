@@ -20,15 +20,28 @@ struct DoneListView: View {
                 .shadow(color: .paleGray , radius: 8)
                 .frame(minHeight: 25, maxHeight: 75)
                 .overlay(
-                    VStack{
-                        HStack{
-                            Text("이번달에 네잎클로버 ").foregroundStyle(.black) +
-                            Text("\(deletionCount / 4)개").foregroundStyle(.green) +
-                            Text("를 모았어요!").foregroundStyle(.black)
-                            Image(systemName: "chevron.right")
+                    HStack{
+                        VStack{
+                            HStack{
+                                Text("이번달에 네잎클로버 ").foregroundStyle(.black).bold().font(.system(size: 20)) +
+                                Text("\(deletionCount / 4)개").foregroundStyle(.green).bold().font(.system(size: 20)) +
+                                Text("를 모았어요!").foregroundStyle(.black).bold().font(.system(size: 20))
+                                Spacer()
+                            }.padding(.leading, 12)
+                            HStack{
+                                Image(systemName: "info.circle.fill")
+                                    .foregroundStyle(Color("gray/gray-700"))
+                                    
+                                Text("완료한 사진을 지우면 탄소배출을 줄일 수 있어요").foregroundStyle(Color("gray/gray-700"))
+                                    .font(.callout)
+                                
+                            }
                         }
+                        Image(systemName: "chevron.right")
+
                     }
-                        .frame(maxHeight: 75)
+                    
+                    .frame(maxHeight: 75)
                 )
                 .padding()
         }
