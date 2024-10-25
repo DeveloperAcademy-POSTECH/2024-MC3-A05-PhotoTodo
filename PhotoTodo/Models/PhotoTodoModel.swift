@@ -55,4 +55,3 @@ class Options {
         self.tags = tags
     }
 }
-
