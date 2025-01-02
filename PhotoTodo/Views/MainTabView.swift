@@ -12,7 +12,7 @@ enum page {
     case folder
 }
 
-struct TabBarView: View {
+struct MainTabView: View {
     @State private var selectedTab = 0
     @State private var isCameraViewActive = false
     //    @State private var path: NavigationPath = NavigationPath()
@@ -35,7 +35,7 @@ struct TabBarView: View {
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if page == .main {
-                        MainView()
+                        MasterTodoView()
                     } else if page == .folder {
                         FolderListView()
                     }
@@ -146,6 +146,6 @@ struct TabBarView: View {
 }
 
 #Preview {
-    TabBarView()
+    MainTabView()
 }
 

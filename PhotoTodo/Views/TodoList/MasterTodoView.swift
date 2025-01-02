@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct MasterTodoView: View {
     var viewType: TodoGridViewType = .main
     var body: some View {
             TodoCompositeGridView(viewType: viewType)
@@ -15,5 +15,5 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    MasterTodoView()
 }
