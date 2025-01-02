@@ -102,6 +102,9 @@ struct TabBarView: View {
             OnboardingView()
         }
         .onAppear {
+#if DEBUG
+            self.isOnboarindViewActive = false
+#endif
             //MARK: 30일 초과한 아이템을 지움
             removeTodoItemsPastDueDate()
             
