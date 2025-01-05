@@ -15,7 +15,7 @@ class AlarmSettingViewModel {
     }
     
     var selectedDays: [String] = []
-    private var alarmSet: Date = Date()
+    var alarmSet: Date = Date()
     var dayNames: [String] {
         ["월", "화", "수", "목", "금", "토", "일"]
     }

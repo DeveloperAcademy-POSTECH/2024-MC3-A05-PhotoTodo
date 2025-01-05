@@ -9,14 +9,14 @@ import SwiftUI
 
 struct AlarmSettingView: View {
     @Environment(\.presentationMode) var presentation
-    @State private var alarmSet = Date()
-    @State private var selectedDays: [String] = []
-    let manager = NotificationManager.shared
+//    @State private var alarmSet = Date()
+//    @State private var selectedDays: [String] = []
+//    let manager = NotificationManager.shared
     @State private var alarmSettingViewModel: AlarmSettingViewModel = .init()
     
-    private var dayNames: [String] {
-        ["월", "화", "수", "목", "금", "토", "일"]
-    }
+//    private var dayNames: [String] {
+//        ["월", "화", "수", "목", "금", "토", "일"]
+//    }
     
     var body: some View {
         ZStack{
@@ -61,7 +61,7 @@ struct AlarmSettingView: View {
                     }
                     
                 }
-                DatePicker("Please enter a date", selection: $alarmSet,
+                DatePicker("Please enter a date", selection: $alarmSettingViewModel.alarmSet,
                            displayedComponents: .hourAndMinute)
                 .datePickerStyle(WheelDatePickerStyle())
                 .labelsHidden()
@@ -74,11 +74,11 @@ struct AlarmSettingView: View {
         }
         .onAppear(perform: {
             if let isAlarmDate = UserDefaults.standard.object(forKey: "alarmTime") as? Date {
-                alarmSet = isAlarmDate
+                alarmSettingViewModel.alarmSet = isAlarmDate
             }
             
             if let isAlarmDay = UserDefaults.standard.object(forKey: "alarmWeekdays") as? [Int] {
-                selectedDays = alarmSettingViewModel.daysToString(selectedDays: isAlarmDay)
+                alarmSettingViewModel.selectedDays = alarmSettingViewModel.daysToString(selectedDays: isAlarmDay)
             }
             
         })
@@ -90,9 +90,9 @@ struct AlarmSettingView: View {
         }) {
             Text(day)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                .foregroundColor(selectedDays.contains(day) ? Color.white : Color("gray/gray-1200"))
+                .foregroundColor(alarmSettingViewModel.selectedDays.contains(day) ? Color.white : Color("gray/gray-1200"))
                 .frame(width: 41, height: 44)
-                .background(selectedDays.contains(day) ? Color("AccentColor") : Color.white)
+                .background(alarmSettingViewModel.selectedDays.contains(day) ? Color("AccentColor") : Color.white)
                 .cornerRadius(10)
         }
     }
