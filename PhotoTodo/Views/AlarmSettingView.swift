@@ -9,14 +9,7 @@ import SwiftUI
 
 struct AlarmSettingView: View {
     @Environment(\.presentationMode) var presentation
-//    @State private var alarmSet = Date()
-//    @State private var selectedDays: [String] = []
-//    let manager = NotificationManager.shared
     @State private var alarmSettingViewModel: AlarmSettingViewModel = .init()
-    
-//    private var dayNames: [String] {
-//        ["월", "화", "수", "목", "금", "토", "일"]
-//    }
     
     var body: some View {
         ZStack{
