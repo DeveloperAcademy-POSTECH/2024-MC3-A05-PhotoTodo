@@ -17,16 +17,22 @@ enum TodoGridViewType {
 }
 
 struct FolderListView: View {
+    
+    // 환경변수
     @Environment(\.modelContext) private var modelContext
-    @State private var editMode: EditMode = .inactive
+    @AppStorage("defaultFolderID") private var defaultFolderID: String?
+    
+    // SwiftData 쿼리
     @Query private var folders: [Folder]
+    
+    // 뷰 관련 변수
+    @State private var folderListViewModel: FolderListViewModel = .init()
+    @State private var editMode: EditMode = .inactive
     @State var isShowingSheet = false
     @State var folderNameInput = ""
     @State var selectedColor: Color?
     private var basicViewType: TodoGridViewType = .singleFolder
     private var doneListViewType: TodoGridViewType = .doneList
-    @AppStorage("defaultFolderID") private var defaultFolderID: String?
-    @State private var folderListViewModel: FolderListViewModel = .init()
     
     
     var body: some View {
