@@ -39,7 +39,7 @@ struct MainTabView: View {
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if page == .main {
-                        MasterTodoView()
+                        TodoGridView(viewType: .main)
                     } else if page == .folder {
                         FolderListView()
                     }

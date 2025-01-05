@@ -17,14 +17,11 @@
 		1A2778E72C56395A00A02C7E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E62C56395A00A02C7E /* Preview Assets.xcassets */; };
 		1A2778F42C57415900A02C7E /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F32C57415900A02C7E /* CameraView.swift */; };
 		1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F52C57416800A02C7E /* FolderListView.swift */; };
-		1A2778F82C5741BD00A02C7E /* MasterTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F72C5741BD00A02C7E /* MasterTodoView.swift */; };
 		1A2778FA2C5741CF00A02C7E /* TodoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778F92C5741CF00A02C7E /* TodoGridView.swift */; };
 		1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778FB2C57719B00A02C7E /* DashBoardView.swift */; };
 		1A2E5C822C5B557200BAFD13 /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1A2E5C812C5B557200BAFD13 /* SkeletonUI */; };
 		1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */; };
-		1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */; };
 		1A2E5C8A2C5C617D00BAFD13 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* MainTabView.swift */; };
-		1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */; };
 		1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A619E492C7DC68A0082FD5C /* ToastView.swift */; };
 		1AFB127E2C69C22D00952121 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 1AFB127D2C69C22D00952121 /* Collections */; };
 		1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12A32C77243A00952121 /* ShareViewController.swift */; };
@@ -76,13 +73,10 @@
 		1A2778E62C56395A00A02C7E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1A2778F32C57415900A02C7E /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		1A2778F52C57416800A02C7E /* FolderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListView.swift; sourceTree = "<group>"; };
-		1A2778F72C5741BD00A02C7E /* MasterTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterTodoView.swift; sourceTree = "<group>"; };
 		1A2778F92C5741CF00A02C7E /* TodoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoGridView.swift; sourceTree = "<group>"; };
 		1A2778FB2C57719B00A02C7E /* DashBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashBoardView.swift; sourceTree = "<group>"; };
 		1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderCarouselView.swift; sourceTree = "<group>"; };
-		1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoCompositeGridView.swift; sourceTree = "<group>"; };
 		1A2E5C892C5C617D00BAFD13 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
-		1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
 		1A619E492C7DC68A0082FD5C /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		1AFB12A12C77243A00952121 /* ShareImage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareImage.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AFB12A32C77243A00952121 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -233,9 +227,6 @@
 		3C0D21892D26D93600F2FED8 /* TodoList */ = {
 			isa = PBXGroup;
 			children = (
-				1A2778F72C5741BD00A02C7E /* MasterTodoView.swift */,
-				1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */,
-				1A2E5C872C5B990D00BAFD13 /* TodoCompositeGridView.swift */,
 				1A2778F92C5741CF00A02C7E /* TodoGridView.swift */,
 				1A0D96742C59287600784CBA /* TodoItemView.swift */,
 				1A619E492C7DC68A0082FD5C /* ToastView.swift */,
@@ -383,15 +374,12 @@
 			files = (
 				1A2E5C8A2C5C617D00BAFD13 /* MainTabView.swift in Sources */,
 				1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */,
-				1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */,
 				1A2778FC2C57719B00A02C7E /* DashBoardView.swift in Sources */,
 				3C0D21942D2AB59D00F2FED8 /* MainTabViewModel.swift in Sources */,
 				3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */,
 				3CC1139B2C69169B00281EBD /* NotificationManager.swift in Sources */,
 				3CB22B5D2CC8EA3B00337F9E /* OnboardingView.swift in Sources */,
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
-				1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */,
-				1A2778F82C5741BD00A02C7E /* MasterTodoView.swift in Sources */,
 				4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
 				1A2778FA2C5741CF00A02C7E /* TodoGridView.swift in Sources */,
