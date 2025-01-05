@@ -27,12 +27,11 @@ struct MainTabView: View {
     
     // 뷰 내부 변수
     @State private var page: page = .main
+    @State private var mainTabViewModel: MainTabViewModel = .init()
     @State private var selectedTab = 0
     @State private var isCameraViewActive = false
     @State private var navigationisActive: Bool = false
     @State var isCameraSheetOn: Bool = false
-    
-    let manager = NotificationManager.shared
     
     var body: some View {
         NavigationStack {
@@ -108,7 +107,7 @@ struct MainTabView: View {
         }
         .onAppear {
             //MARK: 30일 초과한 아이템을 지움
-            removeTodoItemsPastDueDate()
+            mainTabViewModel.removeTodoItemsPastDueDate(todos: self.todos, modelContext: self.modelContext)
             
             //MARK: 최초 1회 실행된 적이 있을 시
             if hasBeenLaunched {
@@ -116,37 +115,11 @@ struct MainTabView: View {
             }
             
             //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
-            let defaultFolder = Folder(
-                id: UUID(),
-                name: "기본",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(defaultFolder)
+            mainTabViewModel.MakeDefaultFolder(modelContext: self.modelContext)
             hasBeenLaunched = true
             
-            manager.requestAuthorization()
+            mainTabViewModel.activateNotificationRequestAuthorization()
         }
-    }
-    
-    private func removeTodoItemsPastDueDate() -> Void {
-        let todoItemsPastDueDate: [Todo] = todos.filter{
-            isPastDueDate(todo: $0)
-        }
-        
-        for todo in todoItemsPastDueDate {
-            if let todo = todos.first(where: { $0.id == todo.id }) {
-                modelContext.delete(todo)
-                deletionCount += 1
-            }
-        }
-    }
-    
-    func isPastDueDate(todo: Todo) -> Bool {
-        if 30 < daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date()) {
-            return true
-        }
-        return false
     }
 }
 
