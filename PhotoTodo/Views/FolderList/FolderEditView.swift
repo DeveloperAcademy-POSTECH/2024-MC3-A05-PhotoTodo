@@ -8,13 +8,19 @@ import SwiftUI
 import SwiftData
 
 struct FolderEditView: View {
+    
+    // 환경변수
+    @Environment(\.modelContext) private var modelContext
+    
+    // SwiftData 쿼리
+    @Query var folders: [Folder]
+    
+    // 뷰 관련 변수
     @Binding var isSheetPresented: Bool
     @Binding var folderNameInput: String
     @Binding var selectedColor: Color?
-    @Query var folders: [Folder]
-    @Environment(\.modelContext) private var modelContext
-    
     @State private var showActionSheet = false
+    
     let colors: [Color] = [Color("folder_color/red"), Color("folder_color/yellow"), Color("folder_color/sky"), Color("folder_color/green"), Color("folder_color/blue"), Color("folder_color/purple")]
     let colorDictionary: [Color: String] = [
         Color("folder_color/red"): "red",

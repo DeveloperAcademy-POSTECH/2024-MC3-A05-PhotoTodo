@@ -11,6 +11,7 @@ import UIKit
 import PhotosUI
 import OrderedCollections
 
+// 투두 정렬 시 옵션
 enum SortOption: String, CaseIterable {
     case byDateIncreasing
     case byDateDecreasing
@@ -19,6 +20,7 @@ enum SortOption: String, CaseIterable {
     case byDueDate
 }
 
+// 투두 상태에 따른 토스트 메세지
 enum ToastOption {
     case none
     case moveToDone
@@ -28,23 +30,30 @@ enum ToastOption {
 }
 
 struct TodoGridView: View {
+    
+    // 환경 변수
     @Environment(\.modelContext) private var modelContext
+    @AppStorage("sortOption") private var sortOption: SortOption = .byDateIncreasing
+    @AppStorage("deletionCount") var deletionCount: Int = 0
+    
+    // SwiftData 쿼리
     @Query var folders: [Folder]
     @Query var compositeTodos: [Todo]
+    
+    // 뷰 관련 변수
+    /// currentFolder보다 viewType이 나중에 선언되어야 함.
     @State var currentFolder: Folder? = nil
     var viewType: TodoGridViewType
+    
+    @ObservedObject private var cameraVM = CameraViewModel.shared
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
-    @AppStorage("sortOption") private var sortOption: SortOption = .byDateIncreasing
     @State private var isShowingOptions = false
     @State private var showingImagePicker = false
     @State private var isDoneSelecting = false
-    @ObservedObject private var cameraVM = CameraViewModel.shared
-    @AppStorage("deletionCount") var deletionCount: Int = 0
     @State private var selectedItems = [PhotosPickerItem]()
     @State private var selectedImages = [Image]()
-    //    @State private var selectedItem: PhotosPickerItem?
-    
+
     //새로운 사진 업로드 시 MakeTodoView에서 필요한 상태들
     @State var contentAlarm: Date? = nil
     @State var memo: String? = nil

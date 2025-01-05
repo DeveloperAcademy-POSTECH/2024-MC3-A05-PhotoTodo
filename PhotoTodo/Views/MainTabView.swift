@@ -12,30 +12,34 @@ enum page {
     case folder
 }
 
-struct TabBarView: View {
-    @State private var selectedTab = 0
-    @State private var isCameraViewActive = false
-    //    @State private var path: NavigationPath = NavigationPath()
-    @State private var page: page = .main
-    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
+struct MainTabView: View {
+    
+    // 환경변수
+    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false // 최초 런치 시
+    @AppStorage("onboarding") var isOnboarindViewActive: Bool = true // 최초 온보딩 시(런치했지만 온보딩을 확인하지 않을 수도 있음)
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.presentationMode) var presentationMode
+    
+    //SwiftData 쿼리
     @Query private var folders: [Folder]
     @Query private var todos: [Todo]
+    
+    // 뷰 내부 변수
+    @State private var page: page = .main
+    @State private var mainTabViewModel: MainTabViewModel = .init()
+    @State private var selectedTab = 0
+    @State private var isCameraViewActive = false
     @State private var navigationisActive: Bool = false
-    let manager = NotificationManager.instance
     @State var isCameraSheetOn: Bool = false
-    // 온보딩뷰
-    @Environment(\.presentationMode) var presentationMode
-    @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
-    @AppStorage("deletionCount") var deletionCount: Int = 0
     
     var body: some View {
-        NavigationStack/*(path: $path)*/ {
+        NavigationStack {
             ZStack{
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if page == .main {
-                        MainView()
+                        TodoGridView(viewType: .main)
                     } else if page == .folder {
                         FolderListView()
                     }
@@ -103,7 +107,7 @@ struct TabBarView: View {
         }
         .onAppear {
             //MARK: 30일 초과한 아이템을 지움
-            removeTodoItemsPastDueDate()
+            self.deletionCount = mainTabViewModel.removeTodoItemsPastDueDate(todos: self.todos, modelContext: self.modelContext, deletionCount: self.deletionCount)
             
             //MARK: 최초 1회 실행된 적이 있을 시
             if hasBeenLaunched {
@@ -111,41 +115,15 @@ struct TabBarView: View {
             }
             
             //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
-            let defaultFolder = Folder(
-                id: UUID(),
-                name: "기본",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(defaultFolder)
+            mainTabViewModel.MakeDefaultFolder(modelContext: self.modelContext)
             hasBeenLaunched = true
             
-            manager.requestAuthorization()
+            mainTabViewModel.activateNotificationRequestAuthorization()
         }
-    }
-    
-    private func removeTodoItemsPastDueDate() -> Void {
-        let todoItemsPastDueDate: [Todo] = todos.filter{
-            isPastDueDate(todo: $0)
-        }
-        
-        for todo in todoItemsPastDueDate {
-            if let todo = todos.first(where: { $0.id == todo.id }) {
-                modelContext.delete(todo)
-                deletionCount += 1
-            }
-        }
-    }
-    
-    func isPastDueDate(todo: Todo) -> Bool {
-        if 30 < daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date()) {
-            return true
-        }
-        return false
     }
 }
 
 #Preview {
-    TabBarView()
+    MainTabView()
 }
 

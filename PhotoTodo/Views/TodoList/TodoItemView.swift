@@ -30,7 +30,7 @@ struct TodoItemView: View {
     @Binding var toastOption: ToastOption
     @Binding var recentlyDoneTodo: Todo?
     
-    let manager = NotificationManager.instance
+    let manager = NotificationManager.shared
     
     var body: some View {
         ZStack{

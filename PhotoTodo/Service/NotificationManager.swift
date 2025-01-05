@@ -7,9 +7,8 @@
 import SwiftUI
 import UserNotifications
 
-
 class NotificationManager {
-    static let instance = NotificationManager() // Singleton
+    static let shared = NotificationManager()
     
     var notiID: [String] = []
     

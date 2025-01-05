@@ -72,7 +72,7 @@ struct MakeTodoView: View {
     @State var isCameraSheetOn: Bool = false
     
     
-    let manager = NotificationManager.instance
+    let manager = NotificationManager.shared
     
     
     var chosenFolderColor : Color{
