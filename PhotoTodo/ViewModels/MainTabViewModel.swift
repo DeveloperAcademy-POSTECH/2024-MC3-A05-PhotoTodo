@@ -11,15 +11,16 @@ import SwiftData
 @Observable
 class MainTabViewModel {
     
-    @AppStorage("deletionCount") var deletionCount: Int = 0
-    
     private var notificationManager: NotificationManager
     
     init() {
         self.notificationManager = NotificationManager()
     }
     
-    func removeTodoItemsPastDueDate(todos: [Todo], modelContext: ModelContext) -> Void {
+    func removeTodoItemsPastDueDate(todos: [Todo], modelContext: ModelContext, deletionCount: Int) -> Int {
+        
+        var count: Int = deletionCount
+        
         let todoItemsPastDueDate: [Todo] = todos.filter{
             isPastDueDate(todo: $0)
         }
@@ -27,9 +28,11 @@ class MainTabViewModel {
         for todo in todoItemsPastDueDate {
             if let todo = todos.first(where: { $0.id == todo.id }) {
                 modelContext.delete(todo)
-                deletionCount += 1
+                count += 1
             }
         }
+        
+        return count
     }
     
     func isPastDueDate(todo: Todo) -> Bool {

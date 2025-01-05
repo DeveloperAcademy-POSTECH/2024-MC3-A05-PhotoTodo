@@ -107,7 +107,7 @@ struct MainTabView: View {
         }
         .onAppear {
             //MARK: 30일 초과한 아이템을 지움
-            mainTabViewModel.removeTodoItemsPastDueDate(todos: self.todos, modelContext: self.modelContext)
+            self.deletionCount = mainTabViewModel.removeTodoItemsPastDueDate(todos: self.todos, modelContext: self.modelContext, deletionCount: self.deletionCount)
             
             //MARK: 최초 1회 실행된 적이 있을 시
             if hasBeenLaunched {
