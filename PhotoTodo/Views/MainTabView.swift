@@ -13,24 +13,29 @@ enum page {
 }
 
 struct MainTabView: View {
-    @State private var selectedTab = 0
-    @State private var isCameraViewActive = false
-    //    @State private var path: NavigationPath = NavigationPath()
-    @State private var page: page = .main
-    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
+    
+    // 환경변수
+    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false // 최초 런치 시
+    @AppStorage("onboarding") var isOnboarindViewActive: Bool = true // 최초 온보딩 시(런치했지만 온보딩을 확인하지 않을 수도 있음)
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.presentationMode) var presentationMode
+    
+    //SwiftData 쿼리
     @Query private var folders: [Folder]
     @Query private var todos: [Todo]
+    
+    // 뷰 내부 변수
+    @State private var page: page = .main
+    @State private var selectedTab = 0
+    @State private var isCameraViewActive = false
     @State private var navigationisActive: Bool = false
-    let manager = NotificationManager.shared
     @State var isCameraSheetOn: Bool = false
-    // 온보딩뷰
-    @Environment(\.presentationMode) var presentationMode
-    @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
-    @AppStorage("deletionCount") var deletionCount: Int = 0
+    
+    let manager = NotificationManager.shared
     
     var body: some View {
-        NavigationStack/*(path: $path)*/ {
+        NavigationStack {
             ZStack{
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack{
