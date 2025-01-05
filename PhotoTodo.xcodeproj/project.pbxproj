@@ -31,8 +31,8 @@
 		1AFB12B22C77245500952121 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12B02C77245500952121 /* PhotoTodoModel.swift */; };
 		3C0D21922D26EC2600F2FED8 /* AlarmSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D21912D26EC2600F2FED8 /* AlarmSettingViewModel.swift */; };
 		3C0D21942D2AB59D00F2FED8 /* MainTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0D21932D2AB59D00F2FED8 /* MainTabViewModel.swift */; };
+		3C5CA6E62D2B065800B0DE47 /* FolderListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5CA6E52D2B065800B0DE47 /* FolderListViewModel.swift */; };
 		3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C90390C2C623EFF00025335 /* Date+Extension.swift */; };
-		3C9944142D2ADAF3004C23F8 /* TodoGridViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9944132D2ADAF3004C23F8 /* TodoGridViewModel.swift */; };
 		3CB22B5D2CC8EA3B00337F9E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB22B5C2CC8EA3B00337F9E /* OnboardingView.swift */; };
 		3CC1139B2C69169B00281EBD /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC1139A2C69169A00281EBD /* NotificationManager.swift */; };
 		4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
@@ -88,8 +88,8 @@
 		1AFB12B42C7724BC00952121 /* PhotoTodo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoTodo.entitlements; sourceTree = "<group>"; };
 		3C0D21912D26EC2600F2FED8 /* AlarmSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSettingViewModel.swift; sourceTree = "<group>"; };
 		3C0D21932D2AB59D00F2FED8 /* MainTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabViewModel.swift; sourceTree = "<group>"; };
+		3C5CA6E52D2B065800B0DE47 /* FolderListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListViewModel.swift; sourceTree = "<group>"; };
 		3C90390C2C623EFF00025335 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		3C9944132D2ADAF3004C23F8 /* TodoGridViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoGridViewModel.swift; sourceTree = "<group>"; };
 		3CB22B5C2CC8EA3B00337F9E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		3CC1139A2C69169A00281EBD /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		3CC113B42C72036100281EBD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -122,7 +122,7 @@
 				1A0D96822C5A14F300784CBA /* CameraViewModel.swift */,
 				3C0D21912D26EC2600F2FED8 /* AlarmSettingViewModel.swift */,
 				3C0D21932D2AB59D00F2FED8 /* MainTabViewModel.swift */,
-				3C9944122D2ADAC5004C23F8 /* TodoListStore */,
+				3C5CA6E42D2B064600B0DE47 /* FolderListViewModel */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -265,12 +265,12 @@
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
-		3C9944122D2ADAC5004C23F8 /* TodoListStore */ = {
+		3C5CA6E42D2B064600B0DE47 /* FolderListViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				3C9944132D2ADAF3004C23F8 /* TodoGridViewModel.swift */,
+				3C5CA6E52D2B065800B0DE47 /* FolderListViewModel.swift */,
 			);
-			path = TodoListStore;
+			path = FolderListViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -397,9 +397,9 @@
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
 				1AFB12B12C77245500952121 /* PhotoTodoModel.swift in Sources */,
 				3C0D21922D26EC2600F2FED8 /* AlarmSettingViewModel.swift in Sources */,
-				3C9944142D2ADAF3004C23F8 /* TodoGridViewModel.swift in Sources */,
 				1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */,
 				1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */,
+				3C5CA6E62D2B065800B0DE47 /* FolderListViewModel.swift in Sources */,
 				1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,

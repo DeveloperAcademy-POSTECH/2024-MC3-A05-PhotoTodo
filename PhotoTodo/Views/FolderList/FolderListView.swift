@@ -26,6 +26,7 @@ struct FolderListView: View {
     private var basicViewType: TodoGridViewType = .singleFolder
     private var doneListViewType: TodoGridViewType = .doneList
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
+    @State private var folderListViewModel: FolderListViewModel = .init()
     
     
     var body: some View {
@@ -46,7 +47,9 @@ struct FolderListView: View {
                         FolderRow(folder: folder, viewType: basicViewType)
                     }
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete { offsets in
+                    self.folderListViewModel.deleteItems(offsets: offsets, modelContext: self.modelContext, folders: self.folders)
+                }
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
                 //리스트 뷰의 마지막에는 완료함이 위치함
                 NavigationLink {
@@ -66,11 +69,13 @@ struct FolderListView: View {
             //            .background(Color.white.edgesIgnoringSafeArea(.all))
             .navigationBarTitle("폴더")
             .toolbar {
-
                 ToolbarItem {
                     if editMode == .inactive {
-                        Button(action: toggleShowingSheet) {
-                            Label("add a folder", systemImage: "plus")
+                        Button {
+                            isShowingSheet.toggle()
+                        } label: {
+                            Image(systemName: "plus")
+                                .aspectRatio(contentMode: .fit)
                         }
                     }
                 }
@@ -85,30 +90,6 @@ struct FolderListView: View {
                     .presentationDetents([.medium, .large])
             })
             .environment(\.editMode, $editMode)
-    }
-    private func toggleShowingSheet(){
-        isShowingSheet.toggle()
-    }
-    
-    
-    private func addFolders() {
-        withAnimation {
-            let newFolder = Folder(
-                id: UUID(),
-                name: "새 폴더",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(newFolder)
-        }
-    }
-    
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(folders[index+1])
-            }
-        }
     }
 }
 
