@@ -22,7 +22,7 @@ struct MainTabView: View {
     @Query private var folders: [Folder]
     @Query private var todos: [Todo]
     @State private var navigationisActive: Bool = false
-    let manager = NotificationManager.instance
+    let manager = NotificationManager.shared
     @State var isCameraSheetOn: Bool = false
     // 온보딩뷰
     @Environment(\.presentationMode) var presentationMode
