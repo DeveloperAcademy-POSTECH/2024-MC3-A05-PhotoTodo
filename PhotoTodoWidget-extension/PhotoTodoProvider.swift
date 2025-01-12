@@ -25,9 +25,8 @@ struct PhotoTodoProvider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<PhotoTodoEntry>) -> Void) {
         let currentDate = Date()
         var entries: [PhotoTodoEntry] = []
-        
+        entries.append(PhotoTodoEntry(date: currentDate))
         let timeline = Timeline(entries: entries, policy: .atEnd)
-        
         completion(timeline)
         }
     

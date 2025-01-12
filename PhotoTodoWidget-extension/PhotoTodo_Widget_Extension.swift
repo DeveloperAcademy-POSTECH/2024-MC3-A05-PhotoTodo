@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct PhotoTodo_Widget_Extension: Widget {
     
-    let kind: String = "Create-With-Swift-Example_Widget"
+    let kind: String = "PhotoTodo_Widget"
     var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: kind,
@@ -19,7 +19,7 @@ struct PhotoTodo_Widget_Extension: Widget {
             content: {PhotoTodoCameraWidgetView(entry: $0)}
         )
         .supportedFamilies([
-            .systemMedium,
+            .systemSmall
         ])
     }
 }
