@@ -58,8 +58,8 @@ struct TabBarView: View {
                         .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
                         
                         
-                        NavigationLink  {
-                            CameraView(isCameraSheetOn: $isCameraSheetOn)
+                        Button  {
+                            isCameraSheetOn = true
                         } label:  {
                             ZStack{
                                 Circle()
@@ -73,9 +73,9 @@ struct TabBarView: View {
                                     .foregroundStyle(Color.green)
                             }
                         }
-                        //                        .navigationDestination(for: String.self) { value in
-                        //                            CameraView()
-                        //                        }
+                        .navigationDestination(isPresented: $isCameraSheetOn) {
+                            CameraView(isCameraSheetOn: $isCameraSheetOn)
+                        }
                         .padding(.horizontal, 55)
                         
                         Button {
@@ -95,6 +95,9 @@ struct TabBarView: View {
                         Spacer()
                     }.background(Color(.white))
                 }
+                .onOpenURL { url in
+                    isCameraSheetOn = true
+                    }
             }
             .ignoresSafeArea(.keyboard)
         }
