@@ -6,35 +6,42 @@
 //
 import SwiftUI
 import SwiftData
- 
+
 enum page {
     case main
     case folder
 }
- 
+
 struct TabBarView: View {
     @State private var selectedTab = 0
     @State private var isCameraViewActive = false
-//    @State private var path: NavigationPath = NavigationPath()
+    //    @State private var path: NavigationPath = NavigationPath()
     @State private var page: page = .main
     @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
+    @Query private var todos: [Todo]
     @State private var navigationisActive: Bool = false
     let manager = NotificationManager.instance
     @State var isCameraSheetOn: Bool = false
+    // 온보딩뷰
+    @Environment(\.presentationMode) var presentationMode
+    @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
+    @AppStorage("deletionCount") var deletionCount: Int = 0
     
     var body: some View {
         NavigationStack/*(path: $path)*/ {
             ZStack{
+                Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if page == .main {
                         MainView()
                     } else if page == .folder {
                         FolderListView()
                     }
+                    
                     HStack {
-                        
+                        Spacer()
                         Button {
                             page = .main
                         } label: {
@@ -48,7 +55,7 @@ struct TabBarView: View {
                                     .bold()
                             }
                         }
-                        .foregroundStyle(page == .main ? Color.gray : Color.lightGray)
+                        .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
                         
                         
                         NavigationLink  {
@@ -84,36 +91,25 @@ struct TabBarView: View {
                                     .bold()
                             }
                         }
-                        .foregroundStyle(page == .folder ? Color.gray : Color.lightGray)
-                    }
+                        .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
+                        Spacer()
+                    }.background(Color(.white))
                 }
- 
-//                NavigationLink(value: "camera") {
-////                    ZStack{
-//                        Circle()
-//                            .frame(width: 80, height: 80)
-//                            .foregroundStyle(Color.white)
-//                            .shadow(color: .lightGray, radius: 10)
-//
-////                        Image(systemName: "camera.fill")
-////                            .resizable()
-////                            .frame(width: 48, height: 35)
-////                            .foregroundStyle(Color.green)
-////                    }
-//                }
-////                .navigationDestination(for: String.self) { value in
-////                    CameraView()
-////                }
-//                .offset(y: 290)
             }
             .ignoresSafeArea(.keyboard)
         }
+        .fullScreenCover(isPresented: $isOnboarindViewActive) {
+            OnboardingView()
+        }
         .onAppear {
+            //MARK: 30일 초과한 아이템을 지움
+            removeTodoItemsPastDueDate()
+            
             //MARK: 최초 1회 실행된 적이 있을 시
             if hasBeenLaunched {
                 return
             }
- 
+            
             //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
             let defaultFolder = Folder(
                 id: UUID(),
@@ -127,165 +123,29 @@ struct TabBarView: View {
             manager.requestAuthorization()
         }
     }
+    
+    private func removeTodoItemsPastDueDate() -> Void {
+        let todoItemsPastDueDate: [Todo] = todos.filter{
+            isPastDueDate(todo: $0)
+        }
+        
+        for todo in todoItemsPastDueDate {
+            if let todo = todos.first(where: { $0.id == todo.id }) {
+                modelContext.delete(todo)
+                deletionCount += 1
+            }
+        }
+    }
+    
+    func isPastDueDate(todo: Todo) -> Bool {
+        if 30 < daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date()) {
+            return true
+        }
+        return false
+    }
 }
-//struct CustomTabBar: View {
-//    @Binding var selectedTab: Int
-//
-//    var body: some View {
-//        HStack {
-//            Button(action: {
-//                selectedTab = 0
-//            }) {
-//                VStack {
-//                    Image(systemName: "list.bullet")
-//                        .foregroundColor(selectedTab == 0 ? .green : .gray)
-//                    Text("전체사진")
-//                        .foregroundColor(selectedTab == 0 ? .green : .gray)
-//                }
-//            }
-//            .frame(maxWidth: .infinity)
-//
-//            Spacer()
-//
-//            Button(action: {
-//                selectedTab = 2
-//            }) {
-//                VStack {
-//                    Image(systemName: "folder.fill")
-//                        .foregroundColor(selectedTab == 2 ? .green : .gray)
-//                    Text("폴더")
-//                        .foregroundColor(selectedTab == 2 ? .green : .gray)
-//                }
-//            }
-//            .frame(maxWidth: .infinity)
-//        }
-//        .frame(height: 50)
-//        .background(Color.white.shadow(radius: 2))
-//    }
-//}
- 
+
 #Preview {
     TabBarView()
 }
- 
- 
-//import SwiftUI
-//
-//enum page {
-//    case main
-//    case folder
-//    case camera
-//}
-//
-//struct TabBarView: View {
-//    @State private var selectedTab = 0
-//    @State private var isCameraViewActive = false
-//    @State private var path: [page] = []
-//    @State private var page: page = .main
-//
-//    var body: some View {
-//        NavigationStack(path: $path) {
-//            ZStack{
-//                VStack{
-//                    if page == .main {
-//                        MainView()
-//                    } else if page == .folder {
-//                        FolderListView()
-//                    }
-//                    HStack {
-//
-//                        Button {
-//                            page = .main
-//                        } label: {
-//                            Text("메인뷰")
-//                        }
-//
-//
-//                        NavigationLink(value: "camera") {
-//                            ZStack{
-//                                Circle()
-//                                    .frame(width: 80, height: 80)
-//                                    .foregroundStyle(Color.white)
-//                                    .shadow(color: .lightGray, radius: 10)
-//
-//                                Image(systemName: "camera.fill")
-//                                    .resizable()
-//                                    .frame(width: 48, height: 35)
-//                                    .foregroundStyle(Color.green)
-//                            }
-//                        }.navigationDestination(for: String.self) { value in
-//                            CameraView()
-//                        }
-//
-//                        Spacer()
-//                        Button {
-//                            page = .folder
-//                        } label: {
-//                            Text("폴더뷰")
-//                        }
-//                    }
-//                    .padding(.horizontal)
-//                }
-//
-////                NavigationLink(value: "camera") {
-////                    ZStack{
-////                        Circle()
-////                            .frame(width: 80, height: 80)
-////                            .foregroundStyle(Color.white)
-////                            .shadow(color: .lightGray, radius: 10)
-////
-////                        Image(systemName: "camera.fill")
-////                            .resizable()
-////                            .frame(width: 48, height: 35)
-////                            .foregroundStyle(Color.green)
-////                    }
-////                }.navigationDestination(for: String.self) { value in
-////                    CameraView()
-////                }
-////                .offset(y: 290)
-//            }
-//            .navigationDestination(for: String.self) { value in
-//                CameraView()
-//            }
-//        }
-//    }
-//}
-////struct CustomTabBar: View {
-////    @Binding var selectedTab: Int
-////
-////    var body: some View {
-////        HStack {
-////            Button(action: {
-////                selectedTab = 0
-////            }) {
-////                VStack {
-////                    Image(systemName: "list.bullet")
-////                        .foregroundColor(selectedTab == 0 ? .green : .gray)
-////                    Text("전체사진")
-////                        .foregroundColor(selectedTab == 0 ? .green : .gray)
-////                }
-////            }
-////            .frame(maxWidth: .infinity)
-////
-////            Spacer()
-////
-////            Button(action: {
-////                selectedTab = 2
-////            }) {
-////                VStack {
-////                    Image(systemName: "folder.fill")
-////                        .foregroundColor(selectedTab == 2 ? .green : .gray)
-////                    Text("폴더")
-////                        .foregroundColor(selectedTab == 2 ? .green : .gray)
-////                }
-////            }
-////            .frame(maxWidth: .infinity)
-////        }
-////        .frame(height: 50)
-////        .background(Color.white.shadow(radius: 2))
-////    }
-////}
-//
-//#Preview {
-//    TabBarView()
-//}
+

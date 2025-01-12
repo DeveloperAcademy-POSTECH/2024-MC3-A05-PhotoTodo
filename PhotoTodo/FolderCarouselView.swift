@@ -108,6 +108,6 @@ struct FolderCarouselView: View {
 }
 
 #Preview {
-    @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    @Previewable @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     return FolderCarouselView(chosenFolder: $chosenFolder)
 }

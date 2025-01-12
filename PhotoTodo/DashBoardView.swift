@@ -75,7 +75,7 @@ private struct DashboardAccomplishmentTotalView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 30) {
             VStack(alignment: .leading, spacing: 8) {
-                Text("이번달에 모은 \n네잎클로버")
+                Text("지금까지 모은 \n네잎클로버")
                     .font(.callout)
                     .foregroundStyle(.gray)
                     .lineSpacing(-8)
@@ -84,7 +84,7 @@ private struct DashboardAccomplishmentTotalView: View {
                     .bold()
             }
             VStack(alignment: .leading, spacing: 8) {
-                Text("이번달에 완료한 \nto do")
+                Text("지금까지 완료한 \nto do")
                     .font(.callout)
                     .foregroundStyle(.gray)
                     .lineSpacing(-8)
@@ -110,7 +110,7 @@ private struct FourLeafCloverCardView: View {
     var body: some View {
         VStack(spacing :20) {
             VStack(spacing : 12) {
-                Text("이번달에 모은 네잎클로버")
+                Text("지금까지 모은 네잎클로버")
                 HStack {
                     Image("fourLeafClover")
                     Text("\(deletionCount / 4)개")

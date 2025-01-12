@@ -5,10 +5,10 @@ import SwiftUI
 @Model
 // MARK: Folder Model에 color 추가해야 할 것 같아욥 by 룰루
 class Folder {
-    let id : UUID
+    @Attribute(.unique) var id : UUID
     var name: String
     var color: String
-    @Relationship(deleteRule:.cascade) var todos: [Todo]
+    @Relationship(deleteRule:.cascade, inverse: \Todo.folder) var todos: [Todo]
     init(id: UUID, name: String, color: String, todos: [Todo]) {
         self.id = id
         self.name = name
@@ -21,10 +21,10 @@ class Folder {
 @Model
 class Todo {
     var folder: Folder?
-    @Attribute(.unique) let id: UUID
+    @Attribute(.unique) var id: UUID
     @Attribute(.externalStorage) var images: [Data]
     var createdAt: Date
-    var options: Options
+    @Relationship(inverse: \Options.todo) var options: Options
     var isDone: Bool
     var isDoneAt: Date?
     
@@ -41,31 +41,17 @@ class Todo {
 
 @Model
 class Options {
-//    enum CodingKeys: String, CodingKey {
-//        case alarm, memo
-//    }
-
+    var todo: Todo?
     var alarm: Date?
     var alarmUUID: String?
     var memo: String?
     var tags: [String]?
 
-    init(alarm: Date? = nil, alarmUUID: String? = nil, memo: String? = nil, tags: [String]? = nil) {
+    init(todo: Todo? = nil, alarm: Date? = nil, alarmUUID: String? = nil, memo: String? = nil, tags: [String]? = nil) {
+        self.todo = todo
         self.alarm = alarm
         self.alarmUUID = alarmUUID
         self.memo = memo
         self.tags = tags
     }
-
-//    required init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        alarm = try container.decodeIfPresent(Date.self, forKey: .alarm)
-//        memo = try container.decodeIfPresent(String.self, forKey: .memo)
-//    }
-//
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        try container.encodeIfPresent(alarm, forKey: .alarm)
-//        try container.encodeIfPresent(memo, forKey: .memo)
-//    }
 }

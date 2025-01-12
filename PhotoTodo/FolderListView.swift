@@ -18,34 +18,33 @@ enum TodoGridViewType {
 
 struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
+    @State private var editMode: EditMode = .inactive
     @Query private var folders: [Folder]
     @State var isShowingSheet = false
     @State var folderNameInput = ""
     @State var selectedColor: Color?
     private var basicViewType: TodoGridViewType = .singleFolder
     private var doneListViewType: TodoGridViewType = .doneList
-    
+    @AppStorage("defaultFolderID") private var defaultFolderID: String?
     
     
     var body: some View {
             List {
                 //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
                 NavigationLink{
-                    TodoGridView(currentFolder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
+                    TodoGridView(currentFolder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
                 } label : {
-                    FolderRow(folder: folders.count > 0 ? folders[0] : nil, viewType: basicViewType)
+                    FolderRow(folder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
                 }
-                .listRowBackground(Color("gray/gray-200"))
+
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
-                ForEach(folders.dropFirst()) { folder in
+                ForEach(folders.filter({$0.id.uuidString != defaultFolderID})) { folder in
                     NavigationLink {
                         TodoGridView(currentFolder: folder, viewType: basicViewType)
                     } label: {
                         FolderRow(folder: folder, viewType: basicViewType)
-                        
                     }
-                    .listRowBackground(Color("gray/gray-200"))
                 }
                 .onDelete(perform: deleteItems)
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
@@ -55,17 +54,27 @@ struct FolderListView: View {
                 } label : {
                     FolderRow(folder: nil, viewType: doneListViewType)
                 }
-                .listRowBackground(Color("gray/gray-200"))
             }
+            .onAppear {
+                if defaultFolderID != nil {
+                    return
+                }
+                defaultFolderID = folders.first(where: {$0.name == "기본"})?.id.uuidString
+            }
+
             .scrollContentBackground(.hidden)
             //            .background(Color.white.edgesIgnoringSafeArea(.all))
             .navigationBarTitle("폴더")
             .toolbar {
+
                 ToolbarItem {
-                    Button(action: toggleShowingSheet) {
-                        Label("add a folder", systemImage: "plus")
+                    if editMode == .inactive {
+                        Button(action: toggleShowingSheet) {
+                            Label("add a folder", systemImage: "plus")
+                        }
                     }
                 }
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                         .frame(width: 38)
@@ -75,6 +84,7 @@ struct FolderListView: View {
                 FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                     .presentationDetents([.medium, .large])
             })
+            .environment(\.editMode, $editMode)
     }
     private func toggleShowingSheet(){
         isShowingSheet.toggle()

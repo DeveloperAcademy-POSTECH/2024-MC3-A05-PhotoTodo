@@ -11,7 +11,7 @@ import UIKit
 import PhotosUI
 import OrderedCollections
 
-enum SortOption {
+enum SortOption: String, CaseIterable {
     case byDateIncreasing
     case byDateDecreasing
     case byName
@@ -35,7 +35,7 @@ struct TodoGridView: View {
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
     @State private var editMode: EditMode = .inactive
-    @State private var sortOption: SortOption = .byDateIncreasing
+    @AppStorage("sortOption") private var sortOption: SortOption = .byDateIncreasing
     @State private var isShowingOptions = false
     @State private var showingImagePicker = false
     @State private var isDoneSelecting = false
@@ -120,6 +120,7 @@ struct TodoGridView: View {
                 customNavBar
             }
             ZStack {
+                Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if todos.isEmpty && viewType != .doneList {
                         GuideLineView(viewType: viewType, todos: todos)
@@ -175,7 +176,7 @@ struct TodoGridView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
                     .frame(width: 38)
-                    .onChange(of: editMode) { newEditMode in
+                    .onChange(of: editMode) { _, newEditMode in
                         //편집모드 해제시 선택정보 삭제
                         if newEditMode == .inactive {
                             selectedTodos.removeAll()
@@ -212,7 +213,7 @@ struct TodoGridView: View {
             .frame(width: 40)
             EditButton()
                 .frame(width: 50)
-                .onChange(of: editMode) { newEditMode in
+                .onChange(of: editMode) { _, newEditMode in
                     //편집모드 해제시 선택정보 삭제
                     if newEditMode == .inactive {
                         selectedTodos.removeAll()
@@ -222,6 +223,7 @@ struct TodoGridView: View {
         .sheet(isPresented: $alarmSetting, content: {
             AlarmSettingView()
                 .presentationDetents([.height(CGFloat(450))])
+                .presentationDragIndicator(.visible)
         })
         .frame(height: 33.5)
         .padding(.trailing, 5.7)
@@ -392,29 +394,33 @@ struct GridView: View {
     
     var body: some View {
         VStack{
-            LazyVGrid(columns: columns, spacing: 12) {
-                //TODO: 이미지 비율 맞추기
-                ForEach(sortedTodos) { todo in
-                    TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
-                    //tap gesture로 선택되었을 시 라인으로 표시됨
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
-                        )
-                    //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                        .onTapGesture {
-                            if editMode == .active {
-                                if selectedTodos.contains(todo.id) {
-                                    selectedTodos.remove(todo.id)
-                                } else {
-                                    selectedTodos.insert(todo.id)
+            ScrollView{
+                LazyVGrid(columns: columns, spacing: 12) {
+                    //TODO: 이미지 비율 맞추기
+                    ForEach(sortedTodos) { todo in
+                        TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
+                        //tap gesture로 선택되었을 시 라인으로 표시됨
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                            )
+                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                            .onTapGesture {
+                                if editMode == .active {
+                                    if selectedTodos.contains(todo.id) {
+                                        selectedTodos.remove(todo.id)
+                                    } else {
+                                        selectedTodos.insert(todo.id)
+                                    }
                                 }
                             }
-                        }
+                    }
                 }
+                .padding(.top, 4)
+                .padding(.bottom)
             }
-            .padding(.bottom)
         }
+        .ignoresSafeArea(.keyboard)
         .padding(.horizontal)
     }
 }

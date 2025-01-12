@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "FilledCoffee.png",
+      "filename" : "onboarding3.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "FilledCoffee 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "FilledCoffee 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

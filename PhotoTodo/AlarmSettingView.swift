@@ -31,7 +31,7 @@ struct AlarmSettingView: View {
                         UserDefaults.standard.set(intDays, forKey: "alarmWeekdays")
                         UserDefaults.standard.set(alarmSet, forKey: "alarmTime")
                         
-                        var calendar = Calendar.current
+                        let calendar = Calendar.current
                         let hour = calendar.component(.hour, from: alarmSet)
                         let minute = calendar.component(.minute, from: alarmSet)
 
