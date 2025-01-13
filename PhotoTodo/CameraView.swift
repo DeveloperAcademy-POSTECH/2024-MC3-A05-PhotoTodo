@@ -157,6 +157,7 @@ struct CameraView: View {
                 }
                 .onDisappear() {
                     print("닫았을 때")
+                    isCameraSheetOn = false
                     cameraVM.stopSession()
                 }
         }

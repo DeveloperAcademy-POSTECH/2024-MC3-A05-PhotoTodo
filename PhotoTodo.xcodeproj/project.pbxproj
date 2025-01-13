@@ -12,6 +12,14 @@
 		1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96822C5A14F300784CBA /* CameraViewModel.swift */; };
 		1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96842C5A150D00784CBA /* CameraPreview.swift */; };
 		1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96862C5A152A00784CBA /* MakeTodoView.swift */; };
+		1A261E142C81C28900B45362 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A261E132C81C28900B45362 /* WidgetKit.framework */; };
+		1A261E162C81C28900B45362 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A261E152C81C28900B45362 /* SwiftUI.framework */; };
+		1A261E1D2C81C28A00B45362 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A261E1C2C81C28A00B45362 /* Assets.xcassets */; };
+		1A261E212C81C28A00B45362 /* PhotoTodoWidget-extensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1A261E112C81C28900B45362 /* PhotoTodoWidget-extensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1A261E262C81C58100B45362 /* PhotoTodoEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A261E252C81C58100B45362 /* PhotoTodoEntry.swift */; };
+		1A261E282C81C8AF00B45362 /* PhotoTodoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A261E272C81C8AF00B45362 /* PhotoTodoProvider.swift */; };
+		1A261E2A2C85678C00B45362 /* PhotoTodoCameraWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A261E292C85678C00B45362 /* PhotoTodoCameraWidgetView.swift */; };
+		1A261E2C2C85681100B45362 /* PhotoTodo_Widget_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A261E2B2C85681100B45362 /* PhotoTodo_Widget_Extension.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E42C56395A00A02C7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E32C56395A00A02C7E /* Assets.xcassets */; };
 		1A2778E72C56395A00A02C7E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E62C56395A00A02C7E /* Preview Assets.xcassets */; };
@@ -39,6 +47,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		1A261E1F2C81C28A00B45362 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1A2778D22C56395900A02C7E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1A261E102C81C28900B45362;
+			remoteInfo = "PhotoTodoWidget-extensionExtension";
+		};
 		1AFB12A92C77243A00952121 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1A2778D22C56395900A02C7E /* Project object */;
@@ -56,6 +71,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 				1AFB12AB2C77243A00952121 /* ShareImage.appex in Embed Foundation Extensions */,
+				1A261E212C81C28A00B45362 /* PhotoTodoWidget-extensionExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -68,6 +84,15 @@
 		1A0D96822C5A14F300784CBA /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		1A0D96842C5A150D00784CBA /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		1A0D96862C5A152A00784CBA /* MakeTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTodoView.swift; sourceTree = "<group>"; };
+		1A261E112C81C28900B45362 /* PhotoTodoWidget-extensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "PhotoTodoWidget-extensionExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A261E132C81C28900B45362 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		1A261E152C81C28900B45362 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		1A261E1C2C81C28A00B45362 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1A261E1E2C81C28A00B45362 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A261E252C81C58100B45362 /* PhotoTodoEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoEntry.swift; sourceTree = "<group>"; };
+		1A261E272C81C8AF00B45362 /* PhotoTodoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoProvider.swift; sourceTree = "<group>"; };
+		1A261E292C85678C00B45362 /* PhotoTodoCameraWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoCameraWidgetView.swift; sourceTree = "<group>"; };
+		1A261E2B2C85681100B45362 /* PhotoTodo_Widget_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodo_Widget_Extension.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
 		1A2778E32C56395A00A02C7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -97,6 +122,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1A261E0E2C81C28900B45362 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A261E162C81C28900B45362 /* SwiftUI.framework in Frameworks */,
+				1A261E142C81C28900B45362 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1A2778D72C56395900A02C7E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -132,11 +166,35 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		1A261E122C81C28900B45362 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1A261E132C81C28900B45362 /* WidgetKit.framework */,
+				1A261E152C81C28900B45362 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		1A261E172C81C28900B45362 /* PhotoTodoWidget-extension */ = {
+			isa = PBXGroup;
+			children = (
+				1A261E252C81C58100B45362 /* PhotoTodoEntry.swift */,
+				1A261E272C81C8AF00B45362 /* PhotoTodoProvider.swift */,
+				1A261E292C85678C00B45362 /* PhotoTodoCameraWidgetView.swift */,
+				1A261E2B2C85681100B45362 /* PhotoTodo_Widget_Extension.swift */,
+				1A261E1C2C81C28A00B45362 /* Assets.xcassets */,
+				1A261E1E2C81C28A00B45362 /* Info.plist */,
+			);
+			path = "PhotoTodoWidget-extension";
+			sourceTree = "<group>";
+		};
 		1A2778D12C56395900A02C7E = {
 			isa = PBXGroup;
 			children = (
 				1A2778DC2C56395900A02C7E /* PhotoTodo */,
 				1AFB12A22C77243A00952121 /* ShareImage */,
+				1A261E172C81C28900B45362 /* PhotoTodoWidget-extension */,
+				1A261E122C81C28900B45362 /* Frameworks */,
 				1A2778DB2C56395900A02C7E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -146,6 +204,7 @@
 			children = (
 				1A2778DA2C56395900A02C7E /* PhotoTodo.app */,
 				1AFB12A12C77243A00952121 /* ShareImage.appex */,
+				1A261E112C81C28900B45362 /* PhotoTodoWidget-extensionExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -204,6 +263,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		1A261E102C81C28900B45362 /* PhotoTodoWidget-extensionExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A261E242C81C28A00B45362 /* Build configuration list for PBXNativeTarget "PhotoTodoWidget-extensionExtension" */;
+			buildPhases = (
+				1A261E0D2C81C28900B45362 /* Sources */,
+				1A261E0E2C81C28900B45362 /* Frameworks */,
+				1A261E0F2C81C28900B45362 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "PhotoTodoWidget-extensionExtension";
+			productName = "PhotoTodoWidget-extensionExtension";
+			productReference = 1A261E112C81C28900B45362 /* PhotoTodoWidget-extensionExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		1A2778D92C56395900A02C7E /* PhotoTodo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1A2778EA2C56395A00A02C7E /* Build configuration list for PBXNativeTarget "PhotoTodo" */;
@@ -217,6 +293,7 @@
 			);
 			dependencies = (
 				1AFB12AA2C77243A00952121 /* PBXTargetDependency */,
+				1A261E202C81C28A00B45362 /* PBXTargetDependency */,
 			);
 			name = PhotoTodo;
 			packageProductDependencies = (
@@ -254,6 +331,9 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
+					1A261E102C81C28900B45362 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 					1A2778D92C56395900A02C7E = {
 						CreatedOnToolsVersion = 15.4;
 					};
@@ -282,11 +362,20 @@
 			targets = (
 				1A2778D92C56395900A02C7E /* PhotoTodo */,
 				1AFB12A02C77243A00952121 /* ShareImage */,
+				1A261E102C81C28900B45362 /* PhotoTodoWidget-extensionExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1A261E0F2C81C28900B45362 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A261E1D2C81C28A00B45362 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1A2778D82C56395900A02C7E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -307,6 +396,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1A261E0D2C81C28900B45362 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A261E2C2C85681100B45362 /* PhotoTodo_Widget_Extension.swift in Sources */,
+				1A261E262C81C58100B45362 /* PhotoTodoEntry.swift in Sources */,
+				1A261E2A2C85678C00B45362 /* PhotoTodoCameraWidgetView.swift in Sources */,
+				1A261E282C81C8AF00B45362 /* PhotoTodoProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1A2778D62C56395900A02C7E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -347,6 +447,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1A261E202C81C28A00B45362 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1A261E102C81C28900B45362 /* PhotoTodoWidget-extensionExtension */;
+			targetProxy = 1A261E1F2C81C28A00B45362 /* PBXContainerItemProxy */;
+		};
 		1AFB12AA2C77243A00952121 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1AFB12A02C77243A00952121 /* ShareImage */;
@@ -366,6 +471,70 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		1A261E222C81C28A00B45362 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2J2UA8CPHM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PhotoTodoWidget-extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "PhotoTodoWidget-extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo.PhotoTodoWidget-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PhotoTodoWidgetKitProvisioningProfile;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A261E232C81C28A00B45362 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2J2UA8CPHM;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "PhotoTodoWidget-extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "PhotoTodoWidget-extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo.PhotoTodoWidget-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PhotoTodoWidgetKitProvisioningProfile;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		1A2778E82C56395A00A02C7E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -495,7 +664,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoTodo/Info.plist;
@@ -532,7 +701,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 4RG9LBF3XF;
+				DEVELOPMENT_TEAM = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoTodo/Info.plist;
@@ -616,6 +785,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1A261E242C81C28A00B45362 /* Build configuration list for PBXNativeTarget "PhotoTodoWidget-extensionExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A261E222C81C28A00B45362 /* Debug */,
+				1A261E232C81C28A00B45362 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		1A2778D52C56395900A02C7E /* Build configuration list for PBXProject "PhotoTodo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
