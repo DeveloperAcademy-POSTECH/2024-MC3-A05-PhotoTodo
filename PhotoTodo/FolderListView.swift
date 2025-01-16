@@ -45,8 +45,16 @@ struct FolderListView: View {
                     } label: {
                         FolderRow(folder: folder, viewType: basicViewType)
                     }
+                    .swipeActions(content: {
+                        Button("Delete", systemImage: "trash", role:  .destructive) {
+                            modelContext.delete(folder)
+                        }
+                    })
                 }
-                .onDelete(perform: deleteItems)
+                .onDelete { _ in
+                    // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
+                    // 실제 삭제 실행시에는 swipeActions으로 넘겨받은 클로저가 호출됩니다.
+                }
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
                 //리스트 뷰의 마지막에는 완료함이 위치함
                 NavigationLink {
@@ -66,7 +74,6 @@ struct FolderListView: View {
             //            .background(Color.white.edgesIgnoringSafeArea(.all))
             .navigationBarTitle("폴더")
             .toolbar {
-
                 ToolbarItem {
                     if editMode == .inactive {
                         Button(action: toggleShowingSheet) {
@@ -100,14 +107,6 @@ struct FolderListView: View {
                 todos: []
             )
             modelContext.insert(newFolder)
-        }
-    }
-    
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(folders[index+1])
-            }
         }
     }
 }
