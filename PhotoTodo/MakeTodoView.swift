@@ -35,6 +35,7 @@ struct MakeTodoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraManager = CameraManager()
     @Binding var chosenFolder: Folder?
     var startViewType: startViewType
     
@@ -410,7 +411,6 @@ extension Binding {
 }
 
 #Preview {
-    @Previewable @State var cameraVM = CameraViewModel()
     @Previewable @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
     @Previewable @State var contentAlarm = Date()
     @Previewable @State var memo: String = ""

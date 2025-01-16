@@ -19,6 +19,7 @@ struct CameraView: View {
     
     // 카메라 촬영 관련
     @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraManager = CameraManager()
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var contentAlarm: Date? = Date()
@@ -53,7 +54,7 @@ struct CameraView: View {
                     ZStack{
                         VStack {
                             Button {
-                                cameraVM.takePhoto()
+                                cameraManager.takePhoto()
                                 cameraCaptureisActive.toggle()
                                 isCameraSheetOn = false
                             } label: {
@@ -80,7 +81,7 @@ struct CameraView: View {
                     ZStack{
                         VStack {
                             Button {
-                                cameraVM.takePhoto()
+                                cameraManager.takePhoto()
                                 cameraCaptureisActive.toggle()
                                 isCameraSheetOn = false
                             } label: {
@@ -138,26 +139,25 @@ struct CameraView: View {
     
     private var cameraPreview: some View {
         GeometryReader { geo in
-            CameraPreview(cameraVM: cameraVM, frame: CGRect(x: 0, y: 0, width: 353, height: 542))
+            CameraPreview(cameraManager: cameraManager, frame: CGRect(x: 0, y: 0, width: 353, height: 542))
                 .gesture(
                     MagnificationGesture()
                         .onChanged { value in
                             let delta = value / self.lastScale
                             self.lastScale = value
-                            let newZoomFactor = cameraVM.zoomFactor * delta
-                            cameraVM.zoomFactor = newZoomFactor
+                            let newZoomFactor = cameraManager.zoomFactor * delta
+                            cameraManager.zoomFactor = newZoomFactor
                         }
                         .onEnded { _ in
                             self.lastScale = 1.0
                         }
                 )
                 .onAppear(){
-                    print("열였을 때")
-                    cameraVM.requestAccessAndSetup()
+                    cameraManager.requestAccessAndSetup()
                 }
                 .onDisappear() {
                     print("닫았을 때")
-                    cameraVM.stopSession()
+                    cameraManager.stopSession()
                 }
         }
         .ignoresSafeArea()
