@@ -3,6 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>com.apple.security.application-groups</key>
-	<array/>
+	<array>
+		<string>group.PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo</string>
+	</array>
 </dict>
 </plist>
