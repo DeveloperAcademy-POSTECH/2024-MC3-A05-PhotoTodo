@@ -20,12 +20,21 @@ struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var editMode: EditMode = .inactive
     @Query private var folders: [Folder]
+    
+    //폴더 삭제시
+    @State private var showingAlert = false
+    @State private var selectedFolder: Folder? = nil
+    
+    //폴더 생성 및 편집 관련 sheet에서 쓰임
     @State var isShowingSheet = false
     @State var folderNameInput = ""
     @State var selectedColor: Color?
+    
+    
     private var basicViewType: TodoGridViewType = .singleFolder
     private var doneListViewType: TodoGridViewType = .doneList
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
+    
     
     
     var body: some View {
@@ -45,11 +54,15 @@ struct FolderListView: View {
                     } label: {
                         FolderRow(folder: folder, viewType: basicViewType)
                     }
-                    .swipeActions(content: {
-                        Button("Delete", systemImage: "trash", role:  .destructive) {
-                            modelContext.delete(folder)
-                        }
-                    })
+                    .swipeActions(
+                        allowsFullSwipe: true,
+                        content: {
+                            Button("Delete", systemImage: "trash") {
+                                showingAlert = true
+                                selectedFolder = folder
+                            }
+                            .tint(.red)
+                        })
                 }
                 .onDelete { _ in
                     // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
@@ -87,12 +100,30 @@ struct FolderListView: View {
                         .frame(width: 38)
                 }
             }
+            .alert(isPresented: $showingAlert) {
+                Alert(
+                    title: Text("'\(selectedFolder?.name ?? "")'폴더를 삭제하시겠습니까?"),
+                    message: Text("이 폴더의 모든 사진이 삭제됩니다."),
+                    primaryButton: .default(
+                        Text("취소")
+                    ),
+                    secondaryButton: .destructive(
+                        Text("Delete"),
+                        action: deleteFolder
+                    ))
+            }
             .sheet(isPresented: $isShowingSheet, content: {
                 FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                     .presentationDetents([.medium, .large])
             })
             .environment(\.editMode, $editMode)
     }
+    
+    private func deleteFolder(){
+        guard let folder = selectedFolder else {return}
+        modelContext.delete(folder)
+    }
+    
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
     }
