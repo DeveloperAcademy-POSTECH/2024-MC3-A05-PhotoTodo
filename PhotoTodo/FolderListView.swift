@@ -155,6 +155,7 @@ struct FolderListView: View {
 private struct FolderRow: View {
     @State var folder: Folder?
     @State var viewType: TodoGridViewType
+    @Query private var todos: [Todo]
     
     var body: some View{
         HStack{
@@ -162,10 +163,12 @@ private struct FolderRow: View {
                 .foregroundStyle(viewType == .singleFolder ? changeStringToColor(colorName: folder != nil ? folder!.color : "folder-color/green" ) : Color("gray/gray-800"))
             Text(folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함")
             Spacer()
+            Text (folder != nil ? "\(folder!.todos.count)장" : viewType == .singleFolder ? "" : "\(todos.filter { $0.isDone }.count)장")
+                .foregroundColor(Color("gray/gray-500"))
         }
     }
 }
-
+    
 
 #Preview {
     FolderListView()
