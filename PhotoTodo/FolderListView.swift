@@ -62,7 +62,7 @@ struct FolderListView: View {
                                 FolderRow(folder: folder, viewType: basicViewType)
                             }
                         }
-                        .listRowInsets(EdgeInsets())
+                        .listRowInsets(EdgeInsets(top: -5, leading: 0, bottom: -5, trailing: 0))
                 }
                 .onDelete { _ in
                     // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
