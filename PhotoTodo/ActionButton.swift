@@ -18,9 +18,11 @@ struct ActionButton: View {
   let action: Action
   var width: CGFloat
   var dismiss: () -> Void
+  var onActionTriggered: () -> Void
 
   var body: some View {
     Button {
+      onActionTriggered()
       action.action {
         dismiss()
       }
@@ -29,6 +31,7 @@ struct ActionButton: View {
         .overlay(alignment: .leading) {
           Label(action.name, systemImage: action.systemIcon)
             .labelStyle(.iconOnly)
+            .foregroundColor(.white)
             .padding(.leading)
         }
         .clipped()

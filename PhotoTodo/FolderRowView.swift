@@ -79,7 +79,13 @@ struct FolderRowView<Content: View>: View {
             ActionButton(
               action: action,
               width: width,
-              dismiss: { withAnimation { offset = 0 } }
+              dismiss: { withAnimation { offset = 0 } },
+              onActionTriggered: {
+                  withAnimation {
+                      offset = -UIScreen.main.bounds.width + 30
+                      isTriggered = true
+                  }
+              }
             )
           }
         }
