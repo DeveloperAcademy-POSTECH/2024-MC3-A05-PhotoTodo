@@ -24,6 +24,7 @@ struct FolderListView: View {
     //폴더 삭제시
     @State private var showingAlert = false
     @State private var selectedFolder: Folder? = nil
+    @State private var pendingCompletion: (() -> Void)?
     
     //폴더 생성 및 편집 관련 sheet에서 쓰임
     @State var isShowingSheet = false
@@ -49,20 +50,19 @@ struct FolderListView: View {
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
                 ForEach(folders.filter({$0.id.uuidString != defaultFolderID})) { folder in
-                    NavigationLink {
-                        TodoGridView(currentFolder: folder, viewType: basicViewType)
-                    } label: {
-                        FolderRow(folder: folder, viewType: basicViewType)
-                    }
-                    .swipeActions(
-                        allowsFullSwipe: true,
-                        content: {
-                            Button("Delete", systemImage: "trash") {
-                                showingAlert = true
-                                selectedFolder = folder
+                    FolderRowView(actions: [
+                        Action(color: .red, name: "delete", systemIcon: "trash.fill", action: { completion in
+                            selectedFolder = folder
+                            pendingCompletion = completion
+                            showingAlert = true
+                        })]) {
+                            NavigationLink {
+                                TodoGridView(currentFolder: folder, viewType: basicViewType)
+                            } label: {
+                                FolderRow(folder: folder, viewType: basicViewType)
                             }
-                            .tint(.red)
-                        })
+                        }
+                        .listRowInsets(EdgeInsets())
                 }
                 .onDelete { _ in
                     // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
@@ -105,11 +105,19 @@ struct FolderListView: View {
                     title: Text("'\(selectedFolder?.name ?? "")'폴더를 삭제하시겠습니까?"),
                     message: Text("이 폴더의 모든 사진이 삭제됩니다."),
                     primaryButton: .default(
-                        Text("취소")
+                        Text("취소"),
+                        action: {
+                            pendingCompletion?()
+                            pendingCompletion = nil
+                        }
                     ),
                     secondaryButton: .destructive(
-                        Text("Delete"),
-                        action: deleteFolder
+                        Text("삭제"),
+                        action: {
+                            deleteFolder()
+                            pendingCompletion?()
+                            pendingCompletion = nil
+                        }
                     ))
             }
             .sheet(isPresented: $isShowingSheet, content: {
