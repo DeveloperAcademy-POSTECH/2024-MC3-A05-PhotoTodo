@@ -76,6 +76,7 @@ struct FolderListView: View {
                     FolderRow(folder: nil, viewType: doneListViewType)
                 }
             }
+            .animation(.default, value: folders) //폴더의 변화가 자연스럽게 반영되도록 설정
             .onAppear {
                 if defaultFolderID != nil {
                     return
@@ -102,7 +103,7 @@ struct FolderListView: View {
             }
             .alert(isPresented: $showingAlert) {
                 Alert(
-                    title: Text("'\(selectedFolder?.name ?? "")'폴더를 삭제하시겠습니까?"),
+                    title: Text("'\(selectedFolder?.name ?? "")' 폴더를 삭제하시겠습니까?"),
                     message: Text("이 폴더의 모든 사진이 삭제됩니다."),
                     primaryButton: .default(
                         Text("취소"),
