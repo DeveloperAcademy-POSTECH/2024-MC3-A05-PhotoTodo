@@ -156,15 +156,31 @@ private struct FolderRow: View {
     @State var folder: Folder?
     @State var viewType: TodoGridViewType
     @Query private var todos: [Todo]
+    @State private var doneCount: Int = 0 // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
     
-    var body: some View{
+    var folderString: String {
+        return folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함"
+    }
+    
+    var folderCountString: String {
+        return folder != nil ? "\(folder!.todos.count)장" : viewType == .singleFolder ? "" : "\(doneCount)장"
+    }
+
+    
+    var body: some View {
         HStack{
             Image(systemName: "folder.fill")
                 .foregroundStyle(viewType == .singleFolder ? changeStringToColor(colorName: folder != nil ? folder!.color : "folder-color/green" ) : Color("gray/gray-800"))
-            Text(folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함")
+            Text(folderString)
             Spacer()
-            Text (folder != nil ? "\(folder!.todos.count)장" : viewType == .singleFolder ? "" : "\(todos.filter { $0.isDone }.count)장")
+            Text(folderCountString)
                 .foregroundColor(Color("gray/gray-500"))
+        }
+        .onAppear {
+            // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
+            if folder == nil && viewType != .singleFolder {
+                doneCount = todos.filter { $0.isDone }.count
+            }
         }
     }
 }
