@@ -12,6 +12,7 @@ struct FolderEditView: View {
     @Binding var folderNameInput: String
     @Binding var selectedColor: Color?
     @Query var folders: [Folder]
+    @Query var folderOrders: [FolderOrder]
     @Environment(\.modelContext) private var modelContext
     
     @State private var showActionSheet = false
@@ -133,6 +134,7 @@ struct FolderEditView: View {
                 todos: []
             )
             modelContext.insert(newFolder)
+            folderOrders.first?.uuidOrder.append(newFolder.id)
             isSheetPresented = false
         }
         

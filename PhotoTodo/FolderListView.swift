@@ -20,6 +20,7 @@ struct FolderListView: View {
     @Environment(\.modelContext) private var modelContext
     @State private var editMode: EditMode = .inactive
     @Query private var folders: [Folder]
+    @Query private var folderOrders: [FolderOrder]
     @State var isShowingSheet = false
     @State var folderNameInput = ""
     @State var selectedColor: Color?
@@ -64,10 +65,13 @@ struct FolderListView: View {
                 }
             }
             .onAppear {
-                if defaultFolderID != nil {
-                    return
+                // 기본폴더 세팅 로직
+                if defaultFolderID == nil {
+                    defaultFolderID = folders.first(where: {$0.name == "기본"})?.id.uuidString
                 }
-                defaultFolderID = folders.first(where: {$0.name == "기본"})?.id.uuidString
+                
+                //folderOrder 세팅 로직
+                setFolderOrders()
             }
 
             .scrollContentBackground(.hidden)
@@ -107,6 +111,26 @@ struct FolderListView: View {
                 todos: []
             )
             modelContext.insert(newFolder)
+            folderOrders.first?.uuidOrder.append(newFolder.id)
+        }
+    }
+    
+    private func setFolderOrders() {
+        if folderOrders.count == 0 {
+            let folderOrder = FolderOrder()
+            modelContext.insert(folderOrder)
+        }
+        
+        guard let folderOrder = folderOrders.first else {
+            return
+        }
+        
+        if folderOrder.uuidOrder.count != folders.count {
+            for folder in folders {
+                if !folderOrder.uuidOrder.contains(folder.id) {
+                    folderOrder.uuidOrder.append(folder.id)
+                }
+            }
         }
     }
 }
