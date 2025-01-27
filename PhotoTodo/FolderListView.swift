@@ -28,14 +28,9 @@ struct FolderListView: View {
     private var doneListViewType: TodoGridViewType = .doneList
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     
-    // this gives the people in the order that you determine
+    // 유저가 설정한 순서대로 폴더를 정렬해 보여줌
        var orderedFolder: [Folder] {
-           // break out people into arrays of people who have the same
-           // referenceID -- but, of course, there's only one for each referenceID
            let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
-           // folderOrders.first is, what should be, the only folderOrder of
-           // interest, so use its uuidOrder and, for each element, find
-           // the Folder with that UUID
            return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
        }
     
@@ -109,6 +104,10 @@ struct FolderListView: View {
             })
             .environment(\.editMode, $editMode)
     }
+}
+
+
+extension FolderListView {
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
     }
