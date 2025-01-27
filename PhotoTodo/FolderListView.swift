@@ -28,6 +28,17 @@ struct FolderListView: View {
     private var doneListViewType: TodoGridViewType = .doneList
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     
+    // this gives the people in the order that you determine
+       var orderedFolder: [Folder] {
+           // break out people into arrays of people who have the same
+           // referenceID -- but, of course, there's only one for each referenceID
+           let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
+           // folderOrders.first is, what should be, the only folderOrder of
+           // interest, so use its uuidOrder and, for each element, find
+           // the Folder with that UUID
+           return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
+       }
+    
     
     var body: some View {
             List {
@@ -40,7 +51,7 @@ struct FolderListView: View {
 
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
-                ForEach(folders.filter({$0.id.uuidString != defaultFolderID})) { folder in
+                ForEach(orderedFolder.filter({$0.id.uuidString != defaultFolderID})) { folder in
                     NavigationLink {
                         TodoGridView(currentFolder: folder, viewType: basicViewType)
                     } label: {
@@ -48,14 +59,15 @@ struct FolderListView: View {
                     }
                     .swipeActions(content: {
                         Button("Delete", systemImage: "trash", role:  .destructive) {
-                            modelContext.delete(folder)
+                            deleteFolder(folder)
                         }
                     })
                 }
-                .onDelete { _ in
-                    // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
-                    // 실제 삭제 실행시에는 swipeActions으로 넘겨받은 클로저가 호출됩니다.
-                }
+                .onMove(perform: handleMove)
+//                .onDelete { _ in
+//                    // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
+//                    // 실제 삭제 실행시에는 swipeActions으로 넘겨받은 클로저가 호출됩니다.
+//                }
                 //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
                 //리스트 뷰의 마지막에는 완료함이 위치함
                 NavigationLink {
@@ -101,7 +113,6 @@ struct FolderListView: View {
         isShowingSheet.toggle()
     }
     
-    
     private func addFolders() {
         withAnimation {
             let newFolder = Folder(
@@ -115,6 +126,13 @@ struct FolderListView: View {
         }
     }
     
+    private func deleteFolder(_ folder: Folder) {
+        if let folderOrder = folderOrders.first {
+            modelContext.delete(folder)
+            folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
+        }
+    }
+    
     private func setFolderOrders() {
         if folderOrders.count == 0 {
             let folderOrder = FolderOrder()
@@ -125,12 +143,24 @@ struct FolderListView: View {
             return
         }
         
-        if folderOrder.uuidOrder.count != folders.count {
+        if folderOrder.uuidOrder.count < folders.count {
             for folder in folders {
                 if !folderOrder.uuidOrder.contains(folder.id) {
-                    folderOrder.uuidOrder.append(folder.id)
+                    folderOrders.first?.uuidOrder.append(folder.id)
                 }
             }
+        }
+        
+        if folderOrder.uuidOrder.count > folders.count {
+            folderOrders.first?.uuidOrder = folders.map {$0.id}
+        }
+    }
+    
+    
+    func handleMove(indices: IndexSet, newOffset: Int) {
+        if let defaultID = defaultFolderID, var newOrder = folderOrders.first?.uuidOrder.filter({$0 != UUID(uuidString: defaultID)}) {
+            newOrder.move(fromOffsets: indices, toOffset: newOffset)
+            folderOrders.first?.uuidOrder = [UUID(uuidString: defaultID)!] + newOrder
         }
     }
 }
