@@ -47,16 +47,20 @@ struct FolderListView: View {
                 
                 //기본 폴더를 제외하고는 모두 삭제 가능
                 ForEach(orderedFolder.filter({$0.id.uuidString != defaultFolderID})) { folder in
-                    NavigationLink {
-                        TodoGridView(currentFolder: folder, viewType: basicViewType)
-                    } label: {
+                    ZStack{ //editMode에서 chevron을 숨기고, FolderRow의 Text의 투명도를 그대로 유지하기 위해서 ZStack을 활용했습니다.
+                        NavigationLink {
+                            TodoGridView(currentFolder: folder, viewType: basicViewType)
+                        } label: {
+                            EmptyView()
+                        }
+                        .opacity(editMode == .active ? 0 : 1)
+                        .swipeActions(content: {
+                            Button("Delete", systemImage: "trash", role:  .destructive) {
+                                deleteFolder(folder)
+                            }
+                        })
                         FolderRow(folder: folder, viewType: basicViewType)
                     }
-                    .swipeActions(content: {
-                        Button("Delete", systemImage: "trash", role:  .destructive) {
-                            deleteFolder(folder)
-                        }
-                    })
                 }
                 .onMove(perform: handleMove)
 //                .onDelete { _ in
