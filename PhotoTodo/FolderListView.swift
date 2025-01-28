@@ -170,14 +170,19 @@ extension FolderListView {
 
 
 private struct FolderRow: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.editMode) private var editMode
     @State var folder: Folder?
     @State var viewType: TodoGridViewType
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
+    @State private var showingAlert = false
+    @Query var folderOrders: [FolderOrder]
     
     var isShowingMemu: Bool {
         return editMode?.wrappedValue == .active && viewType == .singleFolder && folder?.id != UUID(uuidString: defaultFolderID ?? UUID().uuidString)
     }
+    
+    
     
     var body: some View {
         HStack{
@@ -186,11 +191,24 @@ private struct FolderRow: View {
             Text(folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함")
             Spacer()
             Menu {
-                Button("폴더 이름 수정") {
+                Button {
                     print("Rename tapped")
+                } label : {
+                    HStack{
+                        Text("폴더 이름 수정")
+                        Spacer()
+                        Image(systemName: "pencil")
+                    }
+                    
                 }
-                Button("폴더 삭제", role: .destructive) {
-                    print("Delete tapped")
+                Button(role: .destructive) {
+                    showingAlert.toggle()
+                } label : {
+                    HStack{
+                        Text("폴더 삭제")
+                        Spacer()
+                        Image(systemName: "trash")
+                    }
                 }
             } label: {
                 Image(systemName: "ellipsis.circle")
@@ -198,9 +216,29 @@ private struct FolderRow: View {
             }
             .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
             .disabled(!isShowingMemu) // 인터렉션을 막기
-            }
+        }
+        .alert(isPresented: $showingAlert) {
+            Alert(
+                title: Text("'\(folder?.name ?? "")'폴더를 삭제하시겠습니까?"),
+                message: Text("이 폴더의 모든 사진이 삭제됩니다."),
+                primaryButton: .default(
+                    Text("취소")
+                ),
+                secondaryButton: .destructive(
+                    Text("삭제"),
+                    action: deleteFolder
+                ))
         }
     }
+    
+    private func deleteFolder(){
+        guard let folder = folder else {return}
+        if folderOrders.first != nil {
+            modelContext.delete(folder)
+            folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
+        }
+    }
+}
                           
 
 
