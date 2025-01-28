@@ -177,6 +177,8 @@ private struct FolderRow: View {
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     @State private var showingAlert = false
     @Query var folderOrders: [FolderOrder]
+    @State private var isRenamingFolder: Bool = false
+    @State private var newFolderName: String = ""
     
     var body: some View {
         HStack{
@@ -185,6 +187,16 @@ private struct FolderRow: View {
             Text(folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함")
             Spacer()
             menu
+        }
+        .alert("폴더 이름 변경", isPresented: $isRenamingFolder) {
+            TextField("\(newFolderName)", text: $newFolderName)
+            Button{
+                changeFolderName()
+            } label : {
+                Text("저장")
+            }
+            .disabled(newFolderName.isEmpty)
+            Button("취소", role: .cancel) { }
         }
         .alert(isPresented: $showingAlert) {
             Alert(
@@ -207,6 +219,12 @@ private struct FolderRow: View {
             folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
         }
     }
+    
+    private func changeFolderName(){
+        guard let folder = folder else {return}
+        folder.name = newFolderName
+        newFolderName = ""
+    }
 }
 
 /// 메뉴와 관련된 코드 모음
@@ -218,7 +236,8 @@ extension FolderRow {
     var menu: some View {
         Menu {
             Button {
-                print("Rename tapped")
+                isRenamingFolder.toggle()
+                newFolderName = folder?.name ?? ""
             } label : {
                 HStack{
                     Text("폴더 이름 수정")
