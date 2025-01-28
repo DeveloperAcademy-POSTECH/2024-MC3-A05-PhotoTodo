@@ -170,18 +170,38 @@ extension FolderListView {
 
 
 private struct FolderRow: View {
+    @Environment(\.editMode) private var editMode
     @State var folder: Folder?
     @State var viewType: TodoGridViewType
+    @AppStorage("defaultFolderID") private var defaultFolderID: String?
     
-    var body: some View{
+    var isShowingMemu: Bool {
+        return editMode?.wrappedValue == .active && viewType == .singleFolder && folder?.id != UUID(uuidString: defaultFolderID ?? UUID().uuidString)
+    }
+    
+    var body: some View {
         HStack{
             Image(systemName: "folder.fill")
                 .foregroundStyle(viewType == .singleFolder ? changeStringToColor(colorName: folder != nil ? folder!.color : "folder-color/green" ) : Color("gray/gray-800"))
             Text(folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함")
             Spacer()
+            Menu {
+                Button("폴더 이름 수정") {
+                    print("Rename tapped")
+                }
+                Button("폴더 삭제", role: .destructive) {
+                    print("Delete tapped")
+                }
+            } label: {
+                Image(systemName: "ellipsis.circle")
+                    .foregroundStyle(Color(.accent))
+            }
+            .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
+            .disabled(!isShowingMemu) // 인터렉션을 막기
+            }
         }
     }
-}
+                          
 
 
 #Preview {
