@@ -257,7 +257,7 @@ extension FolderRow {
             }
         } label: {
             Image(systemName: "ellipsis.circle")
-                .foregroundStyle(Color(.accent))
+                .foregroundStyle(Color("green/green-600"))
         }
         .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
         .disabled(!isShowingMemu) // 인터렉션을 막기
