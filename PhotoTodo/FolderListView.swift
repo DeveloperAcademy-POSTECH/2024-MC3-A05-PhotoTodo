@@ -178,44 +178,13 @@ private struct FolderRow: View {
     @State private var showingAlert = false
     @Query var folderOrders: [FolderOrder]
     
-    var isShowingMemu: Bool {
-        return editMode?.wrappedValue == .active && viewType == .singleFolder && folder?.id != UUID(uuidString: defaultFolderID ?? UUID().uuidString)
-    }
-    
-    
-    
     var body: some View {
         HStack{
             Image(systemName: "folder.fill")
                 .foregroundStyle(viewType == .singleFolder ? changeStringToColor(colorName: folder != nil ? folder!.color : "folder-color/green" ) : Color("gray/gray-800"))
             Text(folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함")
             Spacer()
-            Menu {
-                Button {
-                    print("Rename tapped")
-                } label : {
-                    HStack{
-                        Text("폴더 이름 수정")
-                        Spacer()
-                        Image(systemName: "pencil")
-                    }
-                    
-                }
-                Button(role: .destructive) {
-                    showingAlert.toggle()
-                } label : {
-                    HStack{
-                        Text("폴더 삭제")
-                        Spacer()
-                        Image(systemName: "trash")
-                    }
-                }
-            } label: {
-                Image(systemName: "ellipsis.circle")
-                    .foregroundStyle(Color(.accent))
-            }
-            .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
-            .disabled(!isShowingMemu) // 인터렉션을 막기
+            menu
         }
         .alert(isPresented: $showingAlert) {
             Alert(
@@ -237,6 +206,42 @@ private struct FolderRow: View {
             modelContext.delete(folder)
             folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
         }
+    }
+}
+
+/// 메뉴와 관련된 코드 모음
+extension FolderRow {
+    var isShowingMemu: Bool {
+        return editMode?.wrappedValue == .active && viewType == .singleFolder && folder?.id != UUID(uuidString: defaultFolderID ?? UUID().uuidString)
+    }
+    
+    var menu: some View {
+        Menu {
+            Button {
+                print("Rename tapped")
+            } label : {
+                HStack{
+                    Text("폴더 이름 수정")
+                    Spacer()
+                    Image(systemName: "pencil")
+                }
+                
+            }
+            Button(role: .destructive) {
+                showingAlert.toggle()
+            } label : {
+                HStack{
+                    Text("폴더 삭제")
+                    Spacer()
+                    Image(systemName: "trash")
+                }
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle")
+                .foregroundStyle(Color(.accent))
+        }
+        .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
+        .disabled(!isShowingMemu) // 인터렉션을 막기
     }
 }
                           
