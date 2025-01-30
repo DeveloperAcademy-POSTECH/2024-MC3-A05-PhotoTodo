@@ -1,8 +1,7 @@
 //
 //  ActionButton.swift
-//  SwipeActionsFromScratch
 //
-//  Created by Kit Langton on 9/20/23.
+//  Kit Langton의 코드를 참고함
 //
 
 import SwiftUI
@@ -35,7 +34,7 @@ struct ActionButton: View {
             .padding(.leading)
         }
         .clipped()
-        .frame(width: width)
+        .frame(width: abs(width))
         .font(.title2)
     }.buttonStyle(.plain)
   }
