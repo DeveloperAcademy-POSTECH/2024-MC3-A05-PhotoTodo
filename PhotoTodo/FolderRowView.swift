@@ -25,11 +25,19 @@ struct FolderRowView<Content: View>: View {
   var dragGesture: some Gesture {
     DragGesture()
       .onChanged { value in
+          if value.translation.width > 0 {
+                  withAnimation(.interactiveSpring) {
+                      offset = 0
+                  }
+                  return
+              }
+
+          
         if !isDragging {
           startOffset = offset
           isDragging = true
         }
-        
+          
         withAnimation(.interactiveSpring) {
           offset = startOffset + value.translation.width
         }
