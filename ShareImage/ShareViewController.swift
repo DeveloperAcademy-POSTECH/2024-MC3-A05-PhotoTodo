@@ -143,7 +143,8 @@ struct ShareView: View {
         let schema = Schema([
             Folder.self,
             Todo.self,
-            Options.self
+            Options.self,
+            FolderOrder.self
         ])
         do {
             let context = try ModelContext(.init(for: schema.self))
