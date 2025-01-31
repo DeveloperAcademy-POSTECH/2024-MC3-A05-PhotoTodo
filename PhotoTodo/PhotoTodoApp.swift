@@ -14,6 +14,7 @@ struct PhotoTodoApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Folder.self,
+            FolderOrder.self,
             Todo.self,
             Options.self
         ])
@@ -39,7 +40,6 @@ struct PhotoTodoApp: App {
     var body: some Scene {
         WindowGroup {
             TabBarView()
-//            TestView()
         }
         .modelContainer(sharedModelContainer)
     }
