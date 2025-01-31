@@ -216,13 +216,14 @@ private struct FolderRow: View {
     @State var viewType: TodoGridViewType
     @Query private var todos: [Todo]
     @State private var doneCount: Int = 0 // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
+    @State private var incompleteTodosCount: Int = 0
     
     var folderString: String {
         return folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함"
     }
     
     var folderCountString: String {
-        return folder != nil ? "\(folder!.todos.count)장" : viewType == .singleFolder ? "" : "\(doneCount)장"
+        return folder != nil ? "\(incompleteTodosCount)장" : viewType == .singleFolder ? "" : "\(doneCount)장"
     }
     
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
@@ -249,6 +250,9 @@ private struct FolderRow: View {
             // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
             if folder == nil && viewType != .singleFolder {
                 doneCount = todos.filter { $0.isDone }.count
+            }
+            if folder != nil && viewType == .singleFolder {
+                incompleteTodosCount = folder!.todos.filter { !$0.isDone }.count
             }
         }
         .alert("폴더 이름 변경", isPresented: $isRenamingFolder) {
