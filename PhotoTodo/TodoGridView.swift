@@ -113,6 +113,17 @@ struct TodoGridView: View {
         }
     }
     
+    var sortOptionString: String {
+        switch sortOption {
+        case .byDateIncreasing:
+            "오래된순"
+        case .byDateDecreasing:
+            "최신순"
+        default:
+            "기타"
+        }
+    }
+    
     
     var body: some View {
         VStack{
@@ -240,7 +251,7 @@ struct TodoGridView: View {
                 }
             } label: {
                 HStack {
-                    Text("정렬")
+                    Text("\(sortOptionString)")
                         .tint(Color.black)
                     Image(systemName: "chevron.down")
                         .tint(Color.black)
