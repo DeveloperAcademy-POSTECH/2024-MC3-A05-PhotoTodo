@@ -92,11 +92,21 @@ struct TodoGridView: View {
             return todos.sorted { $0.isDone && !$1.isDone }
         case .byDueDate:
             return todos.sorted { $0.options.alarm ?? Date() < $1.options.alarm ?? Date() }
-            
         }
     }
-    //TODO: folder.todos를 여러 옵션으로 정렬하기
     
+    var filteredTodos: [Todo] {
+        switch viewType {
+        case .singleFolder:
+            return sortedTodos.filter { $0.folder == currentFolder}
+        case .main:
+            return sortedTodos
+        case .doneList:
+            return sortedTodos //뷰상에서 한번 거르는 로직이 있음
+        }
+    }
+    
+    //TODO: folder.todos를 여러 옵션으로 정렬하기
     var todosGroupedByDate: OrderedDictionary<Int, [Todo]> {
         return getTodosGroupedByDate()
     }
@@ -134,11 +144,12 @@ struct TodoGridView: View {
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if todos.isEmpty && viewType != .doneList {
-                        GuideLineView(viewType: viewType, todos: todos)
+                        GuideLineView(viewType: viewType, todos: todos) //데이터 있을 시
                     } else {
-                        scrollableGridView
+                        scrollableGridView //데이터 없을 시
                     }
                 }
+                //토스트 알림
                 VStack{
                     if toastOption == .moveToDone {
                         ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
@@ -267,7 +278,7 @@ struct TodoGridView: View {
                 CustomTitle(todos: todos)
             }
             sortMenu
-            if viewType != .main {
+            if viewType == .doneList {
                 GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
             } else {
                 groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
@@ -353,22 +364,22 @@ extension TodoGridView {
     
     /// 날짜별로 투두 아이템을 그루핑한 배열을 모은 배열을 리턴함
     private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
-        if sortedTodos.count == 0 {
-            return [dayOfYear(from : Date()): sortedTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
+        if filteredTodos.count == 0 {
+            return [dayOfYear(from : Date()): filteredTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
         }
         var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
         var i = 0
         var curr: Int
-        while i != sortedTodos.count {
+        while i != filteredTodos.count {
             switch sortOption {
             case .byDateIncreasing:
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].createdAt)
             case .byDueDate:
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].options.alarm ?? Date())
+                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].options.alarm ?? Date())
             default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].createdAt)
             }
-            groupedTodos[curr, default: []].append(sortedTodos[i])
+            groupedTodos[curr, default: []].append(filteredTodos[i])
             i += 1
         }
         return groupedTodos
