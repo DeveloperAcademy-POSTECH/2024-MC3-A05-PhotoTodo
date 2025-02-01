@@ -65,9 +65,7 @@ struct TodoGridView: View {
     var todos: [Todo] {
         switch viewType {
         case .singleFolder:
-            return currentFolder!.todos.filter { todo in
-                todo.isDone == false
-            }
+            return currentFolder?.todos.filter { !$0.isDone } ?? []
         case .main:
             return compositeTodos.filter { todo in
                 todo.isDone == false
@@ -98,7 +96,11 @@ struct TodoGridView: View {
     var filteredTodos: [Todo] {
         switch viewType {
         case .singleFolder:
-            return sortedTodos.filter { $0.folder == currentFolder}
+            if let currentFolder = currentFolder {
+                return sortedTodos.filter { $0.folder == currentFolder }
+            } else {
+                return sortedTodos
+            }
         case .main:
             return sortedTodos
         case .doneList:
