@@ -175,7 +175,6 @@ struct TodoGridView: View {
         }
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
-        .navigationTitle(navigationBarTitle)
         .navigationBarHidden( viewType == .main ? true : false)
         //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
         .navigationDestination(isPresented: $isDoneSelecting) {
@@ -276,9 +275,7 @@ struct TodoGridView: View {
     
     var scrollableGridView: some View {
         ScrollView {
-            if viewType == .main {
-                CustomTitle(todos: todos)
-            }
+            CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
             sortMenu
             if viewType == .doneList {
                 GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
@@ -456,7 +453,7 @@ private struct GuideLineView: View {
     var body: some View {
         VStack{
             if viewType == .main {
-                CustomTitle(todos: todos)
+                CustomTitle(todos: todos, viewType: viewType)
             }
             Spacer()
             VStack{
@@ -479,27 +476,40 @@ private struct GuideLineView: View {
 
 private struct CustomTitle: View{
     var todos: [Todo]
+    var viewType: TodoGridViewType
+    var navigationBarTitle: String?
+    var folder: Folder?
     
     var body: some View {
         VStack{
-            HStack{
-                Text("해야 할 일이")
-                    .font(.title)
-                    .bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            if viewType == .main {
+                HStack{
+                    Text("해야 할 일이")
+                        .font(.title)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                todos.count == 0 ?
+                HStack{
+                    Text("모두 완료되었어요!")
+                        .font(.title)
+                        .bold()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                :
+                HStack{
+                    Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
+                    Text("장 남았어요").font(.title).bold()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack{
+                    Label(navigationBarTitle ?? "", systemImage: "folder.fill")
+                    .font(.largeTitle)
+                    //TODO: 폴더 컬러 넣기
+//                    .foregroundColor(.blue)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            
-            todos.count == 0 ?
-            HStack{
-                Text("모두 완료되었어요!")
-                    .font(.title)
-                    .bold()
-            }.frame(maxWidth: .infinity, alignment: .leading)
-            :
-            HStack{
-                Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
-                Text("장 남았어요").font(.title).bold()
-            }.frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
     }
