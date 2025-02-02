@@ -188,45 +188,75 @@ struct TodoGridView: View {
     }
     
     var customNavBar: some View {
-        HStack{
-            Button(action: {
-                alarmSetting.toggle()
-            }, label: {
-                Image(systemName: "alarm")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-            })
-            .padding(.leading)
+        HStack(spacing: 0) {
             Spacer()
+            
             //편집모드에서 다중선택된 아이템 삭제
             Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
                 if editMode == .active {
                     Image(systemName: "trash")
-                        .resizable()
-                        .frame(width: 18, height: 18)
+                        .font(.title2)
+                        .foregroundStyle(Color("green/green-700"))
                 } else {
                     Image(systemName: "plus")
-                        .resizable()
-                        .frame(width: 18, height: 18)
+                        .font(.title2)
+                        .foregroundStyle(Color("green/green-700"))
                 }
             }
-            .frame(width: 40)
+            .frame(width: 44)
+            
             EditButton()
-                .frame(width: 50)
+                .frame(width: 44)
                 .onChange(of: editMode) { _, newEditMode in
                     //편집모드 해제시 선택정보 삭제
                     if newEditMode == .inactive {
                         selectedTodos.removeAll()
                     }
                 }
+            
+            Menu {
+                Button {
+                    alarmSetting.toggle()
+                } label: {
+                    HStack {
+                        Text("정기 알람 설정")
+                        Image(systemName: "alarm")
+                    }
+                }
+                
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Text("도움말")
+                        Image(systemName: "info.circle")
+                    }
+                }
+                
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Text("팀소개")
+                        Image(systemName: "leaf")
+                    }
+                }
+                
+            } label: {
+                Image(systemName: "ellipsis.circle")
+                    .font(.title2)
+                    .foregroundStyle(Color("green/green-700"))
+            }
+            .frame(width: 44)
         }
         .sheet(isPresented: $alarmSetting, content: {
             AlarmSettingView()
                 .presentationDetents([.height(CGFloat(450))])
                 .presentationDragIndicator(.visible)
         })
-        .frame(height: 33.5)
-        .padding(.trailing, 5.7)
+        .frame(height: 44)
+        .padding(.horizontal, 20)
+        .padding(.top, 5)
         .environment(\.editMode, $editMode)
     }
     
