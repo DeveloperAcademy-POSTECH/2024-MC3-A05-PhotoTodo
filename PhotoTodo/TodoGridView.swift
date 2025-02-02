@@ -302,7 +302,7 @@ struct TodoGridView: View {
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     var groupedGridView: some View {
         ForEach(todosGroupedByDate.elements, id: \.key) { element in
-            VStack{
+            VStack(spacing: 8) {
                 HStack {
                     Text(getDateString(element.value[0].createdAt))
                         .font(.callout)
@@ -310,10 +310,12 @@ struct TodoGridView: View {
                         .padding(.leading, 10)
                     Spacer()
                 }
+                .border(.red)
                 .padding(.horizontal, 20)
                 
                 GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)
             }
+            .border(.green)
         }
     }
     
@@ -431,9 +433,9 @@ struct GridView: View {
     ]
     
     var body: some View {
-        VStack{
+        VStack {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 12) {
+                LazyVGrid(columns: columns, spacing: 13) {
                     //TODO: 이미지 비율 맞추기
                     ForEach(sortedTodos) { todo in
                         TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
@@ -454,8 +456,7 @@ struct GridView: View {
                             }
                     }
                 }
-                .padding(.top, 4)
-                .padding(.bottom)
+                .padding(.bottom, 24)
             }
         }
         .ignoresSafeArea(.keyboard)
