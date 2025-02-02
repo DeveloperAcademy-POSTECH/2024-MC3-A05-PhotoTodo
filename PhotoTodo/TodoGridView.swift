@@ -503,15 +503,18 @@ private struct CustomTitle: View{
                 }.frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 HStack{
-                    Label(navigationBarTitle ?? "", systemImage: "folder.fill")
+                    Label {
+                        Text(navigationBarTitle ?? "")
+                    } icon: {
+                        Image(systemName: "folder.fill")
+                            .foregroundColor(Color.folderColor(forName: FolderColorName(rawValue: folder?.color ?? "green") ?? .green))
+                    }
                     .font(.largeTitle)
-                    //TODO: 폴더 컬러 넣기
-//                    .foregroundColor(.blue)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding()
+        .padding(.leading)
     }
 }
 
