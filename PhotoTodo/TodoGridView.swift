@@ -113,6 +113,7 @@ struct TodoGridView: View {
         }
     }
     
+    @State var toastHeight: CGFloat = 0
     
     var body: some View {
         VStack(spacing: 0) {
@@ -130,13 +131,16 @@ struct TodoGridView: View {
                 }
                 VStack{
                     if toastOption == .moveToDone {
-                        ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
+                        ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo, toastHeight: $toastHeight)
                         
                     } else if toastOption == .moveToOrigin {
-                        ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
+                        ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo, toastHeight: $toastHeight)
                     }
                 }
             }
+        }
+        .onAppear {
+            toastHeight = UIScreen.main.bounds.height / 2 - 127 - 50
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
             NavigationLink{
