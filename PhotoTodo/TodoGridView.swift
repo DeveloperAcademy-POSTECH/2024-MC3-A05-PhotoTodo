@@ -303,11 +303,15 @@ struct TodoGridView: View {
     var groupedGridView: some View {
         ForEach(todosGroupedByDate.elements, id: \.key) { element in
             VStack{
-                HStack{
+                HStack {
                     Text(getDateString(element.value[0].createdAt))
-                        .foregroundStyle(.gray)
+                        .font(.callout)
+                        .foregroundStyle(Color("gray/gray-700"))
+                        .padding(.leading, 10)
                     Spacer()
-                }.padding(.leading)
+                }
+                .padding(.horizontal, 20)
+                
                 GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)
             }
         }
