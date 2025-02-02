@@ -310,12 +310,10 @@ struct TodoGridView: View {
                         .padding(.leading, 10)
                     Spacer()
                 }
-                .border(.red)
                 .padding(.horizontal, 20)
                 
                 GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)
             }
-            .border(.green)
         }
     }
     
@@ -442,7 +440,7 @@ struct GridView: View {
                         //tap gesture로 선택되었을 시 라인으로 표시됨
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                                    .strokeBorder(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
                             )
                         //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
                             .onTapGesture {
@@ -456,10 +454,10 @@ struct GridView: View {
                             }
                     }
                 }
-                .padding(.bottom, 24)
             }
         }
         .ignoresSafeArea(.keyboard)
+        .padding(.bottom, 24)
         .padding(.horizontal)
     }
 }
