@@ -115,13 +115,13 @@ struct TodoGridView: View {
     
     
     var body: some View {
-        VStack{
+        VStack(spacing: 0) {
             if viewType == .main {
                 customNavBar
             }
             ZStack {
                 Color("gray/gray-200").ignoresSafeArea()
-                VStack{
+                VStack {
                     if todos.isEmpty && viewType != .doneList {
                         GuideLineView(viewType: viewType, todos: todos)
                     } else {
@@ -424,7 +424,7 @@ struct GridView: View {
     
     var body: some View {
         VStack{
-            ScrollView{
+            ScrollView {
                 LazyVGrid(columns: columns, spacing: 12) {
                     //TODO: 이미지 비율 맞추기
                     ForEach(sortedTodos) { todo in
@@ -507,7 +507,7 @@ private struct CustomTitle: View{
                 Text("장 남았어요").font(.title).bold()
             }.frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
+        .padding(.horizontal, 20)
     }
 }
 
