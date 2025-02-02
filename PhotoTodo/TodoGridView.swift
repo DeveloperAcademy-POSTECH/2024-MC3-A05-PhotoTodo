@@ -269,27 +269,31 @@ struct TodoGridView: View {
                     Text("오래된순").tag(SortOption.byDateIncreasing)
                 }
             } label: {
-                HStack {
+                HStack(spacing: 2) {
                     Text("정렬")
                         .tint(Color.black)
                     Image(systemName: "chevron.down")
                         .tint(Color.black)
                 }
-                .padding(.horizontal)
+                .font(.callout)
             }
+            .frame(width: 70, height: 44)
         }
+        .padding(.horizontal, 20)
     }
     
     var scrollableGridView: some View {
-        ScrollView {
-            if viewType == .main {
-                CustomTitle(todos: todos)
-            }
-            sortMenu
-            if viewType != .main {
-                GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
-            } else {
-                groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 0) {
+                if viewType == .main {
+                    CustomTitle(todos: todos)
+                }
+                sortMenu
+                if viewType != .main {
+                    GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
+                } else {
+                    groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+                }
             }
         }
     }
