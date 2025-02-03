@@ -39,8 +39,9 @@ struct CameraView: View {
     var body: some View {
         VStack(alignment: .center){
             cameraPreview
-                .frame(width: 353, height: 542)
                 .clipShape(RoundedRectangle(cornerRadius: 25))
+                .padding(.top, 6)
+                .padding(.horizontal, 20)
             
           
             if isCameraSheetOn {
@@ -59,13 +60,13 @@ struct CameraView: View {
                                 isCameraSheetOn = false
                             } label: {
                                 ZStack{
-                                    Circle().frame(width: 80, height: 80)
-                                        .foregroundStyle(Color.green)
-                                    Circle().frame(width: 60, height: 60)
-                                        .foregroundStyle(Color.green)
+                                    Circle().frame(width: 78, height: 78)
+                                        .foregroundStyle(Color("green/green-400"))
+                                    Circle().frame(width: 62, height: 62)
+                                        .foregroundStyle(Color("green/green-400"))
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.white, lineWidth: 4)
+                                                .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
                                         )
                                 }
                             }
@@ -75,6 +76,7 @@ struct CameraView: View {
                         }
                     }
                 }
+                .padding(.bottom, 21)
                 .padding(.top)
             } else {
                 HStack(alignment: .center) {
@@ -86,13 +88,13 @@ struct CameraView: View {
                                 isCameraSheetOn = false
                             } label: {
                                 ZStack{
-                                    Circle().frame(width: 80, height: 80)
-                                        .foregroundStyle(Color.green)
-                                    Circle().frame(width: 60, height: 60)
-                                        .foregroundStyle(Color.green)
+                                    Circle().frame(width: 78, height: 78)
+                                        .foregroundStyle(Color("green/green-400"))
+                                    Circle().frame(width: 62, height: 62)
+                                        .foregroundStyle(Color("green/green-400"))
                                         .overlay(
                                             Circle()
-                                                .stroke(Color.white, lineWidth: 4) // 테두리 색상과 두께
+                                                .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
                                         )
                                 }
                             }
@@ -120,6 +122,7 @@ struct CameraView: View {
                         }
                     }
                 }
+                .padding(.bottom, 21)
             }
             
         }
@@ -139,7 +142,8 @@ struct CameraView: View {
     
     private var cameraPreview: some View {
         GeometryReader { geo in
-            CameraPreview(cameraManager: cameraManager, frame: CGRect(x: 0, y: 0, width: 353, height: 542))
+            CameraPreview(cameraManager: cameraManager, frame: CGRect(x: 0, y: 0, width: geo.size.width, height: geo.size.height))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .gesture(
                     MagnificationGesture()
                         .onChanged { value in
@@ -154,6 +158,7 @@ struct CameraView: View {
                 )
                 .onAppear(){
                     cameraManager.requestAccessAndSetup()
+                    print("\(geo.size.width), \(geo.size.height)")
                 }
                 .onDisappear() {
                     print("닫았을 때")
