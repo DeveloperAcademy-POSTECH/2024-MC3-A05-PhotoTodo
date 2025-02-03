@@ -125,6 +125,7 @@ struct TodoGridView: View {
         }
     }
     
+    @State var toastHeight: CGFloat = 0
     var sortOptionString: String {
         switch sortOption {
         case .byDateIncreasing:
@@ -135,16 +136,16 @@ struct TodoGridView: View {
             "기타"
         }
     }
-    
+
     
     var body: some View {
-        VStack{
+        VStack(spacing: 0) {
             if viewType == .main {
                 customNavBar
             }
             ZStack {
                 Color("gray/gray-200").ignoresSafeArea()
-                VStack{
+                VStack {
                     if todos.isEmpty && viewType != .doneList {
                         GuideLineView(viewType: viewType, todos: todos) //데이터 있을 시
                     } else {
@@ -154,13 +155,16 @@ struct TodoGridView: View {
                 //토스트 알림
                 VStack{
                     if toastOption == .moveToDone {
-                        ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
+                        ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo, toastHeight: $toastHeight)
                         
                     } else if toastOption == .moveToOrigin {
-                        ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
+                        ToastView(toastOption: .moveToOrigin, toastMessage: "투두가 복구되었어요!", recentlyDoneTodo: $recentlyDoneTodo, toastHeight: $toastHeight)
                     }
                 }
             }
+        }
+        .onAppear {
+            toastHeight = UIScreen.main.bounds.height / 2 - 127 - 50
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
             NavigationLink{
@@ -211,45 +215,75 @@ struct TodoGridView: View {
     }
     
     var customNavBar: some View {
-        HStack{
-            Button(action: {
-                alarmSetting.toggle()
-            }, label: {
-                Image(systemName: "alarm")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-            })
-            .padding(.leading)
+        HStack(spacing: 0) {
             Spacer()
+            
             //편집모드에서 다중선택된 아이템 삭제
             Button(action: editMode == .active ? deleteSelectedTodos : toggleAddOptions) {
                 if editMode == .active {
                     Image(systemName: "trash")
-                        .resizable()
-                        .frame(width: 18, height: 18)
+                        .font(.title2)
+                        .foregroundStyle(Color("green/green-700"))
                 } else {
                     Image(systemName: "plus")
-                        .resizable()
-                        .frame(width: 18, height: 18)
+                        .font(.title2)
+                        .foregroundStyle(Color("green/green-700"))
                 }
             }
-            .frame(width: 40)
+            .frame(width: 44)
+            
             EditButton()
-                .frame(width: 50)
+                .frame(width: 44)
                 .onChange(of: editMode) { _, newEditMode in
                     //편집모드 해제시 선택정보 삭제
                     if newEditMode == .inactive {
                         selectedTodos.removeAll()
                     }
                 }
+            
+            Menu {
+                Button {
+                    alarmSetting.toggle()
+                } label: {
+                    HStack {
+                        Text("정기 알람 설정")
+                        Image(systemName: "alarm")
+                    }
+                }
+                
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Text("도움말")
+                        Image(systemName: "info.circle")
+                    }
+                }
+                
+                Button {
+                    
+                } label: {
+                    HStack {
+                        Text("팀소개")
+                        Image(systemName: "leaf")
+                    }
+                }
+                
+            } label: {
+                Image(systemName: "ellipsis.circle")
+                    .font(.title2)
+                    .foregroundStyle(Color("green/green-700"))
+            }
+            .frame(width: 44)
         }
         .sheet(isPresented: $alarmSetting, content: {
             AlarmSettingView()
                 .presentationDetents([.height(CGFloat(450))])
                 .presentationDragIndicator(.visible)
         })
-        .frame(height: 33.5)
-        .padding(.trailing, 5.7)
+        .frame(height: 44)
+        .padding(.horizontal, 20)
+        .padding(.top, 5)
         .environment(\.editMode, $editMode)
     }
     
@@ -262,25 +296,30 @@ struct TodoGridView: View {
                     Text("오래된순").tag(SortOption.byDateIncreasing)
                 }
             } label: {
-                HStack {
+
+                HStack(spacing: 2) {
                     Text("\(sortOptionString)")
                         .tint(Color.black)
                     Image(systemName: "chevron.down")
                         .tint(Color.black)
                 }
-                .padding(.horizontal)
+                .font(.callout)
             }
+            .frame(width: 70, height: 44)
         }
+        .padding(.horizontal, 20)
     }
     
     var scrollableGridView: some View {
-        ScrollView {
-            CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
-            sortMenu
-            if viewType == .doneList {
-                GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
-            } else {
-                groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 0) {
+                CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
+                sortMenu
+                if viewType != .doneList {
+                    GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
+                } else {
+                    groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+                }
             }
         }
     }
@@ -289,12 +328,16 @@ struct TodoGridView: View {
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     var groupedGridView: some View {
         ForEach(todosGroupedByDate.elements, id: \.key) { element in
-            VStack{
-                HStack{
+            VStack(spacing: 8) {
+                HStack {
                     Text(getDateString(element.value[0].createdAt))
-                        .foregroundStyle(.gray)
+                        .font(.callout)
+                        .foregroundStyle(Color("gray/gray-700"))
+                        .padding(.leading, 10)
                     Spacer()
-                }.padding(.leading)
+                }
+                .padding(.horizontal, 20)
+                
                 GridView(sortedTodos: element.value, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode)
             }
         }
@@ -414,16 +457,16 @@ struct GridView: View {
     ]
     
     var body: some View {
-        VStack{
-            ScrollView{
-                LazyVGrid(columns: columns, spacing: 12) {
+        VStack {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 13) {
                     //TODO: 이미지 비율 맞추기
                     ForEach(sortedTodos) { todo in
                         TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
                         //tap gesture로 선택되었을 시 라인으로 표시됨
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                                    .strokeBorder(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
                             )
                         //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
                             .onTapGesture {
@@ -437,11 +480,10 @@ struct GridView: View {
                             }
                     }
                 }
-                .padding(.top, 4)
-                .padding(.bottom)
             }
         }
         .ignoresSafeArea(.keyboard)
+        .padding(.bottom, 24)
         .padding(.horizontal)
     }
 }
@@ -514,7 +556,7 @@ private struct CustomTitle: View{
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding(.leading)
+        .padding(.horizontal, 20)
     }
 }
 

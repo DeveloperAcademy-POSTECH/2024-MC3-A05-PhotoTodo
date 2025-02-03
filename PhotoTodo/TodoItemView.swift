@@ -119,12 +119,10 @@ struct TodoItemView: View {
                                 nil : //editMode일 때는 체크박스가 보이지 않게 함
                                 todo.isDone ?
                                 Image("selectedOn")
-                                    .resizable()
-                                    .frame(width: 36, height: 36)
+                                    .aspectRatio(contentMode: .fit)
                                 :
                                 Image("selectedOff")
-                                    .resizable()
-                                    .frame(width: 36, height: 36)
+                                    .aspectRatio(contentMode: .fit)
                             }
                             .frame(width: 44, height: 44)
                                 .padding(8)
