@@ -37,94 +37,97 @@ struct CameraView: View {
     @Binding var isCameraSheetOn: Bool
     
     var body: some View {
-        VStack(alignment: .center){
+        VStack(alignment: .center, spacing: 0){
             cameraPreview
                 .clipShape(RoundedRectangle(cornerRadius: 25))
                 .padding(.top, 6)
                 .padding(.horizontal, 20)
             
           
-            if isCameraSheetOn {
-                EmptyView()
-            } else {
-                FolderCarouselView(chosenFolder: $chosenFolder)
-            }
-            
-            if cameraCaptureState == .single {
-                HStack(alignment: .center) {
-                    ZStack{
-                        VStack {
-                            Button {
-                                cameraManager.takePhoto()
-                                cameraCaptureisActive.toggle()
-                                isCameraSheetOn = false
-                            } label: {
-                                ZStack{
-                                    Circle().frame(width: 78, height: 78)
-                                        .foregroundStyle(Color("green/green-400"))
-                                    Circle().frame(width: 62, height: 62)
-                                        .foregroundStyle(Color("green/green-400"))
-                                        .overlay(
-                                            Circle()
-                                                .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
-                                        )
-                                }
-                            }
-                            .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
-                            }
-                        }
-                    }
+            VStack(spacing: 0) {
+                if isCameraSheetOn {
+                    EmptyView()
+                } else {
+                    FolderCarouselView(chosenFolder: $chosenFolder)
                 }
-                .padding(.bottom, 21)
-                .padding(.top)
-            } else {
-                HStack(alignment: .center) {
-                    ZStack{
-                        VStack {
-                            Button {
-                                cameraManager.takePhoto()
-                                cameraCaptureisActive.toggle()
-                                isCameraSheetOn = false
-                            } label: {
-                                ZStack{
-                                    Circle().frame(width: 78, height: 78)
-                                        .foregroundStyle(Color("green/green-400"))
-                                    Circle().frame(width: 62, height: 62)
-                                        .foregroundStyle(Color("green/green-400"))
-                                        .overlay(
-                                            Circle()
-                                                .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
-                                        )
-                                }
-                            }
-                            .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
-                                    .toolbar {
-                                        Button("Add") {
-                                        }
+            }
+            .padding(.top, 24)
+            
+            VStack(spacing: 0) {
+                if cameraCaptureState == .single {
+                    HStack(alignment: .center) {
+                        ZStack{
+                            VStack {
+                                Button {
+                                    cameraManager.takePhoto()
+                                    cameraCaptureisActive.toggle()
+                                    isCameraSheetOn = false
+                                } label: {
+                                    ZStack{
+                                        Circle().frame(width: 78, height: 78)
+                                            .foregroundStyle(Color("green/green-400"))
+                                        Circle().frame(width: 62, height: 62)
+                                            .foregroundStyle(Color("green/green-400"))
+                                            .overlay(
+                                                Circle()
+                                                    .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
+                                            )
                                     }
+                                }
+                                .navigationDestination(isPresented: $cameraCaptureisActive) {
+                                    MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                }
                             }
                         }
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                cameraCaptureState = .plural
-                            }, label: {
-                                VStack{
-                                    Image(systemName: "square.stack.3d.down.right")
-                                        .resizable()
-                                        .frame(width: 45, height: 52)
-                                    Text("다중촬영")
+                    }
+                } else {
+                    HStack(alignment: .center) {
+                        ZStack{
+                            VStack {
+                                Button {
+                                    cameraManager.takePhoto()
+                                    cameraCaptureisActive.toggle()
+                                    isCameraSheetOn = false
+                                } label: {
+                                    ZStack{
+                                        Circle().frame(width: 78, height: 78)
+                                            .foregroundStyle(Color("green/green-400"))
+                                        Circle().frame(width: 62, height: 62)
+                                            .foregroundStyle(Color("green/green-400"))
+                                            .overlay(
+                                                Circle()
+                                                    .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
+                                            )
+                                    }
                                 }
-                            })
-                            .padding(.trailing, 35)
+                                .navigationDestination(isPresented: $cameraCaptureisActive) {
+                                    MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                        .toolbar {
+                                            Button("Add") {
+                                            }
+                                        }
+                                }
+                            }
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    cameraCaptureState = .plural
+                                }, label: {
+                                    VStack{
+                                        Image(systemName: "square.stack.3d.down.right")
+                                            .resizable()
+                                            .frame(width: 45, height: 52)
+                                        Text("다중촬영")
+                                    }
+                                })
+                                .padding(.trailing, 35)
+                            }
                         }
                     }
                 }
-                .padding(.bottom, 21)
             }
-            
+            .padding(.bottom, 10)
+            .padding(.top, 30)
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: {
