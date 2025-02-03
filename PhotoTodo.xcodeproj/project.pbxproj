@@ -12,6 +12,7 @@
 		1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96822C5A14F300784CBA /* CameraViewModel.swift */; };
 		1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96842C5A150D00784CBA /* CameraPreview.swift */; };
 		1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96862C5A152A00784CBA /* MakeTodoView.swift */; };
+		1A19FFA12D4F88C0004916C0 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19FFA02D4F88BC004916C0 /* Color.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E42C56395A00A02C7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E32C56395A00A02C7E /* Assets.xcassets */; };
 		1A2778E72C56395A00A02C7E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E62C56395A00A02C7E /* Preview Assets.xcassets */; };
@@ -26,6 +27,8 @@
 		1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */; };
 		1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */; };
 		1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A619E492C7DC68A0082FD5C /* ToastView.swift */; };
+		1A8584012D435EC600092B0E /* FolderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8584002D435EBA00092B0E /* FolderRowView.swift */; };
+		1A8584032D435F0000092B0E /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8584022D435EFB00092B0E /* ActionButton.swift */; };
 		1AFB127E2C69C22D00952121 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 1AFB127D2C69C22D00952121 /* Collections */; };
 		1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12A32C77243A00952121 /* ShareViewController.swift */; };
 		1AFB12A72C77243A00952121 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1AFB12A62C77243A00952121 /* Base */; };
@@ -69,6 +72,7 @@
 		1A0D96822C5A14F300784CBA /* CameraViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewModel.swift; sourceTree = "<group>"; };
 		1A0D96842C5A150D00784CBA /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		1A0D96862C5A152A00784CBA /* MakeTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTodoView.swift; sourceTree = "<group>"; };
+		1A19FFA02D4F88BC004916C0 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
 		1A2778E32C56395A00A02C7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -83,6 +87,8 @@
 		1A2E5C892C5C617D00BAFD13 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		1A2E5C8F2C634BAE00BAFD13 /* DoneListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoneListView.swift; sourceTree = "<group>"; };
 		1A619E492C7DC68A0082FD5C /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		1A8584002D435EBA00092B0E /* FolderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRowView.swift; sourceTree = "<group>"; };
+		1A8584022D435EFB00092B0E /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		1AFB12A12C77243A00952121 /* ShareImage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareImage.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AFB12A32C77243A00952121 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		1AFB12A62C77243A00952121 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -169,6 +175,8 @@
 				1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */,
 				1A0D96862C5A152A00784CBA /* MakeTodoView.swift */,
 				1A2778F52C57416800A02C7E /* FolderListView.swift */,
+				1A8584002D435EBA00092B0E /* FolderRowView.swift */,
+				1A8584022D435EFB00092B0E /* ActionButton.swift */,
 				1A2778FB2C57719B00A02C7E /* DashBoardView.swift */,
 				1A0D96742C59287600784CBA /* TodoItemView.swift */,
 				1A0D96842C5A150D00784CBA /* CameraPreview.swift */,
@@ -177,6 +185,7 @@
 				131501CC2C61FCA000AAA4A2 /* AlarmSettingView.swift */,
 				3CC1139A2C69169A00281EBD /* UserNotification.swift */,
 				3CB22B5C2CC8EA3B00337F9E /* OnboardingView.swift */,
+				1A19FFA02D4F88BC004916C0 /* Color.swift */,
 				1A0D96812C5A14CC00784CBA /* ViewModel */,
 				1A2472A22C57A79C00A135D9 /* Models */,
 				1A2778E32C56395A00A02C7E /* Assets.xcassets */,
@@ -314,6 +323,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A8584012D435EC600092B0E /* FolderRowView.swift in Sources */,
 				1A2E5C8A2C5C617D00BAFD13 /* TabBarView.swift in Sources */,
 				1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */,
 				1A2E5C882C5B990D00BAFD13 /* TodoCompositeGridView.swift in Sources */,
@@ -331,11 +341,13 @@
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
 				1AFB12B12C77245500952121 /* PhotoTodoModel.swift in Sources */,
 				1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */,
+				1A19FFA12D4F88C0004916C0 /* Color.swift in Sources */,
 				1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */,
 				1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,
 				131501CD2C61FCA000AAA4A2 /* AlarmSettingView.swift in Sources */,
+				1A8584032D435F0000092B0E /* ActionButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
