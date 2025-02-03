@@ -164,6 +164,7 @@ struct CameraView: View {
     }
 }
 
-//#Preview {
-//    CameraView()
-//}
+#Preview {
+    @Previewable @State var isCameraSheetOn = false
+    CameraView(isCameraSheetOn: $isCameraSheetOn)
+}
