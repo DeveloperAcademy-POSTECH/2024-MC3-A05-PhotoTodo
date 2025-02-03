@@ -52,6 +52,7 @@ struct FolderCarouselView: View {
     @State var isShowingSheet = false
     @State var folderNameInput = ""
     @State var selectedColor: Color?
+    @State var currentScrollPosition: CGFloat = 0
     
     var body: some View {
         GeometryReader { geometry in
@@ -105,8 +106,9 @@ struct FolderCarouselView: View {
                         
                     }
                     .frame(minWidth: geometry.size.width)
-                    .padding(.horizontal, (geometry.size.width - 40) / 2)
+                    .padding(.horizontal, (geometry.size.width / 2) - 41)
                 }
+                .padding(.horizontal, 0)
             }
         }
         .frame(height: 34)
