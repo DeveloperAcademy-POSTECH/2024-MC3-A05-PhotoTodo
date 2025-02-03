@@ -65,9 +65,7 @@ struct TodoGridView: View {
     var todos: [Todo] {
         switch viewType {
         case .singleFolder:
-            return currentFolder!.todos.filter { todo in
-                todo.isDone == false
-            }
+            return currentFolder?.todos.filter { !$0.isDone } ?? []
         case .main:
             return compositeTodos.filter { todo in
                 todo.isDone == false
@@ -92,11 +90,25 @@ struct TodoGridView: View {
             return todos.sorted { $0.isDone && !$1.isDone }
         case .byDueDate:
             return todos.sorted { $0.options.alarm ?? Date() < $1.options.alarm ?? Date() }
-            
         }
     }
-    //TODO: folder.todos를 여러 옵션으로 정렬하기
     
+    var filteredTodos: [Todo] {
+        switch viewType {
+        case .singleFolder:
+            if let currentFolder = currentFolder {
+                return sortedTodos.filter { $0.folder == currentFolder }
+            } else {
+                return sortedTodos
+            }
+        case .main:
+            return sortedTodos
+        case .doneList:
+            return sortedTodos //뷰상에서 한번 거르는 로직이 있음
+        }
+    }
+    
+    //TODO: folder.todos를 여러 옵션으로 정렬하기
     var todosGroupedByDate: OrderedDictionary<Int, [Todo]> {
         return getTodosGroupedByDate()
     }
@@ -113,6 +125,17 @@ struct TodoGridView: View {
         }
     }
     
+    var sortOptionString: String {
+        switch sortOption {
+        case .byDateIncreasing:
+            "오래된순"
+        case .byDateDecreasing:
+            "최신순"
+        default:
+            "기타"
+        }
+    }
+    
     
     var body: some View {
         VStack{
@@ -123,11 +146,12 @@ struct TodoGridView: View {
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack{
                     if todos.isEmpty && viewType != .doneList {
-                        GuideLineView(viewType: viewType, todos: todos)
+                        GuideLineView(viewType: viewType, todos: todos) //데이터 있을 시
                     } else {
-                        scrollableGridView
+                        scrollableGridView //데이터 없을 시
                     }
                 }
+                //토스트 알림
                 VStack{
                     if toastOption == .moveToDone {
                         ToastView(toastOption: .moveToDone, toastMessage: "투두가 완료되었어요!", recentlyDoneTodo: $recentlyDoneTodo)
@@ -151,7 +175,6 @@ struct TodoGridView: View {
         }
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
-        .navigationTitle(navigationBarTitle)
         .navigationBarHidden( viewType == .main ? true : false)
         //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
         .navigationDestination(isPresented: $isDoneSelecting) {
@@ -240,7 +263,7 @@ struct TodoGridView: View {
                 }
             } label: {
                 HStack {
-                    Text("정렬")
+                    Text("\(sortOptionString)")
                         .tint(Color.black)
                     Image(systemName: "chevron.down")
                         .tint(Color.black)
@@ -252,11 +275,9 @@ struct TodoGridView: View {
     
     var scrollableGridView: some View {
         ScrollView {
-            if viewType == .main {
-                CustomTitle(todos: todos)
-            }
+            CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
             sortMenu
-            if viewType != .main {
+            if viewType == .doneList {
                 GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
             } else {
                 groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
@@ -342,22 +363,22 @@ extension TodoGridView {
     
     /// 날짜별로 투두 아이템을 그루핑한 배열을 모은 배열을 리턴함
     private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
-        if sortedTodos.count == 0 {
-            return [dayOfYear(from : Date()): sortedTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
+        if filteredTodos.count == 0 {
+            return [dayOfYear(from : Date()): filteredTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
         }
         var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
         var i = 0
         var curr: Int
-        while i != sortedTodos.count {
+        while i != filteredTodos.count {
             switch sortOption {
             case .byDateIncreasing:
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].createdAt)
             case .byDueDate:
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].options.alarm ?? Date())
+                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].options.alarm ?? Date())
             default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
-                curr = daysPassedSinceJanuaryFirst2024(from : sortedTodos[i].createdAt)
+                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].createdAt)
             }
-            groupedTodos[curr, default: []].append(sortedTodos[i])
+            groupedTodos[curr, default: []].append(filteredTodos[i])
             i += 1
         }
         return groupedTodos
@@ -432,7 +453,7 @@ private struct GuideLineView: View {
     var body: some View {
         VStack{
             if viewType == .main {
-                CustomTitle(todos: todos)
+                CustomTitle(todos: todos, viewType: viewType)
             }
             Spacer()
             VStack{
@@ -455,29 +476,45 @@ private struct GuideLineView: View {
 
 private struct CustomTitle: View{
     var todos: [Todo]
+    var viewType: TodoGridViewType
+    var navigationBarTitle: String?
+    var folder: Folder?
     
     var body: some View {
         VStack{
-            HStack{
-                Text("해야 할 일이")
-                    .font(.title)
-                    .bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
+            if viewType == .main {
+                HStack{
+                    Text("해야 할 일이")
+                        .font(.title)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                todos.count == 0 ?
+                HStack{
+                    Text("모두 완료되었어요!")
+                        .font(.title)
+                        .bold()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+                :
+                HStack{
+                    Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
+                    Text("장 남았어요").font(.title).bold()
+                }.frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                HStack{
+                    Label {
+                        Text(navigationBarTitle ?? "")
+                    } icon: {
+                        Image(systemName: "folder.fill")
+                            .foregroundColor(Color.folderColor(forName: FolderColorName(rawValue: folder?.color ?? "green") ?? .green))
+                    }
+                    .font(.largeTitle)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
-            
-            todos.count == 0 ?
-            HStack{
-                Text("모두 완료되었어요!")
-                    .font(.title)
-                    .bold()
-            }.frame(maxWidth: .infinity, alignment: .leading)
-            :
-            HStack{
-                Text("\(todos.count)").font(.title).bold().foregroundStyle(.green) +
-                Text("장 남았어요").font(.title).bold()
-            }.frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
+        .padding(.leading)
     }
 }
 
