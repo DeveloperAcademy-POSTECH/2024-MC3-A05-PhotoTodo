@@ -176,11 +176,11 @@ struct TodoItemView: View {
             print("알람 데이터 있음")
             // 알람 생성
             let calendar = Calendar.current
-            let year = calendar.component(.year, from: contentAlarm!)
-            let month = calendar.component(.month, from: contentAlarm!)
-            let day = calendar.component(.day, from: contentAlarm!)
-            let hour = calendar.component(.hour, from: contentAlarm!)
-            let minute = calendar.component(.minute, from: contentAlarm!)
+            let year = calendar.component(.year, from: contentAlarm ?? .now)
+            let month = calendar.component(.month, from: contentAlarm ?? .now)
+            let day = calendar.component(.day, from: contentAlarm ?? .now)
+            let hour = calendar.component(.hour, from: contentAlarm ?? .now)
+            let minute = calendar.component(.minute, from: contentAlarm ?? .now)
             
             // Notification 알람 생성 및 id Todo에 저장하기
             id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
