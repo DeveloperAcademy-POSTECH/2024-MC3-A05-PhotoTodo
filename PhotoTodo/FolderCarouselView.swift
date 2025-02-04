@@ -36,12 +36,23 @@ func changeStringToColor(colorName: String) -> Color {
 struct FolderCarouselView: View {
     @Binding var chosenFolder: Folder?
     @State private var selectedButtonIndex: Int = 0
+//#if DEBUG
+//    @State private var folders: [Folder] = [
+//        Folder(id: UUID(), name: "하나", color: "green", todos: []),
+//        Folder(id: UUID(), name: "두울", color: "red", todos: []),
+//        Folder(id: UUID(), name: "세에엣", color: "blue", todos: []),
+//        Folder(id: UUID(), name: "넷", color: "purple", todos: []),
+//        Folder(id: UUID(), name: "다아서어엇", color: "green", todos: [])
+//    ]
+//#else
     @Query private var folders: [Folder]
+//#endif
     
     //폴더 추가 시 사용되는 상태들 상태들
     @State var isShowingSheet = false
     @State var folderNameInput = ""
     @State var selectedColor: Color?
+    @State var currentScrollPosition: CGFloat = 0
     
     var body: some View {
         GeometryReader { geometry in
@@ -63,7 +74,8 @@ struct FolderCarouselView: View {
                                                 .overlay(
                                                     ZStack{
                                                         RoundedRectangle(cornerRadius: 5)
-                                                            .stroke(changeStringToColor(colorName: folder.color), lineWidth: 4)
+                                                            .strokeBorder(changeStringToColor(colorName: folder.color), lineWidth: 1)
+                                                
                                                         Text(folder.name)
                                                             .foregroundColor(changeStringToColor(colorName: folder.color))
                                                             .bold()
@@ -94,12 +106,12 @@ struct FolderCarouselView: View {
                         
                     }
                     .frame(minWidth: geometry.size.width)
-                    .padding(.horizontal, (geometry.size.width - 40) / 2)
+                    .padding(.horizontal, (geometry.size.width / 2) - 41)
                 }
+                .padding(.horizontal, 0)
             }
         }
         .frame(height: 34)
-        .padding(.top)
         .sheet(isPresented: $isShowingSheet, content: {
             FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
                 .presentationDetents([.medium, .large])
