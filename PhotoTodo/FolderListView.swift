@@ -186,16 +186,18 @@ extension FolderListView {
             return
         }
         
-        if folderOrder.uuidOrder.count < folders.count {
-            for folder in folders {
-                if !folderOrder.uuidOrder.contains(folder.id) {
-                    folderOrders.first?.uuidOrder.append(folder.id)
+        DispatchQueue.global().async(){
+            if folderOrder.uuidOrder.count < folders.count {
+                for folder in folders {
+                    if !folderOrder.uuidOrder.contains(folder.id) {
+                        folderOrders.first?.uuidOrder.append(folder.id)
+                    }
                 }
             }
-        }
-        
-        if folderOrder.uuidOrder.count > folders.count {
-            folderOrders.first?.uuidOrder = folders.map {$0.id}
+            
+            if folderOrder.uuidOrder.count > folders.count {
+                folderOrders.first?.uuidOrder = folders.map {$0.id}
+            }
         }
     }
     
@@ -247,12 +249,14 @@ private struct FolderRow: View {
 
         }
         .onAppear {
-            // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
-            if folder == nil && viewType != .singleFolder {
-                doneCount = todos.filter { $0.isDone }.count
-            }
-            if folder != nil && viewType == .singleFolder {
-                incompleteTodosCount = folder!.todos.filter { !$0.isDone }.count
+            DispatchQueue.global().async() {
+                // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
+                if folder == nil && viewType != .singleFolder {
+                    doneCount = todos.filter { $0.isDone }.count
+                }
+                if folder != nil && viewType == .singleFolder {
+                    incompleteTodosCount = folder!.todos.filter { !$0.isDone }.count
+                }
             }
         }
         .alert("폴더 이름 변경", isPresented: $isRenamingFolder) {
