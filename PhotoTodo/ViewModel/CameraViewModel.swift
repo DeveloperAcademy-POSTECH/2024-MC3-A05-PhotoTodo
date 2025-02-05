@@ -16,6 +16,6 @@ class CameraViewModel: ObservableObject {
     
     static let shared = CameraViewModel()
     
-    @Published var photoData: [Data] = []
+    var photoData: [Data] = []
     
 }

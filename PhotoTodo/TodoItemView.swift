@@ -37,15 +37,16 @@ struct TodoItemView: View {
             //TodoItemView는 하나의 버튼임
             Button {
                 //버튼 클릭 시 상태값 세팅
-                chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
-                if (todo.options.alarm != nil) {
-                    contentAlarm = todo.options.alarm!
-                    alarmDataisEmpty = false
-                }
-                memo = todo.options.memo ?? ""
-                alarmID = todo.options.alarmUUID ?? ""
-                cameraVM.photoData = todo.images
-                
+                DispatchQueue.global().async() {
+                    chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+                    if (todo.options.alarm != nil) {
+                        contentAlarm = todo.options.alarm!
+                        alarmDataisEmpty = false
+                    }
+                    memo = todo.options.memo ?? ""
+                    alarmID = todo.options.alarmUUID ?? ""
+                    cameraVM.photoData = todo.images
+                }   
                 //MakeTodoView로 Navigate하기
                 editTodoisActive.toggle()
             } label: {
