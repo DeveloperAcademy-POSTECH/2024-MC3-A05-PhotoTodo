@@ -242,6 +242,12 @@ struct MakeTodoView: View {
                                             //                                            .frame(width: 15, height: 15)
                                             Text("메모")
                                             Spacer()
+                                            if let memo = memo {
+                                                Text(memo.count > 5 ? String("\(memo.prefix(5))...") : memo)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                            
                                             Image(systemName: "chevron.right")
                                                 .resizable()
                                                 .frame(width: 8, height: 12)
