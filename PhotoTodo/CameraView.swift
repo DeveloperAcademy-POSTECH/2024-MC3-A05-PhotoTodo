@@ -39,14 +39,13 @@ struct CameraView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0){
             cameraPreview
-                .clipShape(RoundedRectangle(cornerRadius: 25))
                 .padding(.top, 6)
                 .padding(.horizontal, 20)
             
-          
             VStack(spacing: 0) {
                 if isCameraSheetOn {
-                    EmptyView()
+                    FolderCarouselView(chosenFolder: $chosenFolder)
+                        .hidden()
                 } else {
                     FolderCarouselView(chosenFolder: $chosenFolder)
                 }
@@ -145,8 +144,8 @@ struct CameraView: View {
     
     private var cameraPreview: some View {
         GeometryReader { geo in
-            CameraPreview(cameraManager: cameraManager, frame: CGRect(x: 0, y: 0, width: geo.size.width, height: geo.size.height))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            CameraPreview(cameraManager: cameraManager, frame: CGRect(x: 0, y: 0, width: geo.size.width, height: UIScreen.main.bounds.size.height * 0.6))
+                .frame(width: geo.size.width, height: UIScreen.main.bounds.size.height * 0.6)
                 .gesture(
                     MagnificationGesture()
                         .onChanged { value in
@@ -161,10 +160,8 @@ struct CameraView: View {
                 )
                 .onAppear(){
                     cameraManager.requestAccessAndSetup()
-                    print("\(geo.size.width), \(geo.size.height)")
                 }
                 .onDisappear() {
-                    print("닫았을 때")
                     cameraManager.stopSession()
                 }
         }
