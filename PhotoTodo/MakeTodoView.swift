@@ -84,203 +84,243 @@ struct MakeTodoView: View {
     }
     
     var body: some View {
-        ZStack{
-            VStack(alignment: .center){
-                TabView {
-                    ForEach(cameraVM.photoData.indices, id: \.self) { index in
-                        let imageData: Data = cameraVM.photoData[index]
-                        let uiImage = UIImage(data: imageData)
-                        ZStack{
-                            Button(action: {
-                                imageClickisActive = true
-                                clickedImage = uiImage
-                            }, label: {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .skeleton(with: cameraVM.photoData.isEmpty,
-                                              animation: .pulse(),
-                                              appearance: .solid(color: Color.paleGray, background: Color.lightGray),
-                                              shape: .rectangle,
-                                              lines: 1,
-                                              scales: [1: 1])
-                                    .frame(width: 350, height: 500)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                            })
-                            Button {
-                                if let shareImage = uiImage {
-                                    saveImageToAlbum(image: shareImage)
-                                }
-                            } label: {
-                                Image(systemName: "square.and.arrow.up")
-                                    .resizable()
-                                    .frame(width: 20, height: 30)
-                            }
-                            .alert(isPresented: $showAlert) {
-                                Alert(title: Text("이미지 저장완료"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-                            }
-                            .offset(x: 150, y: -220)
-                            
-                        }
-                    }
-                }
-                .tabViewStyle(PageTabViewStyle())
-                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                .frame(width: 350, height: 500)
-                .clipShape(RoundedRectangle(cornerRadius: 25))
-                VStack {
-                    ZStack{
-                        RoundedRectangle(cornerRadius: 20) // 원하는 radius 값
-                            .fill(Color.paleGray) // 배경색 설정
-                        List {
-                            Section{
-                                HStack{
-                                    Text("폴더")
-                                    Spacer()
-                                    Group{
-                                        Circle()
-                                            .frame(width: 12, height: 12)
-                                            .foregroundStyle(chosenFolderColor)
-                                        
-                                        Menu {
-                                            ForEach(folders, id: \.self.id){ folder in
-                                                Button(action: {
-                                                    chosenFolder = folder
-                                                }) {
-                                                    Label("\(folder.name)", systemImage: "circle")
-                                                }
+        ScrollView {
+            ZStack{
+                VStack(alignment: .center, spacing: 20){
+                    TabView {
+                        ForEach(cameraVM.photoData.indices, id: \.self) { index in
+                            let imageData: Data = cameraVM.photoData[index]
+                            let uiImage = UIImage(data: imageData)
+                            ZStack(alignment: .trailing) {
+                                Button(action: {
+                                    imageClickisActive = true
+                                    clickedImage = uiImage
+                                }, label: {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .skeleton(with: cameraVM.photoData.isEmpty,
+                                                  animation: .pulse(),
+                                                  appearance: .solid(color: Color.paleGray, background: Color.lightGray),
+                                                  shape: .rectangle,
+                                                  lines: 1,
+                                                  scales: [1: 1])
+                                        .frame(height: UIScreen.main.bounds.size.height * 0.6)
+                                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                                })
+                                HStack {
+                                    if startViewType == .camera {
+                                        if cameraVM.photoData.count > 1 {
+                                            Button {
+                                                cameraVM.photoData.remove(at: index)
+                                            } label: {
+                                                Image("deleteImage")
+                                                    .aspectRatio(contentMode: .fit)
+                                            }
+                                            .padding(.trailing, 20)
+                                            .padding(.top, 20)
+                                        }
+                                    } else {
+                                        Button {
+                                            if let shareImage = uiImage {
+                                                saveImageToAlbum(image: shareImage)
                                             }
                                         } label: {
-                                            Text("\(chosenFolderName)")
-                                            //                                Text(chosenFolder.name)
-                                            Image(systemName: "chevron.up.chevron.down")
+                                            Image(systemName: "square.and.arrow.up")
                                                 .resizable()
-                                                .frame(width: 10, height: 15)
+                                                .frame(width: 20, height: 30)
                                         }
-                                        
-                                        
+                                        .alert(isPresented: $showAlert) {
+                                            Alert(title: Text("이미지 저장완료"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                                        }
                                     }
                                 }
-                                Button {
-                                    alarmisActive.toggle()
-                                } label: {
-                                    HStack{
-                                        Text("알람")
-                                        Spacer()
-                                        Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
-                                    }
-                                }
-                                .sheet(isPresented: $alarmisActive, content: {
-                                    VStack{
-                                        HStack{
-                                            Button(action: {
-                                                contentAlarm = Date()
-                                                alarmDataisEmpty = true
-                                                alarmisActive.toggle()
-                                            }, label: {
-                                                Text("리셋")
-                                            })
-                                            Spacer()
-                                            Button(action: {
-                                                alarmDataisEmpty = false
-                                                alarmisActive.toggle()
-                                            }, label: {
-                                                Text("완료")
-                                            })
-                                        }
-                                        
-                                        DatePicker(
-                                            "Select Date",
-                                            selection: $contentAlarm.withDefault(Date()),
-                                            displayedComponents: [.date, .hourAndMinute]
-                                        )
-                                        .labelsHidden()
-                                        .datePickerStyle(.wheel)
-                                    }
-                                    .padding()
-                                    .presentationDetents([.height(CGFloat(300))])
-                                })
-                                
-                                
-                                Button(action: {
-                                    memoisActive.toggle()
-                                    newMemo = memo ?? ""
-                                }, label: {
-                                    HStack{
-//                                        Image(systemName: "pencil")
-//                                            .resizable()
-//                                            .frame(width: 15, height: 15)
-                                        Text("메모")
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .resizable()
-                                            .frame(width: 8, height: 12)
-                                    }
-                                })
-                                .sheet(isPresented: $memoisActive, content: {
-                                    VStack{
-                                        HStack{
-                                            Spacer()
-                                            Button(action: {
-                                                memoisActive.toggle()
-                                                memo = newMemo
-                                            }, label: {
-                                                Text("완료")
-                                            })
-                                        }
-                                        
-                                        VStack{
-                                            TextField("메모를 입력해주세요.", text: $newMemo, axis: .vertical	)
-                                        }.frame(height: 100, alignment: .top)
-                                        
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .presentationDetents([.height(CGFloat(200))])
-                                })
                             }
-                            .listRowBackground(Color.clear)
-                            .foregroundStyle(Color.black)
                         }
-                        .padding(.leading, -16)
-                        .padding(.top, -34)
-                        .background(Color.clear) // List의 배경색을 투명하게 설정
-                        .scrollContentBackground(.hidden)
-                        .scrollDisabled(true)
-                        .frame(minHeight: 132)
                     }
-                    .clipShape(RoundedRectangle(cornerRadius: 20)) // 모서리 둥글게
-                }
-                .frame(width: 350, height: 132)
-            }
-            if imageClickisActive {
-                ZStack{
-                    Color.black
-                        .opacity(0.7)
-                        .ignoresSafeArea()
+                    .tabViewStyle(PageTabViewStyle())
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                    .frame(height: UIScreen.main.bounds.size.height * 0.6)
+                    .clipShape(RoundedRectangle(cornerRadius: 25))
                     VStack {
-                        HStack{
-                            Button(action: {
-                                imageClickisActive = false
-                            }, label: {
-                                Text("X")
-                                    .foregroundStyle(Color.white)
-                                    .bold()
-                            })
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 20) // 원하는 radius 값
+                                .fill(Color.paleGray) // 배경색 설정
+                            List {
+                                Section{
+                                    HStack{
+                                        Text("폴더")
+                                        Spacer()
+                                        Group{
+                                            Circle()
+                                                .frame(width: 12, height: 12)
+                                                .foregroundStyle(chosenFolderColor)
+                                            
+                                            Menu {
+                                                ForEach(folders, id: \.self.id){ folder in
+                                                    Button(action: {
+                                                        chosenFolder = folder
+                                                    }) {
+                                                        HStack {
+                                                            if chosenFolder == folder {
+                                                                Image(systemName: "checkmark")
+                                                            } else {
+                                                                Image(systemName: "checkmark").hidden()
+                                                            }
+                                                            
+                                                            Text("\(folder.name)")
+                                                            Spacer()
+                                                            HStack {
+                                                                if chosenFolder == folder {
+                                                                    Image(systemName: "checkmark")
+                                                                } else {
+                                                                    Image(systemName: "checkmark").hidden()
+                                                                }
+                                                            }
+                                                            .frame(width: 30)
+                                                        }
+                                                    }
+                                                }
+                                            } label: {
+                                                Text("\(chosenFolderName)")
+                                                //                                Text(chosenFolder.name)
+                                                Image(systemName: "chevron.up.chevron.down")
+                                                    .resizable()
+                                                    .frame(width: 10, height: 15)
+                                            }
+                                            
+                                            
+                                        }
+                                    }
+                                    Button {
+                                        alarmisActive.toggle()
+                                    } label: {
+                                        HStack{
+                                            Text("알람")
+                                            Spacer()
+                                            Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
+                                        }
+                                    }
+                                    .sheet(isPresented: $alarmisActive, content: {
+                                        VStack{
+                                            HStack{
+                                                Button(action: {
+                                                    contentAlarm = Date()
+                                                    alarmDataisEmpty = true
+                                                    alarmisActive.toggle()
+                                                }, label: {
+                                                    Text("리셋")
+                                                })
+                                                Spacer()
+                                                Button(action: {
+                                                    alarmDataisEmpty = false
+                                                    alarmisActive.toggle()
+                                                }, label: {
+                                                    Text("완료")
+                                                })
+                                            }
+                                            
+                                            DatePicker(
+                                                "Select Date",
+                                                selection: $contentAlarm.withDefault(Date()),
+                                                in: Date()...,
+                                                displayedComponents: [.date, .hourAndMinute]
+                                            )
+                                            .labelsHidden()
+                                            .datePickerStyle(.wheel)
+                                        }
+                                        .padding()
+                                        .presentationDetents([.height(CGFloat(300))])
+                                    })
+                                    
+                                    
+                                    Button(action: {
+                                        memoisActive.toggle()
+                                        newMemo = memo ?? ""
+                                    }, label: {
+                                        HStack{
+                                            //                                        Image(systemName: "pencil")
+                                            //                                            .resizable()
+                                            //                                            .frame(width: 15, height: 15)
+                                            Text("메모")
+                                            Spacer()
+                                            if let memo = memo {
+                                                Text(memo.count > 5 ? String("\(memo.prefix(5))...") : memo)
+                                                    .lineLimit(1)
+                                                    .truncationMode(.tail)
+                                            }
+                                            
+                                            Image(systemName: "chevron.right")
+                                                .resizable()
+                                                .frame(width: 8, height: 12)
+                                        }
+                                    })
+                                    .sheet(isPresented: $memoisActive, content: {
+                                        VStack{
+                                            HStack{
+                                                Spacer()
+                                                Button(action: {
+                                                    memoisActive.toggle()
+                                                    memo = newMemo
+                                                }, label: {
+                                                    Text("완료")
+                                                })
+                                            }
+                                            
+                                            VStack{
+                                                TextField("메모를 입력해주세요.", text: $newMemo, axis: .vertical	)
+                                            }.frame(height: 100, alignment: .top)
+                                            
+                                            Spacer()
+                                        }
+                                        .padding()
+                                        .presentationDetents([.height(CGFloat(200))])
+                                    })
+                                }
+                                .listRowBackground(Color.clear)
+                                .foregroundStyle(Color.black)
+                            }
+                            .padding(.leading, -16)
+                            .padding(.top, -34)
+                            .background(Color.clear) // List의 배경색을 투명하게 설정
+                            .scrollContentBackground(.hidden)
+                            .scrollDisabled(true)
+                            .frame(minHeight: 132)
+                        }
+                        .clipShape(RoundedRectangle(cornerRadius: 20)) // 모서리 둥글게
+                    }
+                    .frame(width: 350, height: 132)
+                }
+                .padding(.horizontal, 20)
+                if imageClickisActive {
+                    ZStack{
+                        Color.black
+                            .opacity(0.7)
+                            .ignoresSafeArea()
+                        VStack {
+                            HStack{
+                                Button(action: {
+                                    imageClickisActive = false
+                                }, label: {
+                                    Text("X")
+                                        .foregroundStyle(Color.white)
+                                        .bold()
+                                })
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            Spacer()
+                            Image(uiImage: clickedImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .clipShape(RoundedRectangle(cornerRadius: 25))
+                                .scaleEffect(imageScale >= 1.0 ? imageScale : 1.0)
+                                .gesture(magnification)
+                            Spacer()
                             Spacer()
                         }
-                        .padding()
-                        
-                        Spacer()
-                        Image(uiImage: clickedImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 350, height: 500)
-                            .clipShape(RoundedRectangle(cornerRadius: 25))
-                            .scaleEffect(imageScale >= 1.0 ? imageScale : 1.0)
-                            .gesture(magnification)
-                        Spacer()
-                        Spacer()
+                        .padding(.horizontal, 20)
                     }
                 }
             }
@@ -368,7 +408,7 @@ struct MakeTodoView: View {
         dismiss()
         
     }
-
+    
     
     func saveImageToAlbum(image: UIImage) {
         PHPhotoLibrary.requestAuthorization { status in
