@@ -222,6 +222,7 @@ struct MakeTodoView: View {
                                             DatePicker(
                                                 "Select Date",
                                                 selection: $contentAlarm.withDefault(Date()),
+                                                in: Date()...,
                                                 displayedComponents: [.date, .hourAndMinute]
                                             )
                                             .labelsHidden()
