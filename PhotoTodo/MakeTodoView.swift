@@ -34,7 +34,7 @@ struct SharedImage: Transferable {
 struct MakeTodoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraVM = CameraViewModel.shared
     @State private var cameraManager = CameraManager()
     @Binding var chosenFolder: Folder?
     var startViewType: startViewType
