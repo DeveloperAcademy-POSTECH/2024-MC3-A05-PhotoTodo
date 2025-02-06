@@ -10,7 +10,7 @@ import UIKit
 import SwiftData
 
 struct TodoItemView: View {
-    @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraVM = CameraViewModel.shared
     @Environment(\.modelContext) private var modelContext
     @Binding var editMode: EditMode
     @State private var editTodoisActive: Bool = false
