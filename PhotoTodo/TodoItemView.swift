@@ -157,16 +157,19 @@ struct TodoItemView: View {
     
     func onButtonTapped() {
         //버튼 클릭 시 상태값 세팅
+        chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+        if (todo.options.alarm != nil) {
+            contentAlarm = todo.options.alarm!
+            alarmDataisEmpty = false
+        }
+        memo = todo.options.memo ?? ""
+        alarmID = todo.options.alarmUUID ?? ""
+        
+        //UI Hang 방지 위해 백그라운드 작업
         DispatchQueue.global().async() {
-            chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
-            if (todo.options.alarm != nil) {
-                contentAlarm = todo.options.alarm!
-                alarmDataisEmpty = false
-            }
-            memo = todo.options.memo ?? ""
-            alarmID = todo.options.alarmUUID ?? ""
             cameraVM.photoData = todo.images
         }
+        
         //MakeTodoView로 Navigate하기
         editTodoisActive.toggle()
     }
