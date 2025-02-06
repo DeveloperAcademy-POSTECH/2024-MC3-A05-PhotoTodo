@@ -160,7 +160,24 @@ struct MakeTodoView: View {
                                                     Button(action: {
                                                         chosenFolder = folder
                                                     }) {
-                                                        Label("\(folder.name)", systemImage: "circle")
+                                                        HStack {
+                                                            if chosenFolder == folder {
+                                                                Image(systemName: "checkmark")
+                                                            } else {
+                                                                Image(systemName: "checkmark").hidden()
+                                                            }
+                                                            
+                                                            Text("\(folder.name)")
+                                                            Spacer()
+                                                            HStack {
+                                                                if chosenFolder == folder {
+                                                                    Image(systemName: "checkmark")
+                                                                } else {
+                                                                    Image(systemName: "checkmark").hidden()
+                                                                }
+                                                            }
+                                                            .frame(width: 30)
+                                                        }
                                                     }
                                                 }
                                             } label: {
