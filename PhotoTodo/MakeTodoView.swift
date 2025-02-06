@@ -106,6 +106,7 @@ struct MakeTodoView: View {
                                                   lines: 1,
                                                   scales: [1: 1])
                                         .frame(height: UIScreen.main.bounds.size.height * 0.6)
+                                        .clipShape(RoundedRectangle(cornerRadius: 25))
                                 })
                                 HStack {
                                     if startViewType == .camera {
@@ -313,13 +314,13 @@ struct MakeTodoView: View {
                             Image(uiImage: clickedImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 350, height: 500)
                                 .clipShape(RoundedRectangle(cornerRadius: 25))
                                 .scaleEffect(imageScale >= 1.0 ? imageScale : 1.0)
                                 .gesture(magnification)
                             Spacer()
                             Spacer()
                         }
+                        .padding(.horizontal, 20)
                     }
                 }
             }
