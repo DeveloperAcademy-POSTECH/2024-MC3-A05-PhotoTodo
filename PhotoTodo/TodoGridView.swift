@@ -370,6 +370,7 @@ struct TodoGridView: View {
             }
             
             modelContext.insert(newTodo)
+            try? modelContext.save()
         }
     }
     
@@ -392,6 +393,7 @@ struct TodoGridView: View {
                     }
                 }
                 selectedTodos.removeAll() // Clear selected items after deletion
+                try? modelContext.save()
             }
         }
     }

@@ -353,6 +353,7 @@ struct MakeTodoView: View {
             folders[0].todos.append(newTodo)
         }
         modelContext.insert(newTodo)
+        try? modelContext.save() 
         home = true
         
         if startViewType == .gridMain {  //startViewType이 .gridMain일 경우 (.gridSingleFolder의 경우에는 제외)
