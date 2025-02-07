@@ -34,7 +34,7 @@ struct SharedImage: Transferable {
 struct MakeTodoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraVM = CameraViewModel.shared
     @State private var cameraManager = CameraManager()
     @Binding var chosenFolder: Folder?
     var startViewType: startViewType
@@ -393,6 +393,7 @@ struct MakeTodoView: View {
             folders[0].todos.append(newTodo)
         }
         modelContext.insert(newTodo)
+        try? modelContext.save() 
         home = true
         
         if startViewType == .gridMain {  //startViewType이 .gridMain일 경우 (.gridSingleFolder의 경우에는 제외)

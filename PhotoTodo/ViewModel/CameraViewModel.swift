@@ -11,11 +11,11 @@ import UIKit
 import SwiftUI
 
 ///카메라 촬영
-//@Observable
-class CameraViewModel: ObservableObject {
+@Observable
+class CameraViewModel{
     
     static let shared = CameraViewModel()
     
-    @Published var photoData: [Data] = []
+    var photoData: [Data] = []
     
 }

@@ -39,7 +39,7 @@ struct TodoGridView: View {
     @State private var isShowingOptions = false
     @State private var showingImagePicker = false
     @State private var isDoneSelecting = false
-    @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraVM = CameraViewModel.shared
     @AppStorage("deletionCount") var deletionCount: Int = 0
     @State private var selectedItems = [PhotosPickerItem]()
     @State private var selectedImages = [Image]()
@@ -370,6 +370,7 @@ struct TodoGridView: View {
             }
             
             modelContext.insert(newTodo)
+            try? modelContext.save()
         }
     }
     
@@ -392,6 +393,7 @@ struct TodoGridView: View {
                     }
                 }
                 selectedTodos.removeAll() // Clear selected items after deletion
+                try? modelContext.save()
             }
         }
     }

@@ -18,7 +18,7 @@ struct CameraView: View {
     @Environment(\.dismiss) private var dismiss
     
     // 카메라 촬영 관련
-    @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraVM = CameraViewModel.shared
     @State private var cameraManager = CameraManager()
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
