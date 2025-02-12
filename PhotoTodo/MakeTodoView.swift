@@ -65,6 +65,7 @@ struct MakeTodoView: View {
     //이미지 추가 관련 변수들
     @State private var showingImagePicker = false
     @State private var selectedItems = [PhotosPickerItem]()
+    @State private var selectedIndexs: Int = 0
     
     //알람 설정 관련
     @State private var showAlert = false
@@ -85,63 +86,69 @@ struct MakeTodoView: View {
     
     var body: some View {
         ScrollView {
-            ZStack{
+            ZStack {
                 VStack(alignment: .center, spacing: 20){
-                    TabView {
-                        ForEach(cameraVM.photoData.indices, id: \.self) { index in
-                            let imageData: Data = cameraVM.photoData[index]
-                            let uiImage = UIImage(data: imageData)
-                            ZStack(alignment: .trailing) {
-                                Button(action: {
-                                    imageClickisActive = true
-                                    clickedImage = uiImage
-                                }, label: {
-                                    Image(uiImage: uiImage)
+                    ZStack(alignment: .topTrailing) {
+                        TabView(selection: $selectedIndexs) {
+                            ForEach(cameraVM.photoData.indices, id: \.self) { index in
+                                let imageData: Data = cameraVM.photoData[index]
+                                let uiImage = UIImage(data: imageData)
+                                ZStack(alignment: .trailing) {
+                                    Button(action: {
+                                        imageClickisActive = true
+                                        clickedImage = uiImage
+                                    }, label: {
+                                        Image(uiImage: uiImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .skeleton(with: cameraVM.photoData.isEmpty,
+                                                      animation: .pulse(),
+                                                      appearance: .solid(color: Color.paleGray, background: Color.lightGray),
+                                                      shape: .rectangle,
+                                                      lines: 1,
+                                                      scales: [1: 1])
+                                            .frame(height: UIScreen.main.bounds.size.height * 0.6)
+                                            .clipShape(RoundedRectangle(cornerRadius: 25))
+                                    })
+                                }
+                            }
+                        }
+                        .tabViewStyle(PageTabViewStyle())
+                        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                        .frame(height: UIScreen.main.bounds.size.height * 0.6)
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                        
+                        HStack {
+                            if startViewType == .edit {
+                                Button {
+                                    let imageData: Data = cameraVM.photoData[self.selectedIndexs]
+                                    let uiImage = UIImage(data: imageData)
+                                    if let shareImage = uiImage {
+                                        saveImageToAlbum(image: shareImage)
+                                    }
+                                } label: {
+                                    Image(systemName: "square.and.arrow.up")
                                         .resizable()
-                                        .scaledToFill()
-                                        .skeleton(with: cameraVM.photoData.isEmpty,
-                                                  animation: .pulse(),
-                                                  appearance: .solid(color: Color.paleGray, background: Color.lightGray),
-                                                  shape: .rectangle,
-                                                  lines: 1,
-                                                  scales: [1: 1])
-                                        .frame(height: UIScreen.main.bounds.size.height * 0.6)
-                                        .clipShape(RoundedRectangle(cornerRadius: 25))
-                                })
-                                HStack {
-                                    if startViewType == .camera {
-                                        if cameraVM.photoData.count > 1 {
-                                            Button {
-                                                cameraVM.photoData.remove(at: index)
-                                            } label: {
-                                                Image("deleteImage")
-                                                    .aspectRatio(contentMode: .fit)
-                                            }
-                                            .padding(.trailing, 20)
-                                            .padding(.top, 20)
-                                        }
-                                    } else {
-                                        Button {
-                                            if let shareImage = uiImage {
-                                                saveImageToAlbum(image: shareImage)
-                                            }
-                                        } label: {
-                                            Image(systemName: "square.and.arrow.up")
-                                                .resizable()
-                                                .frame(width: 20, height: 30)
-                                        }
-                                        .alert(isPresented: $showAlert) {
-                                            Alert(title: Text("이미지 저장완료"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-                                        }
+                                        .frame(width: 20, height: 30)
+                                }
+                                .alert(isPresented: $showAlert) {
+                                    Alert(title: Text("이미지 저장완료"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                                }
+                                
+                            } else {
+                                if cameraVM.photoData.count > 1 {
+                                    Button {
+                                        cameraVM.photoData.remove(at: self.selectedIndexs)
+                                    } label: {
+                                        Image("deleteImage")
+                                            .aspectRatio(contentMode: .fit)
                                     }
                                 }
                             }
                         }
+                        .padding(.trailing, 20)
+                        .padding(.top, 20)
                     }
-                    .tabViewStyle(PageTabViewStyle())
-                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-                    .frame(height: UIScreen.main.bounds.size.height * 0.6)
-                    .clipShape(RoundedRectangle(cornerRadius: 25))
                     VStack {
                         ZStack{
                             RoundedRectangle(cornerRadius: 20) // 원하는 radius 값
@@ -393,7 +400,7 @@ struct MakeTodoView: View {
             folders[0].todos.append(newTodo)
         }
         modelContext.insert(newTodo)
-        try? modelContext.save() 
+        try? modelContext.save()
         home = true
         
         if startViewType == .gridMain {  //startViewType이 .gridMain일 경우 (.gridSingleFolder의 경우에는 제외)
