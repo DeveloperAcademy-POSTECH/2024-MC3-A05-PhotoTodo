@@ -46,12 +46,6 @@ struct CameraView: View {
                 if !isCameraSheetOn {
                     FolderCarouselView(chosenFolder: $chosenFolder)
                 }
-//                if isCameraSheetOn {
-//                    FolderCarouselView(chosenFolder: $chosenFolder)
-//                        .hidden()
-//                } else {
-//                    FolderCarouselView(chosenFolder: $chosenFolder)
-//                }
             }
             .padding(.top, 24)
             
@@ -148,7 +142,6 @@ struct CameraView: View {
     private var cameraPreview: some View {
         GeometryReader { geo in
             CameraPreview(cameraManager: cameraManager, frame: CGRect(x: 0, y: 0, width: geo.size.width, height: UIScreen.main.bounds.size.height * 0.6))
-                .border(.red, width: 2)
                 .frame(width: geo.size.width, height: UIScreen.main.bounds.size.height * 0.6)
                 .gesture(
                     MagnificationGesture()
