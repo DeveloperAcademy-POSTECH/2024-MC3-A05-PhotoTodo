@@ -49,6 +49,7 @@ struct MakeTodoView: View {
     @Binding var memo: String?
     @State var newMemo: String = ""
     @Query private var folders: [Folder]
+    @Query private var folderOrders: [FolderOrder]
     @Binding var home: Bool?
     
     // 이미지 처리관련
@@ -82,6 +83,11 @@ struct MakeTodoView: View {
     }
     var chosenFolderName : String{
         return chosenFolder != nil ? chosenFolder!.name : folders[0].name
+    }
+    
+    var orderedFolder: [Folder] {
+        let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
+        return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
     }
     
     var body: some View {
@@ -164,7 +170,7 @@ struct MakeTodoView: View {
                                                 .foregroundStyle(chosenFolderColor)
                                             
                                             Menu {
-                                                ForEach(folders, id: \.self.id){ folder in
+                                                ForEach(orderedFolder, id: \.self.id){ folder in
                                                     Button(action: {
                                                         chosenFolder = folder
                                                     }) {

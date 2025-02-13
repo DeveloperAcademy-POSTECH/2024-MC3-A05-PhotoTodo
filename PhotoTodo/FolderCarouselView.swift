@@ -46,6 +46,7 @@ struct FolderCarouselView: View {
 //    ]
 //#else
     @Query private var folders: [Folder]
+    @Query private var folderOrders: [FolderOrder]
 //#endif
     
     //폴더 추가 시 사용되는 상태들 상태들
@@ -54,12 +55,17 @@ struct FolderCarouselView: View {
     @State var selectedColor: Color?
     @State var currentScrollPosition: CGFloat = 0
     
+    var orderedFolder: [Folder] {
+        let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
+        return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(Array(folders.enumerated()), id: \.element.id) { index, folder in
+                        ForEach(Array(orderedFolder.enumerated()), id: \.element.id) { index, folder in
                             Button(action: {
                                 withAnimation {
                                     selectedButtonIndex = index
