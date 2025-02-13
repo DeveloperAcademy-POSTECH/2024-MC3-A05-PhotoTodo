@@ -342,6 +342,7 @@ struct MakeTodoView: View {
             NavigationStack{
                 CameraView(isCameraSheetOn: $isCameraSheetOn)
             }
+            .presentationDragIndicator(.visible)
         })
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10-cameraVM.photoData.count, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
