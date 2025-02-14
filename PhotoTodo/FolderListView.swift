@@ -157,6 +157,7 @@ extension FolderListView {
             )
             modelContext.insert(newFolder)
             folderOrders.first?.uuidOrder.append(newFolder.id)
+            try? modelContext.save()
         }
     }
     
@@ -164,7 +165,8 @@ extension FolderListView {
         guard let folder = folder else { return }
         if let folderOrder = folderOrders.first {
             modelContext.delete(folder)
-            folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
+            folderOrder.uuidOrder.removeAll { $0 == folder.id }
+            try? modelContext.save()
         }
     }
     
@@ -172,6 +174,7 @@ extension FolderListView {
         if folderOrders.count == 0 {
             let folderOrder = FolderOrder()
             modelContext.insert(folderOrder)
+            try? modelContext.save()
         }
         
         guard let folderOrder = folderOrders.first else {
@@ -190,6 +193,7 @@ extension FolderListView {
             if folderOrder.uuidOrder.count > folders.count {
                 folderOrders.first?.uuidOrder = folders.map {$0.id}
             }
+            try? modelContext.save()
         }
     }
     
@@ -198,6 +202,7 @@ extension FolderListView {
         if let defaultID = defaultFolderID, var newOrder = folderOrders.first?.uuidOrder.filter({$0 != UUID(uuidString: defaultID)}) {
             newOrder.move(fromOffsets: indices, toOffset: newOffset)
             folderOrders.first?.uuidOrder = [UUID(uuidString: defaultID)!] + newOrder
+            try? modelContext.save()
         }
     }
 }
@@ -277,9 +282,10 @@ private struct FolderRow: View {
     
     private func deleteFolder(){
         guard let folder = folder else {return}
-        if folderOrders.first != nil {
+        if let folderOrder = folderOrders.first {
             modelContext.delete(folder)
-            folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
+            folderOrder.uuidOrder.removeAll { $0 == folder.id }
+            try? modelContext.save()
         }
     }
     
@@ -287,6 +293,7 @@ private struct FolderRow: View {
         guard let folder = folder else {return}
         folder.name = newFolderName
         newFolderName = ""
+        try? modelContext.save()
     }
 }
 
