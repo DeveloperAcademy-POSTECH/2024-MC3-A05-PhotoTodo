@@ -57,8 +57,8 @@ struct FolderListView: View {
             
             //기본 폴더를 제외하고는 모두 삭제 가능
             ForEach(orderedFolder.filter({$0.id.uuidString != defaultFolderID})) { folder in
-                ZStack{
-                    FolderRowView(actions: [
+                if editMode == .inactive {
+                    FolderRowView(actions: [ // Swipe Action의 동작을 커스텀한 뷰
                         Action(color: .red, name: "delete", systemIcon: "trash.fill", action: { completion in
                             selectedFolder = folder
                             pendingCompletion = completion
@@ -71,20 +71,12 @@ struct FolderListView: View {
                             }
                         }
                         .opacity( editMode == .active ? 0 : 1)
-                        .disabled(editMode == .active)
+                    .listRowInsets(EdgeInsets(top: -5, leading: 0, bottom: -5, trailing: 0))
+                } else {
                     FolderRow(folder: folder, viewType: basicViewType)
-                        .padding(.leading, 16)
-                        .opacity( editMode == .active ? 1 : 0)
-                        
                 }
-                .listRowInsets(EdgeInsets(top: -5, leading: 0, bottom: -5, trailing: 0))
-
             }
             .onMove(perform: handleMove)
-            // .onDelete { _ in
-            //     // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
-            //     // 실제 삭제 실행시에는 swipeActions으로 넘겨받은 클로저가 호출됩니다.
-            // }
             //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
             //리스트 뷰의 마지막에는 완료함이 위치함
             NavigationLink {
@@ -240,10 +232,10 @@ private struct FolderRow: View {
                 .foregroundStyle(viewType == .singleFolder ? changeStringToColor(colorName: folder != nil ? folder!.color : "folder-color/green" ) : Color("gray/gray-800"))
             Text(folderString)
             Spacer()
-            ZStack{
+            HStack {
                 Text(folderCountString)
                     .foregroundColor(Color("gray/gray-500"))
-                    .opacity(editMode?.wrappedValue == .active ? 0 : 1)
+
                 menu
             }
 
@@ -330,6 +322,7 @@ extension FolderRow {
             Image(systemName: "ellipsis.circle")
                 .foregroundStyle(Color("green/green-600"))
         }
+        .frame(width: isShowingMemu ? nil : 0, alignment: .trailing)
         .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
         .disabled(!isShowingMemu) // 인터렉션을 막기
     }
