@@ -312,7 +312,7 @@ struct TodoGridView: View {
     
     private var scrollableGridView: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
                 sortMenu
                 if viewType == .doneList {
