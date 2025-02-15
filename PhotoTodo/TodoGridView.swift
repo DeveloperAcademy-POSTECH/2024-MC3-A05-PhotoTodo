@@ -29,8 +29,8 @@ enum ToastOption {
 
 struct TodoGridView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query var folders: [Folder]
-    @Query var compositeTodos: [Todo]
+    @Query private var folders: [Folder]
+    @Query private var compositeTodos: [Todo]
     @State var currentFolder: Folder? = nil
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
@@ -46,11 +46,11 @@ struct TodoGridView: View {
     //    @State private var selectedItem: PhotosPickerItem?
     
     //새로운 사진 업로드 시 MakeTodoView에서 필요한 상태들
-    @State var contentAlarm: Date? = nil
-    @State var memo: String? = nil
-    @State var alarmDataisEmpty: Bool? = nil
-    @State var home: Bool? = nil
-    @State var alarmID: String? = nil
+    @State private var contentAlarm: Date? = nil
+    @State private var memo: String? = nil
+    @State private var alarmDataisEmpty: Bool? = nil
+    @State private var home: Bool? = nil
+    @State private var alarmID: String? = nil
     @State private var alarmSetting: Bool = false
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
@@ -59,10 +59,10 @@ struct TodoGridView: View {
     @State private var recentlyDoneTodo: Todo? = nil
     
     /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
-    @State var isCameraSheetOn: Bool = false
+    @State private var isCameraSheetOn: Bool = false
     
     
-    var todos: [Todo] {
+    private var todos: [Todo] {
         switch viewType {
         case .singleFolder:
             return currentFolder?.todos.filter { !$0.isDone } ?? []
@@ -78,7 +78,7 @@ struct TodoGridView: View {
     }
     
     
-    var sortedTodos: [Todo] {
+    private var sortedTodos: [Todo] {
         switch sortOption {
         case .byDateIncreasing:
             return todos.sorted { $0.createdAt < $1.createdAt }
@@ -93,7 +93,7 @@ struct TodoGridView: View {
         }
     }
     
-    var filteredTodos: [Todo] {
+    private var filteredTodos: [Todo] {
         switch viewType {
         case .singleFolder:
             if let currentFolder = currentFolder {
@@ -114,7 +114,7 @@ struct TodoGridView: View {
     }
     
     
-    var navigationBarTitle: String {
+    private var navigationBarTitle: String {
         switch viewType {
         case .singleFolder:
             return currentFolder?.name ?? folders[0].name
@@ -126,7 +126,7 @@ struct TodoGridView: View {
     }
     
     @State var toastHeight: CGFloat = 0
-    var sortOptionString: String {
+    private var sortOptionString: String {
         switch sortOption {
         case .byDateIncreasing:
             "오래된순"
@@ -214,7 +214,7 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    var customNavBar: some View {
+    private var customNavBar: some View {
         HStack(spacing: 0) {
             Spacer()
             
@@ -287,7 +287,7 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    var sortMenu: some View {
+    private var sortMenu: some View {
         HStack {
             Spacer()
             Menu {
@@ -310,7 +310,7 @@ struct TodoGridView: View {
         .padding(.horizontal, 20)
     }
     
-    var scrollableGridView: some View {
+    private var scrollableGridView: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
@@ -326,7 +326,7 @@ struct TodoGridView: View {
     
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
-    var groupedGridView: some View {
+    private var groupedGridView: some View {
         ForEach(todosGroupedByDate.elements, id: \.key) { element in
             VStack(spacing: 8) {
                 HStack {
