@@ -296,7 +296,6 @@ struct TodoGridView: View {
                     Text("오래된순").tag(SortOption.byDateIncreasing)
                 }
             } label: {
-
                 HStack(spacing: 2) {
                     Text("\(sortOptionString)")
                         .tint(Color.black)
@@ -305,7 +304,8 @@ struct TodoGridView: View {
                 }
                 .font(.callout)
             }
-            .frame(width: 70, height: 44)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .frame(height: 44)
         }
         .padding(.horizontal, 20)
     }
