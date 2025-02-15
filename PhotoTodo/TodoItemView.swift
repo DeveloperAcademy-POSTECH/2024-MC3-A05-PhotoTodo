@@ -202,6 +202,7 @@ struct TodoItemView: View {
         todo.images = cameraVM.photoData
         todo.options = Options(alarm: contentAlarm, alarmUUID: id, memo: memo)
         editTodoisActive.toggle()
+        try? modelContext.save()
     }
     
     ///삭제되기까지 남은 기간을 계산하는 함수
