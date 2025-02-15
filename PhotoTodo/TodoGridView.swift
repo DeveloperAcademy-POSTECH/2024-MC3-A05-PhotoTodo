@@ -554,6 +554,7 @@ private struct CustomTitle: View{
                             .foregroundColor(Color.folderColor(forName: FolderColorName(rawValue: folder?.color ?? "green") ?? .green))
                     }
                     .font(.largeTitle)
+                    .bold()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
