@@ -147,9 +147,9 @@ struct TodoGridView: View {
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack {
                     if todos.isEmpty && viewType != .doneList {
-                        GuideLineView(viewType: viewType, todos: todos) //데이터 있을 시
+                        GuideLineView(viewType: viewType, todos: todos, navigationBarTitle: navigationBarTitle, folder: currentFolder) //데이터 없을 시
                     } else {
-                        scrollableGridView //데이터 없을 시
+                        scrollableGridView //데이터 있을 시
                     }
                 }
                 //토스트 알림
@@ -493,12 +493,12 @@ struct GridView: View {
 private struct GuideLineView: View {
     var viewType: TodoGridViewType
     var todos: [Todo]
+    var navigationBarTitle: String
+    var folder: Folder?
     
     var body: some View {
         VStack{
-            if viewType == .main {
-                CustomTitle(todos: todos, viewType: viewType)
-            }
+            CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: folder)
             Spacer()
             VStack{
                 Image("mainEmptyIcon")
