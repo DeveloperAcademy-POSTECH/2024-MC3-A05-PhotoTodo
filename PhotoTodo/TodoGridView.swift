@@ -186,20 +186,25 @@ struct TodoGridView: View {
         }
         .toolbar {
             ToolbarItem {
-                editMode == .active ?
                 //편집모드에서 다중선택된 아이템 삭제
-                Button(action: deleteSelectedTodos) {
-                    Image(systemName: "trash")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                }.frame(width: 45) :
-                //편집모드가 아닐 시 아이템 추가 버튼
-                Button(action: toggleAddOptions) {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                }.frame(width: 45)
+                if editMode == .active {
+                    Button(action: deleteSelectedTodos) {
+                        Image(systemName: "trash")
+                            .resizable()
+                            .frame(width: 18, height: 18)
+                    }.frame(width: 45)
+                } else {
+                    //편집모드가 아닐 시 아이템 추가 버튼
+                    Button(action: toggleAddOptions) {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 18, height: 18)
+                    }
+                    .frame(width: 45)
+                    .disabled(viewType == .doneList)
+                }
             }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
                     .frame(width: 38)
