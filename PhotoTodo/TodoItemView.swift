@@ -33,10 +33,10 @@ struct TodoItemView: View {
     let manager = NotificationManager.instance
     
     var body: some View {
-        ZStack{
+        ZStack {
             //TodoItemView는 하나의 버튼임
             Button {
-                onButtonTapped()
+                onTodoItemTapped()
             } label: {
                 Image(uiImage: UIImage(data: todo.images.count > 0 ? todo.images[0] : Data()))
                     .resizable()
@@ -67,59 +67,7 @@ struct TodoItemView: View {
                     }
                 //MARK: 체크박스 표시
                     .overlay(alignment: .topLeading) {
-                        Button{
-                            todo.isDoneAt = nil
-                            if (todo.isDone) {
-                                // 완료상태 -> 미완료상태로 변경
-                                //                                withAnimation {
-                                todo.isDone.toggle()
-                                //                                }
-                                todo.isDoneAt = nil
-                                //                                toastMassage = todo
-                                toastOption = .moveToOrigin
-                                recentlyDoneTodo = todo
-                                DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
-                                    DispatchQueue.main.async {
-                                        //                                        toastMassage = nil
-                                        toastOption = .none
-                                    }
-                                })
-                                print("메인함으로 보내버림")
-                            } else {
-                                // 미완료상태 -> 완료상태로 변경
-                                //                                withAnimation {
-                                todo.isDone.toggle()
-                                //                                }
-                                todo.isDoneAt = Date()
-                                //                                toastMassage = nil
-                                toastOption = .moveToDone
-                                recentlyDoneTodo = todo
-                                DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
-                                    DispatchQueue.main.async {
-                                        //                                        toastMassage = todo
-                                        toastOption = .none
-                                    }
-                                })
-                                print("완료함으로 보내버림")
-                            }
-                        } label : {
-                            VStack{
-                                editMode == .active ?
-                                nil : //editMode일 때는 체크박스가 보이지 않게 함
-                                todo.isDone ?
-                                Image("selectedOn")
-                                    .aspectRatio(contentMode: .fit)
-                                :
-                                Image("selectedOff")
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                            .frame(width: 44, height: 44)
-                                .padding(8)
-                        }
-                        .disabled(editMode == .active)
-                        .sensoryFeedback(.success, trigger: todo.isDone) { oldValue, newValue in
-                            return todo.isDone == true
-                        }
+                        checkBoxButton
                     }
                 
             }
@@ -155,7 +103,59 @@ struct TodoItemView: View {
         }
     }
     
-    func onButtonTapped() {
+    private var checkBoxButton: some View {
+            Button {
+                onCheckBoxButtonTapped()
+                } label : {
+                VStack{
+                    editMode == .active ?
+                    nil : //editMode일 때는 체크박스가 보이지 않게 함
+                    todo.isDone ?
+                    Image("selectedOn")
+                        .aspectRatio(contentMode: .fit)
+                    :
+                    Image("selectedOff")
+                        .aspectRatio(contentMode: .fit)
+                }
+                .frame(width: 44, height: 44)
+                    .padding(8)
+            }
+            .disabled(editMode == .active)
+            .sensoryFeedback(.success, trigger: todo.isDone) { oldValue, newValue in
+                return todo.isDone == true
+            }
+    }
+    
+    func onCheckBoxButtonTapped() {
+        todo.isDoneAt = nil
+        if (todo.isDone) {
+            // 완료상태 -> 미완료상태로 변경
+            todo.isDone.toggle()
+            todo.isDoneAt = nil
+            toastOption = .moveToOrigin
+            recentlyDoneTodo = todo
+            DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
+                DispatchQueue.main.async {
+                    toastOption = .none
+                }
+            })
+            print("메인함으로 보내버림")
+        } else {
+            todo.isDone.toggle()
+            todo.isDoneAt = Date()
+            toastOption = .moveToDone
+            recentlyDoneTodo = todo
+            DispatchQueue.global().asyncAfter(deadline: .now() + 3, execute: {
+                DispatchQueue.main.async {
+                    toastOption = .none
+                }
+            })
+            print("완료함으로 보내버림")
+        }
+        try? modelContext.save()
+    }
+    
+    func onTodoItemTapped() {
         //버튼 클릭 시 상태값 세팅
         chosenFolder = todo.folder ?? Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
         if (todo.options.alarm != nil) {
