@@ -27,9 +27,9 @@ struct FolderListView: View {
     @State private var pendingCompletion: (() -> Void)?
     
     //폴더 생성 및 편집 관련 sheet에서 쓰임
-    @State var isShowingSheet = false
-    @State var folderNameInput = ""
-    @State var selectedColor: Color?
+    @State private var isShowingSheet = false
+    @State private var folderNameInput = ""
+    @State private var selectedColor: Color?
     
     @Query private var folderOrders: [FolderOrder]
     
@@ -204,9 +204,9 @@ private struct FolderRow: View {
     @State private var incompleteTodosCount: Int = 0
     
     //폴더 생성 및 편집 관련 sheet에서 쓰임
-    @State var isShowingSheet = false
-    @State var folderNameInput = ""
-    @State var selectedColor: Color?
+    @State private var isShowingSheet = false
+    @State private var folderNameInput = ""
+    @State private var selectedColor: Color?
     
     var folderString: String {
         return folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함"
