@@ -71,7 +71,7 @@ struct FolderListView: View {
                             }
                         }
                         .opacity( editMode == .active ? 0 : 1)
-                    .listRowInsets(EdgeInsets(top: -5, leading: 0, bottom: -5, trailing: 0))
+                        .listRowInsets(EdgeInsets(top: -7.5, leading: 0, bottom: -7.5, trailing: 0))
                 } else {
                     FolderRow(folder: folder, viewType: basicViewType)
                 }
@@ -303,6 +303,7 @@ extension FolderRow {
             }
         } label: {
             Image(systemName: "ellipsis.circle")
+                .font(.title2)
                 .foregroundStyle(Color("green/green-600"))
         }
         .frame(width: isShowingMemu ? nil : 0, alignment: .trailing)
