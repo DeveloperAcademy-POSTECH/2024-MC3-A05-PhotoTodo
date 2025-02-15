@@ -134,7 +134,7 @@ struct FolderListView: View {
                 ))
         }
         .sheet(isPresented: $isShowingSheet, content: {
-            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $selectedFolder)
                 .presentationDetents([.medium, .large])
         })
         .environment(\.editMode, $editMode)
@@ -145,20 +145,6 @@ struct FolderListView: View {
 extension FolderListView {
     private func toggleShowingSheet(){
         isShowingSheet.toggle()
-    }
-    
-    private func addFolders() {
-        withAnimation {
-            let newFolder = Folder(
-                id: UUID(),
-                name: "새 폴더",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(newFolder)
-            folderOrders.first?.uuidOrder.append(newFolder.id)
-            try? modelContext.save()
-        }
     }
     
     private func deleteFolder(_ folder: Folder?) {
@@ -217,6 +203,11 @@ private struct FolderRow: View {
     @State private var doneCount: Int = 0 // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
     @State private var incompleteTodosCount: Int = 0
     
+    //폴더 생성 및 편집 관련 sheet에서 쓰임
+    @State var isShowingSheet = false
+    @State var folderNameInput = ""
+    @State var selectedColor: Color?
+    
     var folderString: String {
         return folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함"
     }
@@ -228,8 +219,7 @@ private struct FolderRow: View {
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     @State private var showingAlert = false
     @Query var folderOrders: [FolderOrder]
-    @State private var isRenamingFolder: Bool = false
-    @State private var newFolderName: String = ""
+
     
     var body: some View {
         HStack{
@@ -256,16 +246,11 @@ private struct FolderRow: View {
                 }
             }
         }
-        .alert("폴더 이름 변경", isPresented: $isRenamingFolder) {
-            TextField("\(newFolderName)", text: $newFolderName)
-            Button{
-                changeFolderName()
-            } label : {
-                Text("저장")
-            }
-            .disabled(newFolderName.isEmpty)
-            Button("취소", role: .cancel) { }
-        }
+        .sheet(isPresented: $isShowingSheet, content: {
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $folder)
+                .presentationDetents([.medium, .large])
+        })
+
         .alert(isPresented: $showingAlert) {
             Alert(
                 title: Text("'\(folder?.name ?? "")'폴더를 삭제하시겠습니까?"),
@@ -288,13 +273,6 @@ private struct FolderRow: View {
             try? modelContext.save()
         }
     }
-    
-    private func changeFolderName(){
-        guard let folder = folder else {return}
-        folder.name = newFolderName
-        newFolderName = ""
-        try? modelContext.save()
-    }
 }
 
 /// 메뉴와 관련된 코드 모음
@@ -306,15 +284,13 @@ extension FolderRow {
     var menu: some View {
         Menu {
             Button {
-                isRenamingFolder.toggle()
-                newFolderName = folder?.name ?? ""
+                onEditFolderButtonTapped()
             } label : {
                 HStack{
-                    Text("폴더 이름 수정")
+                    Text("폴더 정보 수정")
                     Spacer()
                     Image(systemName: "pencil")
                 }
-                
             }
             Button(role: .destructive) {
                 showingAlert.toggle()
@@ -332,6 +308,12 @@ extension FolderRow {
         .frame(width: isShowingMemu ? nil : 0, alignment: .trailing)
         .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
         .disabled(!isShowingMemu) // 인터렉션을 막기
+    }
+    
+    func onEditFolderButtonTapped() {
+        isShowingSheet.toggle()
+        folderNameInput = folder?.name ?? ""
+        selectedColor = Color.folderColor(forName: FolderColorName(rawValue: (folder?.color)!) ?? .green)
     }
 }
 
