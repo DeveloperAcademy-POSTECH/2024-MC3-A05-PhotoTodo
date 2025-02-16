@@ -53,7 +53,7 @@ struct MakeTodoView: View {
     @Binding var home: Bool?
     
     // 이미지 처리관련
-    @State private var imageClickisActive: Bool = false
+    @State private var isZoomViewPresented: Bool = false
     @State private var clickedImage: UIImage?
     @State private var imageScale: CGFloat = 1.0
     private var magnification: some Gesture {
@@ -94,29 +94,29 @@ struct MakeTodoView: View {
         ScrollView {
             ZStack {
                 VStack(alignment: .center, spacing: 20){
+                    // 이미지 확인용 TabView, 이미지 저장 및 삭제 버튼 중첩뷰
                     ZStack(alignment: .topTrailing) {
+                        // 1. TODO 이미지 확인 뷰
                         TabView(selection: $selectedIndexs) {
                             ForEach(cameraVM.photoData.indices, id: \.self) { index in
                                 let imageData: Data = cameraVM.photoData[index]
                                 let uiImage = UIImage(data: imageData)
-                                ZStack(alignment: .trailing) {
-                                    Button(action: {
-                                        imageClickisActive = true
-                                        clickedImage = uiImage
-                                    }, label: {
-                                        Image(uiImage: uiImage)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .skeleton(with: cameraVM.photoData.isEmpty,
-                                                      animation: .pulse(),
-                                                      appearance: .solid(color: Color.paleGray, background: Color.lightGray),
-                                                      shape: .rectangle,
-                                                      lines: 1,
-                                                      scales: [1: 1])
-                                            .frame(height: UIScreen.main.bounds.size.height * 0.6)
-                                            .clipShape(RoundedRectangle(cornerRadius: 25))
-                                    })
-                                }
+                                Button(action: {
+                                    isZoomViewPresented = true
+                                    clickedImage = uiImage
+                                }, label: {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .skeleton(with: cameraVM.photoData.isEmpty,
+                                                  animation: .pulse(),
+                                                  appearance: .solid(color: Color.paleGray, background: Color.lightGray),
+                                                  shape: .rectangle,
+                                                  lines: 1,
+                                                  scales: [1: 1])
+                                        .frame(height: UIScreen.main.bounds.size.height * 0.6)
+                                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                                })
                             }
                         }
                         .tabViewStyle(PageTabViewStyle())
@@ -124,14 +124,13 @@ struct MakeTodoView: View {
                         .frame(height: UIScreen.main.bounds.size.height * 0.6)
                         .clipShape(RoundedRectangle(cornerRadius: 25))
                         
+                        // 2. 이미지 삭제 및 공유 버튼
+                        /// edit모드 -> 이미지 공유
+                        /// 그 외 -> 이미지 삭제
                         HStack {
                             if startViewType == .edit {
                                 Button {
-                                    let imageData: Data = cameraVM.photoData[self.selectedIndexs]
-                                    let uiImage = UIImage(data: imageData)
-                                    if let shareImage = uiImage {
-                                        saveImageToAlbum(image: shareImage)
-                                    }
+                                    saveImageToAlbum()
                                 } label: {
                                     Image(systemName: "square.and.arrow.up")
                                         .resizable()
@@ -305,7 +304,7 @@ struct MakeTodoView: View {
                     .frame(width: 350, height: 132)
                 }
                 .padding(.horizontal, 20)
-                if imageClickisActive {
+                if isZoomViewPresented {
                     ZStack{
                         Color.black
                             .opacity(0.7)
@@ -313,7 +312,7 @@ struct MakeTodoView: View {
                         VStack {
                             HStack{
                                 Button(action: {
-                                    imageClickisActive = false
+                                    isZoomViewPresented = false
                                 }, label: {
                                     Text("X")
                                         .foregroundStyle(Color.white)
@@ -377,6 +376,14 @@ struct MakeTodoView: View {
                 }
                 .disabled(10 <= cameraVM.photoData.count)
             }
+        }
+    }
+    
+    func saveImageToAlbum() {
+        let imageData: Data = cameraVM.photoData[self.selectedIndexs]
+        let uiImage = UIImage(data: imageData)
+        if let shareImage = uiImage {
+            saveImageToAlbum(image: shareImage)
         }
     }
     
