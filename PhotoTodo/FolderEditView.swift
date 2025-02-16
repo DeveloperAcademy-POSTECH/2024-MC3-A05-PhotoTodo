@@ -136,8 +136,8 @@ struct FolderEditView: View {
             modelContext.insert(newFolder)
             folderOrders.first?.uuidOrder.append(newFolder.id)
             isSheetPresented = false
+            try? modelContext.save()
         }
-        
         folderNameInput = ""
         isSheetPresented = false
         selectedColor = nil
