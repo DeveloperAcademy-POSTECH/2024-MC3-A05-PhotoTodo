@@ -13,6 +13,7 @@
 		1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96842C5A150D00784CBA /* CameraPreview.swift */; };
 		1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D96862C5A152A00784CBA /* MakeTodoView.swift */; };
 		1A19FFA12D4F88C0004916C0 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A19FFA02D4F88BC004916C0 /* Color.swift */; };
+		1A27017E2D62C35C00DA8892 /* FolderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A27017D2D62C35900DA8892 /* FolderManager.swift */; };
 		1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */; };
 		1A2778E42C56395A00A02C7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E32C56395A00A02C7E /* Assets.xcassets */; };
 		1A2778E72C56395A00A02C7E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E62C56395A00A02C7E /* Preview Assets.xcassets */; };
@@ -73,6 +74,7 @@
 		1A0D96842C5A150D00784CBA /* CameraPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		1A0D96862C5A152A00784CBA /* MakeTodoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeTodoView.swift; sourceTree = "<group>"; };
 		1A19FFA02D4F88BC004916C0 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		1A27017D2D62C35900DA8892 /* FolderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderManager.swift; sourceTree = "<group>"; };
 		1A2778DA2C56395900A02C7E /* PhotoTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1A2778DD2C56395900A02C7E /* PhotoTodoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoApp.swift; sourceTree = "<group>"; };
 		1A2778E32C56395A00A02C7E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		1A0D96812C5A14CC00784CBA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				1A27017D2D62C35900DA8892 /* FolderManager.swift */,
 				1A0D96822C5A14F300784CBA /* CameraViewModel.swift */,
 				3CBC08FB2D38C623008EBA78 /* CameraManager.swift */,
 			);
@@ -346,6 +349,7 @@
 				1A0D96852C5A150D00784CBA /* CameraPreview.swift in Sources */,
 				1A2778DE2C56395900A02C7E /* PhotoTodoApp.swift in Sources */,
 				1A2778F42C57415900A02C7E /* CameraView.swift in Sources */,
+				1A27017E2D62C35C00DA8892 /* FolderManager.swift in Sources */,
 				131501CD2C61FCA000AAA4A2 /* AlarmSettingView.swift in Sources */,
 				1A8584032D435F0000092B0E /* ActionButton.swift in Sources */,
 			);
