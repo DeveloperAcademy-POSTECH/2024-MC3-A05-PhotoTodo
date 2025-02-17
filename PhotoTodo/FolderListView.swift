@@ -231,7 +231,7 @@ private struct FolderRow: View {
                 Text(folderCountString)
                     .foregroundColor(Color("gray/gray-500"))
 
-                menu
+                folderRowMenu
             }
 
         }
@@ -281,7 +281,7 @@ extension FolderRow {
         return editMode?.wrappedValue == .active && viewType == .singleFolder && folder?.id != UUID(uuidString: defaultFolderID ?? UUID().uuidString)
     }
     
-    var menu: some View {
+    var folderRowMenu: some View {
         Menu {
             Button {
                 onEditFolderButtonTapped()
