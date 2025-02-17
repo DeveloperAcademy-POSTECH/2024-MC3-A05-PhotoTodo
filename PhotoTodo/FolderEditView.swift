@@ -140,13 +140,12 @@ struct FolderEditView: View {
                 )
                 modelContext.insert(newFolder)
                 folderOrders.first?.uuidOrder.append(newFolder.id)
-                try? modelContext.save()
             }
         } else { // 바인딩된 폴더가 존재 -> 폴더 수정
                 selectedFolder?.name = folderNameInput
                 selectedFolder?.color = selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green"
-                try? modelContext.save()
             }
+        try? modelContext.save()
         
         //초기화 해주기
         folderNameInput = ""

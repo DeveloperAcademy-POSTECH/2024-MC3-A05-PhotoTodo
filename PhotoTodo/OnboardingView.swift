@@ -22,6 +22,7 @@ struct OnboardingView: View {
                         Image("onboarding\(indexList[selectedItem])")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
+                            .padding(.top, 80)
                     }
                 }
                 .tabViewStyle(PageTabViewStyle())
@@ -54,6 +55,7 @@ struct OnboardingView: View {
             }
             .padding(.top, 30)
         }
+        .ignoresSafeArea(edges: .top)
     }
 }
 

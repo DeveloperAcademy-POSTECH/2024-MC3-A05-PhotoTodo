@@ -39,14 +39,11 @@ struct CameraView: View {
     var body: some View {
         VStack(alignment: .center, spacing: 0){
             cameraPreview
-                .padding(.top, 6)
+                .padding(.top, isCameraSheetOn ? 36 : 6)
                 .padding(.horizontal, 20)
             
             VStack(spacing: 0) {
-                if isCameraSheetOn {
-                    FolderCarouselView(chosenFolder: $chosenFolder)
-                        .hidden()
-                } else {
+                if !isCameraSheetOn {
                     FolderCarouselView(chosenFolder: $chosenFolder)
                 }
             }
