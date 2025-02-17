@@ -76,7 +76,7 @@ struct MakeTodoView: View {
     
     
     let manager = NotificationManager.instance
-    
+    var folderManager = FolderManager()
     
     var chosenFolderColor : Color{
         return chosenFolder != nil ? changeStringToColor(colorName: chosenFolder?.color ?? "green") : changeStringToColor(colorName: folders[0].color)
@@ -86,8 +86,7 @@ struct MakeTodoView: View {
     }
     
     var orderedFolder: [Folder] {
-        let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
-        return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
+        return folderManager.getOrderedFolder(folders, folderOrders)
     }
     
     var body: some View {
