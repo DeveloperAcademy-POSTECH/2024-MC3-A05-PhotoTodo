@@ -145,7 +145,7 @@ struct TabBarView: View {
             manager.requestAuthorization()
             
             //MARK: 폴더 순서 정렬 관련 안정화 코드
-            folderManager.setFolderOrder(folders, folderOrders, modelContext: modelContext)
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
     }
     

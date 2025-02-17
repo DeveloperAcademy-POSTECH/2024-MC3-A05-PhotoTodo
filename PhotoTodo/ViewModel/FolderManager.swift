@@ -24,7 +24,7 @@ struct FolderManager {
         return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
     }
     
-    func setFolderOrder(_ folders: [Folder], _ folderOrders: [FolderOrder], modelContext: ModelContext) {
+    func setFolderOrder(_ folders: [Folder], _ folderOrders: [FolderOrder], _ modelContext: ModelContext) {
         if folderOrders.count == 0 {
             let folderOrder = FolderOrder()
             modelContext.insert(folderOrder)

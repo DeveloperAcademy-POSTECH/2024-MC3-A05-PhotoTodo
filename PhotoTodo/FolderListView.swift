@@ -93,7 +93,7 @@ struct FolderListView: View {
             }
             
             //folderOrder 세팅 로직
-            folderManager.setFolderOrder(folders, folderOrders, modelContext: modelContext)
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
         
         .scrollContentBackground(.hidden)
