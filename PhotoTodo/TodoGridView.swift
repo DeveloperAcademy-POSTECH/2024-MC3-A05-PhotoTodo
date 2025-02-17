@@ -202,6 +202,7 @@ struct TodoGridView: View {
                     }
                     .frame(width: 45)
                     .disabled(viewType == .doneList)
+                    .opacity(viewType == .doneList ? 0 : 1)
                 }
             }
             
