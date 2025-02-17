@@ -29,8 +29,8 @@ enum ToastOption {
 
 struct TodoGridView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query var folders: [Folder]
-    @Query var compositeTodos: [Todo]
+    @Query private var folders: [Folder]
+    @Query private var compositeTodos: [Todo]
     @State var currentFolder: Folder? = nil
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
@@ -46,11 +46,11 @@ struct TodoGridView: View {
     //    @State private var selectedItem: PhotosPickerItem?
     
     //새로운 사진 업로드 시 MakeTodoView에서 필요한 상태들
-    @State var contentAlarm: Date? = nil
-    @State var memo: String? = nil
-    @State var alarmDataisEmpty: Bool? = nil
-    @State var home: Bool? = nil
-    @State var alarmID: String? = nil
+    @State private var contentAlarm: Date? = nil
+    @State private var memo: String? = nil
+    @State private var alarmDataisEmpty: Bool? = nil
+    @State private var home: Bool? = nil
+    @State private var alarmID: String? = nil
     @State private var alarmSetting: Bool = false
     
     // 토글버튼에 따라서 토스트 메시지 설정 변수
@@ -59,10 +59,10 @@ struct TodoGridView: View {
     @State private var recentlyDoneTodo: Todo? = nil
     
     /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
-    @State var isCameraSheetOn: Bool = false
+    @State private var isCameraSheetOn: Bool = false
     
     
-    var todos: [Todo] {
+    private var todos: [Todo] {
         switch viewType {
         case .singleFolder:
             return currentFolder?.todos.filter { !$0.isDone } ?? []
@@ -78,7 +78,7 @@ struct TodoGridView: View {
     }
     
     
-    var sortedTodos: [Todo] {
+    private var sortedTodos: [Todo] {
         switch sortOption {
         case .byDateIncreasing:
             return todos.sorted { $0.createdAt < $1.createdAt }
@@ -93,7 +93,7 @@ struct TodoGridView: View {
         }
     }
     
-    var filteredTodos: [Todo] {
+    private var filteredTodos: [Todo] {
         switch viewType {
         case .singleFolder:
             if let currentFolder = currentFolder {
@@ -114,7 +114,7 @@ struct TodoGridView: View {
     }
     
     
-    var navigationBarTitle: String {
+    private var navigationBarTitle: String {
         switch viewType {
         case .singleFolder:
             return currentFolder?.name ?? folders[0].name
@@ -126,7 +126,7 @@ struct TodoGridView: View {
     }
     
     @State var toastHeight: CGFloat = 0
-    var sortOptionString: String {
+    private var sortOptionString: String {
         switch sortOption {
         case .byDateIncreasing:
             "오래된순"
@@ -147,9 +147,9 @@ struct TodoGridView: View {
                 Color("gray/gray-200").ignoresSafeArea()
                 VStack {
                     if todos.isEmpty && viewType != .doneList {
-                        GuideLineView(viewType: viewType, todos: todos) //데이터 있을 시
+                        GuideLineView(viewType: viewType, todos: todos, navigationBarTitle: navigationBarTitle, folder: currentFolder) //데이터 없을 시
                     } else {
-                        scrollableGridView //데이터 없을 시
+                        scrollableGridView //데이터 있을 시
                     }
                 }
                 //토스트 알림
@@ -186,20 +186,26 @@ struct TodoGridView: View {
         }
         .toolbar {
             ToolbarItem {
-                editMode == .active ?
                 //편집모드에서 다중선택된 아이템 삭제
-                Button(action: deleteSelectedTodos) {
-                    Image(systemName: "trash")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                }.frame(width: 45) :
-                //편집모드가 아닐 시 아이템 추가 버튼
-                Button(action: toggleAddOptions) {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .frame(width: 18, height: 18)
-                }.frame(width: 45)
+                if editMode == .active {
+                    Button(action: deleteSelectedTodos) {
+                        Image(systemName: "trash")
+                            .resizable()
+                            .frame(width: 18, height: 18)
+                    }.frame(width: 45)
+                } else {
+                    //편집모드가 아닐 시 아이템 추가 버튼
+                    Button(action: toggleAddOptions) {
+                        Image(systemName: "plus")
+                            .resizable()
+                            .frame(width: 18, height: 18)
+                    }
+                    .frame(width: 45)
+                    .disabled(viewType == .doneList)
+                    .opacity(viewType == .doneList ? 0 : 1)
+                }
             }
+            
             ToolbarItem(placement: .navigationBarTrailing) {
                 EditButton()
                     .frame(width: 38)
@@ -214,7 +220,7 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    var customNavBar: some View {
+    private var customNavBar: some View {
         HStack(spacing: 0) {
             Spacer()
             
@@ -287,7 +293,7 @@ struct TodoGridView: View {
         .environment(\.editMode, $editMode)
     }
     
-    var sortMenu: some View {
+    private var sortMenu: some View {
         HStack {
             Spacer()
             Menu {
@@ -296,7 +302,6 @@ struct TodoGridView: View {
                     Text("오래된순").tag(SortOption.byDateIncreasing)
                 }
             } label: {
-
                 HStack(spacing: 2) {
                     Text("\(sortOptionString)")
                         .tint(Color.black)
@@ -305,14 +310,15 @@ struct TodoGridView: View {
                 }
                 .font(.callout)
             }
-            .frame(width: 70, height: 44)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .frame(height: 44)
         }
         .padding(.horizontal, 20)
     }
     
-    var scrollableGridView: some View {
+    private var scrollableGridView: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
                 sortMenu
                 if viewType == .doneList {
@@ -326,7 +332,7 @@ struct TodoGridView: View {
     
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
-    var groupedGridView: some View {
+    private var groupedGridView: some View {
         ForEach(todosGroupedByDate.elements, id: \.key) { element in
             VStack(spacing: 8) {
                 HStack {
@@ -493,12 +499,12 @@ struct GridView: View {
 private struct GuideLineView: View {
     var viewType: TodoGridViewType
     var todos: [Todo]
+    var navigationBarTitle: String
+    var folder: Folder?
     
     var body: some View {
         VStack{
-            if viewType == .main {
-                CustomTitle(todos: todos, viewType: viewType)
-            }
+            CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: folder)
             Spacer()
             VStack{
                 Image("mainEmptyIcon")
@@ -554,6 +560,7 @@ private struct CustomTitle: View{
                             .foregroundColor(Color.folderColor(forName: FolderColorName(rawValue: folder?.color ?? "green") ?? .green))
                     }
                     .font(.largeTitle)
+                    .bold()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
