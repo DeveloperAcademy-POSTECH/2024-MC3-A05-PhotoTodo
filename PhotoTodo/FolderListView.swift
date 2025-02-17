@@ -27,9 +27,9 @@ struct FolderListView: View {
     @State private var pendingCompletion: (() -> Void)?
     
     //폴더 생성 및 편집 관련 sheet에서 쓰임
-    @State var isShowingSheet = false
-    @State var folderNameInput = ""
-    @State var selectedColor: Color?
+    @State private var isShowingSheet = false
+    @State private var folderNameInput = ""
+    @State private var selectedColor: Color?
     
     @Query private var folderOrders: [FolderOrder]
     
@@ -57,8 +57,8 @@ struct FolderListView: View {
             
             //기본 폴더를 제외하고는 모두 삭제 가능
             ForEach(orderedFolder.filter({$0.id.uuidString != defaultFolderID})) { folder in
-                ZStack{
-                    FolderRowView(actions: [
+                if editMode == .inactive {
+                    FolderRowView(actions: [ // Swipe Action의 동작을 커스텀한 뷰
                         Action(color: .red, name: "delete", systemIcon: "trash.fill", action: { completion in
                             selectedFolder = folder
                             pendingCompletion = completion
@@ -71,20 +71,12 @@ struct FolderListView: View {
                             }
                         }
                         .opacity( editMode == .active ? 0 : 1)
-                        .disabled(editMode == .active)
+                        .listRowInsets(EdgeInsets(top: -7.5, leading: 0, bottom: -7.5, trailing: 0))
+                } else {
                     FolderRow(folder: folder, viewType: basicViewType)
-                        .padding(.leading, 16)
-                        .opacity( editMode == .active ? 1 : 0)
-                        
                 }
-                .listRowInsets(EdgeInsets(top: -5, leading: 0, bottom: -5, trailing: 0))
-
             }
             .onMove(perform: handleMove)
-            // .onDelete { _ in
-            //     // editMode일 때 UI가 반응하도록 하기 위해 빈 클로저를 남겼습니다.
-            //     // 실제 삭제 실행시에는 swipeActions으로 넘겨받은 클로저가 호출됩니다.
-            // }
             //TODO: 옵션을 줘서 완료된 것(되지 않은 것)만 필터링해서 보여주기
             //리스트 뷰의 마지막에는 완료함이 위치함
             NavigationLink {
@@ -142,7 +134,7 @@ struct FolderListView: View {
                 ))
         }
         .sheet(isPresented: $isShowingSheet, content: {
-            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $selectedFolder)
                 .presentationDetents([.medium, .large])
         })
         .environment(\.editMode, $editMode)
@@ -155,24 +147,12 @@ extension FolderListView {
         isShowingSheet.toggle()
     }
     
-    private func addFolders() {
-        withAnimation {
-            let newFolder = Folder(
-                id: UUID(),
-                name: "새 폴더",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(newFolder)
-            folderOrders.first?.uuidOrder.append(newFolder.id)
-        }
-    }
-    
     private func deleteFolder(_ folder: Folder?) {
         guard let folder = folder else { return }
         if let folderOrder = folderOrders.first {
             modelContext.delete(folder)
-            folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
+            folderOrder.uuidOrder.removeAll { $0 == folder.id }
+            try? modelContext.save()
         }
     }
     
@@ -180,6 +160,7 @@ extension FolderListView {
         if folderOrders.count == 0 {
             let folderOrder = FolderOrder()
             modelContext.insert(folderOrder)
+            try? modelContext.save()
         }
         
         guard let folderOrder = folderOrders.first else {
@@ -198,6 +179,7 @@ extension FolderListView {
             if folderOrder.uuidOrder.count > folders.count {
                 folderOrders.first?.uuidOrder = folders.map {$0.id}
             }
+            try? modelContext.save()
         }
     }
     
@@ -206,6 +188,7 @@ extension FolderListView {
         if let defaultID = defaultFolderID, var newOrder = folderOrders.first?.uuidOrder.filter({$0 != UUID(uuidString: defaultID)}) {
             newOrder.move(fromOffsets: indices, toOffset: newOffset)
             folderOrders.first?.uuidOrder = [UUID(uuidString: defaultID)!] + newOrder
+            try? modelContext.save()
         }
     }
 }
@@ -220,6 +203,11 @@ private struct FolderRow: View {
     @State private var doneCount: Int = 0 // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
     @State private var incompleteTodosCount: Int = 0
     
+    //폴더 생성 및 편집 관련 sheet에서 쓰임
+    @State private var isShowingSheet = false
+    @State private var folderNameInput = ""
+    @State private var selectedColor: Color?
+    
     var folderString: String {
         return folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함"
     }
@@ -231,8 +219,7 @@ private struct FolderRow: View {
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     @State private var showingAlert = false
     @Query var folderOrders: [FolderOrder]
-    @State private var isRenamingFolder: Bool = false
-    @State private var newFolderName: String = ""
+
     
     var body: some View {
         HStack{
@@ -240,11 +227,11 @@ private struct FolderRow: View {
                 .foregroundStyle(viewType == .singleFolder ? changeStringToColor(colorName: folder != nil ? folder!.color : "folder-color/green" ) : Color("gray/gray-800"))
             Text(folderString)
             Spacer()
-            ZStack{
+            HStack {
                 Text(folderCountString)
                     .foregroundColor(Color("gray/gray-500"))
-                    .opacity(editMode?.wrappedValue == .active ? 0 : 1)
-                menu
+
+                folderRowMenu
             }
 
         }
@@ -259,16 +246,11 @@ private struct FolderRow: View {
                 }
             }
         }
-        .alert("폴더 이름 변경", isPresented: $isRenamingFolder) {
-            TextField("\(newFolderName)", text: $newFolderName)
-            Button{
-                changeFolderName()
-            } label : {
-                Text("저장")
-            }
-            .disabled(newFolderName.isEmpty)
-            Button("취소", role: .cancel) { }
-        }
+        .sheet(isPresented: $isShowingSheet, content: {
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $folder)
+                .presentationDetents([.medium, .large])
+        })
+
         .alert(isPresented: $showingAlert) {
             Alert(
                 title: Text("'\(folder?.name ?? "")'폴더를 삭제하시겠습니까?"),
@@ -285,16 +267,11 @@ private struct FolderRow: View {
     
     private func deleteFolder(){
         guard let folder = folder else {return}
-        if folderOrders.first != nil {
+        if let folderOrder = folderOrders.first {
             modelContext.delete(folder)
-            folderOrders.first?.uuidOrder.removeAll { $0 == folder.id }
+            folderOrder.uuidOrder.removeAll { $0 == folder.id }
+            try? modelContext.save()
         }
-    }
-    
-    private func changeFolderName(){
-        guard let folder = folder else {return}
-        folder.name = newFolderName
-        newFolderName = ""
     }
 }
 
@@ -304,18 +281,16 @@ extension FolderRow {
         return editMode?.wrappedValue == .active && viewType == .singleFolder && folder?.id != UUID(uuidString: defaultFolderID ?? UUID().uuidString)
     }
     
-    var menu: some View {
+    var folderRowMenu: some View {
         Menu {
             Button {
-                isRenamingFolder.toggle()
-                newFolderName = folder?.name ?? ""
+                onEditFolderButtonTapped()
             } label : {
                 HStack{
-                    Text("폴더 이름 수정")
+                    Text("폴더 정보 수정")
                     Spacer()
                     Image(systemName: "pencil")
                 }
-                
             }
             Button(role: .destructive) {
                 showingAlert.toggle()
@@ -328,10 +303,18 @@ extension FolderRow {
             }
         } label: {
             Image(systemName: "ellipsis.circle")
+                .font(.title2)
                 .foregroundStyle(Color("green/green-600"))
         }
+        .frame(width: isShowingMemu ? nil : 0, alignment: .trailing)
         .opacity(isShowingMemu ? 1 : 0) // 편집 모드가 아닐 때 숨기기
         .disabled(!isShowingMemu) // 인터렉션을 막기
+    }
+    
+    func onEditFolderButtonTapped() {
+        isShowingSheet.toggle()
+        folderNameInput = folder?.name ?? ""
+        selectedColor = Color.folderColor(forName: FolderColorName(rawValue: (folder?.color)!) ?? .green)
     }
 }
 

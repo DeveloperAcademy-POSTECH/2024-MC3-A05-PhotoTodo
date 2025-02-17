@@ -54,7 +54,8 @@ struct FolderCarouselView: View {
     @State var folderNameInput = ""
     @State var selectedColor: Color?
     @State var currentScrollPosition: CGFloat = 0
-    
+    @State var newFolder: Folder? = nil //"폴더 추가" 선택 시 현재 선택된 폴더와 다른 폴더를 만들기 위해 사용되는 더미 변수. nil값 외에 다른 값으로 두지 말것.
+     
     var orderedFolder: [Folder] {
         let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
         return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
@@ -119,7 +120,7 @@ struct FolderCarouselView: View {
         }
         .frame(height: 34)
         .sheet(isPresented: $isShowingSheet, content: {
-            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $newFolder)
                 .presentationDetents([.medium, .large])
         })
     }
