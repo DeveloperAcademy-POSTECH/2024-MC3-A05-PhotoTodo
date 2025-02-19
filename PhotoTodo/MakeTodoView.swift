@@ -35,7 +35,6 @@ struct MakeTodoView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var cameraVM = CameraViewModel.shared
-    @State private var cameraManager = CameraManager()
     @Binding var chosenFolder: Folder?
     var startViewType: startViewType
     
