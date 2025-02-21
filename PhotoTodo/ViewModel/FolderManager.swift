@@ -20,8 +20,9 @@ struct FolderManager {
     }
 
     func getOrderedFolder(_ folders: [Folder], _ folderOrders: [FolderOrder]) -> [Folder] {
-        let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
-        return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
+        guard let order = folderOrders.first?.uuidOrder else { return folders }
+        let folderDict = Dictionary(uniqueKeysWithValues: folders.map { ($0.id, $0) })
+        return order.compactMap { folderDict[$0] }
     }
     
     func setFolderOrder(_ folders: [Folder], _ folderOrders: [FolderOrder], _ modelContext: ModelContext) {
@@ -50,4 +51,36 @@ struct FolderManager {
             try? modelContext.save()
         }
     }
+
+    func saveFolder(_ folderOrders: [FolderOrder], _ folderNameInput: String, _ selectedFolder: Folder?, _ selectedColor: Color?, _ modelContext: ModelContext){
+        if folderNameInput == "" {
+            return
+        }
+        
+        if selectedFolder == nil { //현재 바인딩된 폴더가 없음 -> 새로 생성
+            withAnimation {
+                let newFolder = Folder(
+                    id: UUID(),
+                    name: folderNameInput,
+                    color: selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green",
+                    todos: []
+                )
+                modelContext.insert(newFolder)
+                folderOrders.first?.uuidOrder.append(newFolder.id)
+            }
+        } else { // 바인딩된 폴더가 존재 -> 폴더 수정
+                selectedFolder?.name = folderNameInput
+                selectedFolder?.color = selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green"
+            }
+        try? modelContext.save()
+    }
 }
+
+let colorDictionary: [Color: String] = [
+    Color("folder_color/red"): "red",
+    Color("folder_color/sky"): "sky",
+    Color("folder_color/yellow"): "yellow",
+    Color("folder_color/green"): "green",
+    Color("folder_color/blue"): "blue",
+    Color("folder_color/purple"): "purple"
+]
