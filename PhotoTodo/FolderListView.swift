@@ -37,11 +37,11 @@ struct FolderListView: View {
     private var doneListViewType: TodoGridViewType = .doneList
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     
+    var folderManager = FolderManager()
     
     // 유저가 설정한 순서대로 폴더를 정렬해 보여줌
     var orderedFolder: [Folder] {
-        let uuidLookup = Dictionary(grouping: folders, by: { $0.id })
-        return folderOrders.first?.uuidOrder.compactMap({ uuidLookup[$0]?.first }) ?? []
+        return folderManager.getOrderedFolder(folders, folderOrders)
     }
     
     
@@ -93,7 +93,7 @@ struct FolderListView: View {
             }
             
             //folderOrder 세팅 로직
-            setFolderOrders()
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
         
         .scrollContentBackground(.hidden)
@@ -148,40 +148,9 @@ extension FolderListView {
     }
     
     private func deleteFolder(_ folder: Folder?) {
-        guard let folder = folder else { return }
-        if let folderOrder = folderOrders.first {
-            modelContext.delete(folder)
-            folderOrder.uuidOrder.removeAll { $0 == folder.id }
-            try? modelContext.save()
-        }
+        folderManager.deleteFolder(folder, folderOrders, modelContext)
     }
-    
-    private func setFolderOrders() {
-        if folderOrders.count == 0 {
-            let folderOrder = FolderOrder()
-            modelContext.insert(folderOrder)
-            try? modelContext.save()
-        }
-        
-        guard let folderOrder = folderOrders.first else {
-            return
-        }
-        
-        DispatchQueue.global().async(){
-            if folderOrder.uuidOrder.count < folders.count {
-                for folder in folders {
-                    if !folderOrder.uuidOrder.contains(folder.id) {
-                        folderOrders.first?.uuidOrder.append(folder.id)
-                    }
-                }
-            }
-            
-            if folderOrder.uuidOrder.count > folders.count {
-                folderOrders.first?.uuidOrder = folders.map {$0.id}
-            }
-            try? modelContext.save()
-        }
-    }
+
     
     
     func handleMove(indices: IndexSet, newOffset: Int) {
@@ -207,6 +176,8 @@ private struct FolderRow: View {
     @State private var isShowingSheet = false
     @State private var folderNameInput = ""
     @State private var selectedColor: Color?
+    
+    var folderManager = FolderManager()
     
     var folderString: String {
         return folder != nil ? folder!.name : viewType == .singleFolder ? "" : "완료함"
@@ -266,12 +237,7 @@ private struct FolderRow: View {
     }
     
     private func deleteFolder(){
-        guard let folder = folder else {return}
-        if let folderOrder = folderOrders.first {
-            modelContext.delete(folder)
-            folderOrder.uuidOrder.removeAll { $0 == folder.id }
-            try? modelContext.save()
-        }
+        folderManager.deleteFolder(folder, folderOrders, modelContext)
     }
 }
 

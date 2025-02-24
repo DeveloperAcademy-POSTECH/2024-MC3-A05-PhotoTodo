@@ -29,6 +29,8 @@ struct FolderEditView: View {
         Color("folder_color/purple"): "purple"
     ]
     
+    var folderManager = FolderManager()
+    
     var body: some View {
         VStack (alignment: .leading) {
             HStack {
@@ -126,31 +128,11 @@ struct FolderEditView: View {
     }
     
     private func saveFolder() {
-        if folderNameInput == "" {
-            return
-        }
-        
-        if selectedFolder == nil { //현재 바인딩된 폴더가 없음 -> 새로 생성
-            withAnimation {
-                let newFolder = Folder(
-                    id: UUID(),
-                    name: folderNameInput,
-                    color: selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green",
-                    todos: []
-                )
-                modelContext.insert(newFolder)
-                folderOrders.first?.uuidOrder.append(newFolder.id)
-            }
-        } else { // 바인딩된 폴더가 존재 -> 폴더 수정
-                selectedFolder?.name = folderNameInput
-                selectedFolder?.color = selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green"
-            }
-        try? modelContext.save()
+        folderManager.saveFolder(folderOrders, folderNameInput, selectedFolder, selectedColor, modelContext)
         
         //초기화 해주기
         folderNameInput = ""
         isSheetPresented = false
         selectedColor = nil
-        isSheetPresented = false
     }
 }

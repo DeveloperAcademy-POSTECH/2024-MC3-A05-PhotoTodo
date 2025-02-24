@@ -20,6 +20,7 @@ struct TabBarView: View {
     @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
+    @Query private var folderOrders: [FolderOrder]
     @Query private var todos: [Todo]
     @State private var navigationisActive: Bool = false
     let manager = NotificationManager.instance
@@ -28,6 +29,8 @@ struct TabBarView: View {
     @Environment(\.presentationMode) var presentationMode
     @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
     @AppStorage("deletionCount") var deletionCount: Int = 0
+    
+    var folderManager = FolderManager()
     
     var body: some View {
         NavigationStack/*(path: $path)*/ {
@@ -140,6 +143,9 @@ struct TabBarView: View {
             hasBeenLaunched = true
             
             manager.requestAuthorization()
+            
+            //MARK: 폴더 순서 정렬 관련 안정화 코드
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
     }
     
