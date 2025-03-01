@@ -36,19 +36,37 @@ func changeStringToColor(colorName: String) -> Color {
 struct FolderCarouselView: View {
     @Binding var chosenFolder: Folder?
     @State private var selectedButtonIndex: Int = 0
+    //#if DEBUG
+    //    @State private var folders: [Folder] = [
+    //        Folder(id: UUID(), name: "하나", color: "green", todos: []),
+    //        Folder(id: UUID(), name: "두울", color: "red", todos: []),
+    //        Folder(id: UUID(), name: "세에엣", color: "blue", todos: []),
+    //        Folder(id: UUID(), name: "넷", color: "purple", todos: []),
+    //        Folder(id: UUID(), name: "다아서어엇", color: "green", todos: [])
+    //    ]
+    //#else
     @Query private var folders: [Folder]
+    @Query private var folderOrders: [FolderOrder]
+    //#endif
     
     //폴더 추가 시 사용되는 상태들 상태들
     @State var isShowingSheet = false
     @State var folderNameInput = ""
     @State var selectedColor: Color?
+    @State var currentScrollPosition: CGFloat = 0
+    @State var newFolder: Folder? = nil //"폴더 추가" 선택 시 현재 선택된 폴더와 다른 폴더를 만들기 위해 사용되는 더미 변수. nil값 외에 다른 값으로 두지 말것.
+    var folderManager = FolderManager()
+    
+    var orderedFolder: [Folder] {
+        return folderManager.getOrderedFolder(folders, folderOrders)
+    }
     
     var body: some View {
         GeometryReader { geometry in
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
-                        ForEach(Array(folders.enumerated()), id: \.element.id) { index, folder in
+                        ForEach(Array(orderedFolder.enumerated()), id: \.element.id) { index, folder in
                             Button(action: {
                                 withAnimation {
                                     selectedButtonIndex = index
@@ -59,17 +77,18 @@ struct FolderCarouselView: View {
                             }) {
                                 RoundedRectangle(cornerRadius: 5)
                                     .fill(selectedButtonIndex == index ? changeStringToColor(colorName: folder.color).opacity(0.2) : Color.white)
-                                                .frame(width: 82, height: 34)
-                                                .overlay(
-                                                    ZStack{
-                                                        RoundedRectangle(cornerRadius: 5)
-                                                            .stroke(changeStringToColor(colorName: folder.color), lineWidth: 4)
-                                                        Text(folder.name)
-                                                            .foregroundColor(changeStringToColor(colorName: folder.color))
-                                                            .bold()
-                                                    }
-                                                )
-                                                .clipShape(RoundedRectangle(cornerRadius: 5))
+                                    .frame(width: 82, height: 34)
+                                    .overlay(
+                                        ZStack{
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .strokeBorder(changeStringToColor(colorName: folder.color), lineWidth: 1)
+                                            
+                                            Text(folder.name)
+                                                .foregroundColor(changeStringToColor(colorName: folder.color))
+                                                .bold()
+                                        }
+                                    )
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
                             }
                             .onAppear(perform: {
                                 withAnimation {
@@ -94,14 +113,14 @@ struct FolderCarouselView: View {
                         
                     }
                     .frame(minWidth: geometry.size.width)
-                    .padding(.horizontal, (geometry.size.width - 40) / 2)
+                    .padding(.horizontal, (geometry.size.width / 2) - 41)
                 }
+                .padding(.horizontal, 0)
             }
         }
         .frame(height: 34)
-        .padding(.top)
         .sheet(isPresented: $isShowingSheet, content: {
-            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor)
+            FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $newFolder)
                 .presentationDetents([.medium, .large])
         })
     }

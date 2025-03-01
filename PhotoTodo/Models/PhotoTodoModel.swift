@@ -3,7 +3,6 @@ import SwiftData
 import SwiftUI
 
 @Model
-// MARK: Folder Model에 color 추가해야 할 것 같아욥 by 룰루
 class Folder {
     @Attribute(.unique) var id : UUID
     var name: String
@@ -53,5 +52,14 @@ class Options {
         self.alarmUUID = alarmUUID
         self.memo = memo
         self.tags = tags
+    }
+}
+
+@Model
+class FolderOrder {
+    var uuidOrder: [UUID] // 폴더를 UUID별로 보여줄 배열
+
+    init() {
+        uuidOrder = []
     }
 }

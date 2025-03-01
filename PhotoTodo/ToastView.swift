@@ -11,6 +11,7 @@ struct ToastView: View {
     @State var toastOption: ToastOption
     @State var toastMessage: String
     @Binding var recentlyDoneTodo: Todo?
+    @Binding var toastHeight: CGFloat
     
     var body: some View {
         RoundedRectangle(cornerRadius: 35)
@@ -33,7 +34,7 @@ struct ToastView: View {
                         .padding()
                 }
             }
-            .offset(y: 250)
+            .offset(y: toastHeight)
     }
 }
 
@@ -43,6 +44,6 @@ struct ToastView: View {
     @Previewable @State var toastMessage: String = ""
     @Previewable @State var toastOption: ToastOption = .none
     @Previewable @State var recentlyDoneTodo: Todo? = nil
-    
-    return ToastView(toastOption: toastOption, toastMessage: toastMessage, recentlyDoneTodo: $recentlyDoneTodo)
+    @Previewable @State var toastHeight: CGFloat = 200
+    return ToastView(toastOption: toastOption, toastMessage: toastMessage, recentlyDoneTodo: $recentlyDoneTodo, toastHeight: $toastHeight)
 }
