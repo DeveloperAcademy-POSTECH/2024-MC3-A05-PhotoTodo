@@ -30,7 +30,6 @@ enum ToastOption {
 struct TodoGridView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
-    @Query private var compositeTodos: [Todo]
     @State var currentFolder: Folder? = nil
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
@@ -61,19 +60,18 @@ struct TodoGridView: View {
     /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
     @State private var isCameraSheetOn: Bool = false
     
+    private var compositeTodos: [Todo] {
+        folders.flatMap { $0.todos }
+    }
     
     private var todos: [Todo] {
         switch viewType {
         case .singleFolder:
             return currentFolder?.todos.filter { !$0.isDone } ?? []
         case .main:
-            return compositeTodos.filter { todo in
-                todo.isDone == false
-            }
+            return compositeTodos.filter { !$0.isDone }
         case .doneList:
-            return compositeTodos.filter { todo in
-                todo.isDone == true
-            }
+            return compositeTodos.filter { $0.isDone }
         }
     }
     
