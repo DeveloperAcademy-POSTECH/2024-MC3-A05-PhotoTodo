@@ -11,11 +11,15 @@ struct FolderEditView: View {
     @Binding var isSheetPresented: Bool
     @Binding var folderNameInput: String
     @Binding var selectedColor: Color?
+    @Binding var selectedFolder: Folder?
+    
     @Query var folders: [Folder]
+    @Query var folderOrders: [FolderOrder]
     @Environment(\.modelContext) private var modelContext
     
     @State private var showActionSheet = false
     let colors: [Color] = [Color("folder_color/red"), Color("folder_color/yellow"), Color("folder_color/sky"), Color("folder_color/green"), Color("folder_color/blue"), Color("folder_color/purple")]
+    
     let colorDictionary: [Color: String] = [
         Color("folder_color/red"): "red",
         Color("folder_color/sky"): "sky",
@@ -24,7 +28,9 @@ struct FolderEditView: View {
         Color("folder_color/blue"): "blue",
         Color("folder_color/purple"): "purple"
     ]
-
+    
+    var folderManager = FolderManager()
+    
     var body: some View {
         VStack (alignment: .leading) {
             HStack {
@@ -41,7 +47,7 @@ struct FolderEditView: View {
                     .font(.headline)
                 Spacer()
                 Button("저장") {
-                    addFolders()
+                    saveFolder()
                 }
             }
             .padding()
@@ -121,21 +127,10 @@ struct FolderEditView: View {
         .interactiveDismissDisabled(!folderNameInput.isEmpty)
     }
     
-    private func addFolders() {
-        if folderNameInput == "" {
-            return
-        }
-        withAnimation {
-            let newFolder = Folder(
-                id: UUID(),
-                name: folderNameInput,
-                color: selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green",
-                todos: []
-            )
-            modelContext.insert(newFolder)
-            isSheetPresented = false
-        }
+    private func saveFolder() {
+        folderManager.saveFolder(folderOrders, folderNameInput, selectedFolder, selectedColor, modelContext)
         
+        //초기화 해주기
         folderNameInput = ""
         isSheetPresented = false
         selectedColor = nil

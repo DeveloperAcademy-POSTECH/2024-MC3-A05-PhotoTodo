@@ -18,7 +18,8 @@ struct CameraView: View {
     @Environment(\.dismiss) private var dismiss
     
     // 카메라 촬영 관련
-    @ObservedObject private var cameraVM = CameraViewModel.shared
+    @State private var cameraVM = CameraViewModel.shared
+    @State private var cameraManager = CameraManager()
     @State private var cameraCaptureState: CameraCaptureState = .single
     @State private var cameraCaptureisActive = false
     @State private var contentAlarm: Date? = Date()
@@ -36,91 +37,93 @@ struct CameraView: View {
     @Binding var isCameraSheetOn: Bool
     
     var body: some View {
-        VStack(alignment: .center){
+        VStack(alignment: .center, spacing: 0){
             cameraPreview
-                .frame(width: 353, height: 542)
-                .clipShape(RoundedRectangle(cornerRadius: 25))
+                .padding(.top, isCameraSheetOn ? 36 : 6)
+                .padding(.horizontal, 20)
             
-          
-            if isCameraSheetOn {
-                EmptyView()
-            } else {
-                FolderCarouselView(chosenFolder: $chosenFolder)
-            }
-            
-            if cameraCaptureState == .single {
-                HStack(alignment: .center) {
-                    ZStack{
-                        VStack {
-                            Button {
-                                cameraVM.takePhoto()
-                                cameraCaptureisActive.toggle()
-                                isCameraSheetOn = false
-                            } label: {
-                                ZStack{
-                                    Circle().frame(width: 80, height: 80)
-                                        .foregroundStyle(Color.green)
-                                    Circle().frame(width: 60, height: 60)
-                                        .foregroundStyle(Color.green)
-                                        .overlay(
-                                            Circle()
-                                                .stroke(Color.white, lineWidth: 4)
-                                        )
-                                }
-                            }
-                            .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
-                            }
-                        }
-                    }
+            VStack(spacing: 0) {
+                if !isCameraSheetOn {
+                    FolderCarouselView(chosenFolder: $chosenFolder)
                 }
-                .padding(.top)
-            } else {
-                HStack(alignment: .center) {
-                    ZStack{
-                        VStack {
-                            Button {
-                                cameraVM.takePhoto()
-                                cameraCaptureisActive.toggle()
-                                isCameraSheetOn = false
-                            } label: {
-                                ZStack{
-                                    Circle().frame(width: 80, height: 80)
-                                        .foregroundStyle(Color.green)
-                                    Circle().frame(width: 60, height: 60)
-                                        .foregroundStyle(Color.green)
-                                        .overlay(
-                                            Circle()
-                                                .stroke(Color.white, lineWidth: 4) // 테두리 색상과 두께
-                                        )
-                                }
-                            }
-                            .navigationDestination(isPresented: $cameraCaptureisActive) {
-                                MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
-                                    .toolbar {
-                                        Button("Add") {
-                                        }
+            }
+            .padding(.top, 24)
+            
+            VStack(spacing: 0) {
+                if cameraCaptureState == .single {
+                    HStack(alignment: .center) {
+                        ZStack{
+                            VStack {
+                                Button {
+                                    cameraManager.takePhoto()
+                                    cameraCaptureisActive.toggle()
+                                    isCameraSheetOn = false
+                                } label: {
+                                    ZStack{
+                                        Circle().frame(width: 78, height: 78)
+                                            .foregroundStyle(Color("green/green-400"))
+                                        Circle().frame(width: 62, height: 62)
+                                            .foregroundStyle(Color("green/green-400"))
+                                            .overlay(
+                                                Circle()
+                                                    .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
+                                            )
                                     }
+                                }
+                                .navigationDestination(isPresented: $cameraCaptureisActive) {
+                                    MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                }
                             }
                         }
-                        HStack{
-                            Spacer()
-                            Button(action: {
-                                cameraCaptureState = .plural
-                            }, label: {
-                                VStack{
-                                    Image(systemName: "square.stack.3d.down.right")
-                                        .resizable()
-                                        .frame(width: 45, height: 52)
-                                    Text("다중촬영")
+                    }
+                } else {
+                    HStack(alignment: .center) {
+                        ZStack{
+                            VStack {
+                                Button {
+                                    cameraManager.takePhoto()
+                                    cameraCaptureisActive.toggle()
+                                    isCameraSheetOn = false
+                                } label: {
+                                    ZStack{
+                                        Circle().frame(width: 78, height: 78)
+                                            .foregroundStyle(Color("green/green-400"))
+                                        Circle().frame(width: 62, height: 62)
+                                            .foregroundStyle(Color("green/green-400"))
+                                            .overlay(
+                                                Circle()
+                                                    .strokeBorder(Color.white, lineWidth: 3)// 테두리 색상과 두께
+                                            )
+                                    }
                                 }
-                            })
-                            .padding(.trailing, 35)
+                                .navigationDestination(isPresented: $cameraCaptureisActive) {
+                                    MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                                        .toolbar {
+                                            Button("Add") {
+                                            }
+                                        }
+                                }
+                            }
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    cameraCaptureState = .plural
+                                }, label: {
+                                    VStack{
+                                        Image(systemName: "square.stack.3d.down.right")
+                                            .resizable()
+                                            .frame(width: 45, height: 52)
+                                        Text("다중촬영")
+                                    }
+                                })
+                                .padding(.trailing, 35)
+                            }
                         }
                     }
                 }
             }
-            
+            .padding(.bottom, 10)
+            .padding(.top, 30)
         }
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: {
@@ -138,32 +141,32 @@ struct CameraView: View {
     
     private var cameraPreview: some View {
         GeometryReader { geo in
-            CameraPreview(cameraVM: cameraVM, frame: CGRect(x: 0, y: 0, width: 353, height: 542))
+            CameraPreview(cameraManager: cameraManager, frame: CGRect(x: 0, y: 0, width: geo.size.width, height: UIScreen.main.bounds.size.height * 0.6))
+                .frame(width: geo.size.width, height: UIScreen.main.bounds.size.height * 0.6)
                 .gesture(
                     MagnificationGesture()
                         .onChanged { value in
                             let delta = value / self.lastScale
                             self.lastScale = value
-                            let newZoomFactor = cameraVM.zoomFactor * delta
-                            cameraVM.zoomFactor = newZoomFactor
+                            let newZoomFactor = cameraManager.zoomFactor * delta
+                            cameraManager.zoomFactor = newZoomFactor
                         }
                         .onEnded { _ in
                             self.lastScale = 1.0
                         }
                 )
                 .onAppear(){
-                    print("열였을 때")
-                    cameraVM.requestAccessAndSetup()
+                    cameraManager.requestAccessAndSetup()
                 }
                 .onDisappear() {
-                    print("닫았을 때")
-                    cameraVM.stopSession()
+                    cameraManager.stopSession()
                 }
         }
         .ignoresSafeArea()
     }
 }
 
-//#Preview {
-//    CameraView()
-//}
+#Preview {
+    @Previewable @State var isCameraSheetOn = false
+    CameraView(isCameraSheetOn: $isCameraSheetOn)
+}

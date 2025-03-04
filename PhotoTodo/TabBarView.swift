@@ -20,6 +20,7 @@ struct TabBarView: View {
     @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
+    @Query private var folderOrders: [FolderOrder]
     @Query private var todos: [Todo]
     @State private var navigationisActive: Bool = false
     let manager = NotificationManager.instance
@@ -29,79 +30,100 @@ struct TabBarView: View {
     @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
     @AppStorage("deletionCount") var deletionCount: Int = 0
     
+    var folderManager = FolderManager()
+    
     var body: some View {
         NavigationStack/*(path: $path)*/ {
-            ZStack{
-                Color("gray/gray-200").ignoresSafeArea()
-                VStack{
+            ZStack(alignment: .bottom) {
+                Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
+                VStack(spacing: 0) {
                     if page == .main {
                         MainView()
                     } else if page == .folder {
                         FolderListView()
                     }
                     
-                    HStack {
-                        Spacer()
-                        Button {
-                            page = .main
-                        } label: {
-                            VStack{
-                                Image(page == .main ? "allTodo.fill" : "allTodo")
-                                    .resizable()
-                                    .frame(width: 20, height: 20)
-                                Text("전체투두")
-                                    .font(.system(size: 12))
-                                    .padding(.top, 2)
-                                    .bold()
+                    HStack(spacing: 0) {
+                        HStack {
+                            Button {
+                                page = .main
+                            } label: {
+                                VStack(spacing: 0) {
+                                    VStack{
+                                        Image(page == .main ? "allTodo.fill" : "allTodo")
+                                            .font(.system(size: 24))
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 20, height: 20)
+                                    }
+                                    .frame(width: 44, height: 44)
+                                    Text("전체투두")
+                                        .font(.system(size: 12))
+                                        .bold()
+                                }
+                                .frame(height: 60)
                             }
+                            .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
+                            
+                            Spacer()
+                            
+                            Button {
+                                page = .folder
+                            } label: {
+                                VStack(spacing: 0) {
+                                    VStack {
+                                        Image(systemName: page == .folder ? "folder.fill" : "folder")
+                                            .font(.system(size: 24))
+                                            .aspectRatio(contentMode: .fit)
+                                    }
+                                    .frame(width: 44, height: 44)
+                                    Text("폴더")
+                                        .font(.system(size: 12))
+                                        .bold()
+                                }
+                                .frame(height: 60)
+                            }
+                            .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
                         }
-                        .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
-                        
-                        
-                        NavigationLink  {
-                            CameraView(isCameraSheetOn: $isCameraSheetOn)
-                        } label:  {
-                            ZStack{
-                                Circle()
-                                    .frame(width: 70, height: 70)
-                                    .foregroundStyle(Color.white)
-                                    .shadow(color: .lightGray, radius: 10)
-                                
+                        .padding(.horizontal, 42)
+                        .padding(.bottom, 23)
+                    }
+                    .background(Color.white)
+                }
+                
+                HStack {
+                    NavigationLink  {
+                        CameraView(isCameraSheetOn: $isCameraSheetOn)
+                    } label:  {
+                        ZStack{
+                            Circle()
+                                .frame(width: 78, height: 78)
+                                .foregroundStyle(Color.white)
+                                .shadow(color: .lightGray, radius: 10)
+                            VStack {
                                 Image("cloverCamera.fill")
-                                    .resizable()
-                                    .frame(width: 40, height: 30)
-                                    .foregroundStyle(Color.green)
+                                    .font(.system(size: 40))
+                                    .aspectRatio(contentMode: .fill)
+                                    .foregroundStyle(Color("green/green-400"))
                             }
+                            .frame(width: 48, height: 48)
                         }
-                        //                        .navigationDestination(for: String.self) { value in
-                        //                            CameraView()
-                        //                        }
-                        .padding(.horizontal, 55)
-                        
-                        Button {
-                            page = .folder
-                        } label: {
-                            VStack{
-                                Image(systemName: page == .folder ? "folder.fill" : "folder")
-                                    .resizable()
-                                    .frame(width: 25, height: 20)
-                                Text("폴더")
-                                    .font(.system(size: 12))
-                                    .padding(.top, 2)
-                                    .bold()
-                            }
-                        }
-                        .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
-                        Spacer()
-                    }.background(Color(.white))
+                    }
+                    //                        .navigationDestination(for: String.self) { value in
+                    //                            CameraView()
+                    //                        }
+                    .offset(y: -42)
                 }
             }
+            .edgesIgnoringSafeArea(.bottom)
             .ignoresSafeArea(.keyboard)
         }
         .fullScreenCover(isPresented: $isOnboarindViewActive) {
             OnboardingView()
         }
         .onAppear {
+#if DEBUG
+            self.isOnboarindViewActive = false
+#endif
             //MARK: 30일 초과한 아이템을 지움
             removeTodoItemsPastDueDate()
             
@@ -121,6 +143,9 @@ struct TabBarView: View {
             hasBeenLaunched = true
             
             manager.requestAuthorization()
+            
+            //MARK: 폴더 순서 정렬 관련 안정화 코드
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
     }
     
