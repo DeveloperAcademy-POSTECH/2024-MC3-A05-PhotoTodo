@@ -33,19 +33,38 @@ struct TabBarView: View {
     var folderManager = FolderManager()
     
     var body: some View {
-        NavigationStack/*(path: $path)*/ {
+        
             ZStack(alignment: .bottom) {
-                Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
-                VStack(spacing: 0) {
-                    if page == .main {
-                        MainView()
-                    } else if page == .folder {
-                        FolderListView()
+                
+                TabView(selection: $selectedTab) {
+                    NavigationStack {
+                        ZStack{
+                            Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
+                            MainView()
+                        }
                     }
+                    .tag(0)
                     
+                    CameraView(isCameraSheetOn: $isCameraSheetOn)
+                        .tag(1)
+                    
+                    NavigationStack {
+                        ZStack{
+                            Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
+                            FolderListView()
+                        }
+                    }
+                    .tag(2)
+                }
+                .onAppear {
+                    UITabBar.appearance().isHidden = true
+                }
+                VStack(spacing: 0) {
+                    Spacer()
                     HStack(spacing: 0) {
                         HStack {
                             Button {
+                                selectedTab = 0
                                 page = .main
                             } label: {
                                 VStack(spacing: 0) {
@@ -67,6 +86,7 @@ struct TabBarView: View {
                             Spacer()
                             
                             Button {
+                                selectedTab = 2
                                 page = .folder
                             } label: {
                                 VStack(spacing: 0) {
@@ -92,6 +112,7 @@ struct TabBarView: View {
                 
                 HStack {
                     NavigationLink  {
+//                        selectedTab = 1
                         CameraView(isCameraSheetOn: $isCameraSheetOn)
                     } label:  {
                         ZStack{
@@ -116,7 +137,7 @@ struct TabBarView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
             .ignoresSafeArea(.keyboard)
-        }
+        
         .fullScreenCover(isPresented: $isOnboarindViewActive) {
             OnboardingView()
         }
