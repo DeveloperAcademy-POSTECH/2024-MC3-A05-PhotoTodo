@@ -185,7 +185,7 @@ private struct FolderRow: View {
     @Environment(\.editMode) private var editMode
     @State var folder: Folder?
     @State var viewType: TodoGridViewType
-    @Query private var todos: [Todo]
+    @Query private var folders: [Folder]
     @State private var doneCount: Int = 0 // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
     @State private var incompleteTodosCount: Int = 0
     
@@ -207,7 +207,10 @@ private struct FolderRow: View {
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     @State private var showingAlert = false
     @Query var folderOrders: [FolderOrder]
-
+    
+    private var todos: [Todo] {
+        folders.flatMap { $0.todos }
+    }
     
     var body: some View {
         HStack{
