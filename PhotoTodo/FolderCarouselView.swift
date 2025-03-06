@@ -90,12 +90,6 @@ struct FolderCarouselView: View {
                                     )
                                     .clipShape(RoundedRectangle(cornerRadius: 5))
                             }
-                            .onAppear(perform: {
-                                withAnimation {
-                                    selectedButtonIndex = 0
-                                    proxy.scrollTo(0, anchor: .center)
-                                }
-                            })
                             .id(index)
                         }
                         
@@ -112,6 +106,20 @@ struct FolderCarouselView: View {
                         })
                         
                     }
+                    .onAppear(perform: {
+                        withAnimation {
+                            selectedButtonIndex = 0
+                            if let chosenFolder = chosenFolder {
+                                for (index, folder) in orderedFolder.enumerated() {
+                                    if folder == chosenFolder {
+                                        selectedButtonIndex = index
+                                        break
+                                    }
+                                }
+                            }
+                            proxy.scrollTo(selectedButtonIndex, anchor: .center)
+                        }
+                    })
                     .frame(minWidth: geometry.size.width)
                     .padding(.horizontal, (geometry.size.width / 2) - 41)
                 }
