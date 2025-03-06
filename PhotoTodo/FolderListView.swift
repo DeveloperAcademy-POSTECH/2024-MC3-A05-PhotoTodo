@@ -17,9 +17,10 @@ enum TodoGridViewType {
 }
 
 struct FolderListView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) var modelContext
     @State private var editMode: EditMode = .inactive
-    @Query private var folders: [Folder]
+    @Query var folders: [Folder]
+    @Binding var recentlyVisitedFolder: Folder?
     
     //폴더 삭제시
     @State private var showingAlert = false
@@ -44,12 +45,20 @@ struct FolderListView: View {
         return folderManager.getOrderedFolder(folders, folderOrders)
     }
     
+    // Custom initializer
+    init(recentFolder: Binding<Folder?>) {
+        self._recentlyVisitedFolder = recentFolder
+    }
+
     
     var body: some View {
         List {
             //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
             NavigationLink{
                 TodoGridView(currentFolder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
+                    .onAppear {
+                        recentlyVisitedFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                    }
             } label : {
                 FolderRow(folder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
             }
@@ -66,6 +75,9 @@ struct FolderListView: View {
                         })]) {
                             NavigationLink {
                                 TodoGridView(currentFolder: folder, viewType: basicViewType)
+                                    .onAppear {
+                                        recentlyVisitedFolder = folder
+                                    }
                             } label: {
                                 FolderRow(folder: folder, viewType: basicViewType)
                             }
@@ -81,6 +93,9 @@ struct FolderListView: View {
             //리스트 뷰의 마지막에는 완료함이 위치함
             NavigationLink {
                 DoneListView()
+                                .onAppear {
+                                    recentlyVisitedFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                                }
             } label : {
                 FolderRow(folder: nil, viewType: doneListViewType)
             }
@@ -94,6 +109,8 @@ struct FolderListView: View {
             
             //folderOrder 세팅 로직
             folderManager.setFolderOrder(folders, folderOrders, modelContext)
+            
+            recentlyVisitedFolder = nil
         }
         
         .scrollContentBackground(.hidden)
@@ -287,7 +304,9 @@ extension FolderRow {
 
 
 #Preview {
-    FolderListView()
+    @Previewable @State var recentFolder: Folder? = nil
+    
+    FolderListView(recentFolder: $recentFolder)
         .modelContainer(for: Folder.self, inMemory: true)
 }
 

@@ -32,6 +32,9 @@ struct TabBarView: View {
     @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
     @AppStorage("deletionCount") var deletionCount: Int = 0
     
+    @State var recentlySeenFolder: Folder? = nil
+    @AppStorage("defaultFolderID") private var defaultFolderID: String?
+    
     var folderManager = FolderManager()
     @State var recentTag: Int = 0
     
@@ -53,7 +56,7 @@ struct TabBarView: View {
                                     }
                                     .animation(.easeInOut, value: isCameraViewActive)
                                     .navigationDestination(isPresented: $isCameraViewNavigate){
-                                            CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
+                                        CameraView(chosenFolder: recentlySeenFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
                                             .onDisappear {
                                                 if home == true {
                                                     isCameraViewActive = false
@@ -68,7 +71,7 @@ struct TabBarView: View {
                                 NavigationStack {
                                     ZStack{
                                         Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
-                                        FolderListView()
+                                        FolderListView(recentFolder: $recentlySeenFolder)
                                     }
                                 }
                                 .tag(2)
@@ -88,6 +91,7 @@ struct TabBarView: View {
                                 Button {
                                     selectedTab = 0
                                     recentTag = 0
+                                    recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
                                     page = .main
                                 } label: {
                                     VStack(spacing: 0) {
@@ -112,6 +116,7 @@ struct TabBarView: View {
                                     selectedTab = 2
                                     recentTag = 2
                                     page = .folder
+                                    recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
                                 } label: {
                                     VStack(spacing: 0) {
                                         VStack {
