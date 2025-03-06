@@ -178,10 +178,17 @@ struct TodoGridView: View {
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
         .navigationBarHidden( viewType == .main ? true : false)
-        //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
-        .navigationDestination(isPresented: $isDoneSelecting) {
-            MakeTodoView(chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
-        }
+        .sheet(isPresented: $isDoneSelecting, content: {
+            NavigationStack{
+                VStack{
+                    ScrollView{
+                        MakeTodoView(chosenFolder: $currentFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                            .presentationDragIndicator(.visible)
+                    }
+                }
+            }
+            
+        })
         .toolbar {
             ToolbarItem {
                 //편집모드에서 다중선택된 아이템 삭제
