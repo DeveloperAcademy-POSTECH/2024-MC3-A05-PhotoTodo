@@ -30,11 +30,11 @@ struct CameraView: View {
     // 폴더 관련
     @State var chosenFolder: Folder? = nil
     @Query private var folders: [Folder]
-    @State private var home: Bool? = false
     @State private var lastScale: CGFloat = 1.0
     
     //이미지 추가 관련
     @Binding var isCameraSheetOn: Bool
+    @Binding var home: Bool?
     
     var body: some View {
         VStack(alignment: .center, spacing: 0){
@@ -58,6 +58,7 @@ struct CameraView: View {
                                     cameraManager.takePhoto()
                                     cameraCaptureisActive.toggle()
                                     isCameraSheetOn = false
+                                    home = false
                                 } label: {
                                     ZStack{
                                         Circle().frame(width: 78, height: 78)
@@ -134,9 +135,13 @@ struct CameraView: View {
             // 네비게이션 되돌아가는 로직
             if home == nil { return }
             if home! == false { return }
-            home = false
             dismiss()
-        })        
+        })
+        .task(id: cameraCaptureisActive) {
+            if !cameraCaptureisActive {
+                home = true
+            }
+        }
     }
     
     private var cameraPreview: some View {
@@ -168,5 +173,6 @@ struct CameraView: View {
 
 #Preview {
     @Previewable @State var isCameraSheetOn = false
-    CameraView(isCameraSheetOn: $isCameraSheetOn)
+    @Previewable @State var home: Bool? = false
+    CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
 }

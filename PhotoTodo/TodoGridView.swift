@@ -166,7 +166,7 @@ struct TodoGridView: View {
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
             NavigationLink{
-                CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn)
+                CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
             } label : {
                 Text("촬영하기")
             }

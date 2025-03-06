@@ -337,7 +337,7 @@ struct MakeTodoView: View {
         }
         .sheet(isPresented: $isCameraSheetOn, content: {
             NavigationStack{
-                CameraView(isCameraSheetOn: $isCameraSheetOn)
+                CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
             }
             .presentationDragIndicator(.visible)
         })
@@ -475,7 +475,7 @@ extension Binding {
     @Previewable @State var contentAlarm = Date()
     @Previewable @State var memo: String = ""
     @Previewable @State var alarmDataisEmpty: Bool = true
-    @Previewable @State var home: Bool = false
+    @Previewable @State var home: Bool? = false
     @Previewable @State var alarmID = ""
     return MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
