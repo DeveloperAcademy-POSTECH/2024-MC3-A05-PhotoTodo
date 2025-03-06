@@ -59,6 +59,7 @@ struct TodoGridView: View {
     
     /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
     @State private var isCameraSheetOn: Bool = false
+    @State private var isCameraNavigate: Bool = false
     
     private var compositeTodos: [Todo] {
         folders.flatMap { $0.todos }
@@ -165,10 +166,9 @@ struct TodoGridView: View {
             toastHeight = UIScreen.main.bounds.height / 2 - 127 - 50
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
-            NavigationLink{
-                CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
-            } label : {
-                Text("촬영하기")
+            Button("촬영하기") {
+                isCameraNavigate = true
+                home = false
             }
             Button("앨범에서 가져오기"){
                 cameraVM.photoData.removeAll()
@@ -178,6 +178,21 @@ struct TodoGridView: View {
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
         .navigationBarHidden( viewType == .main ? true : false)
+        .sheet(isPresented: $isCameraNavigate, content: {
+            NavigationStack{
+                CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
+                    .toolbar {
+                        if !isCameraSheetOn {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button("취소") {
+                                    print("Edit tapped")
+                                }
+                            }
+                        }
+                    }
+                    .presentationDragIndicator(.visible)
+            }
+        })
         .sheet(isPresented: $isDoneSelecting, content: {
             NavigationStack{
                 VStack{
@@ -187,7 +202,6 @@ struct TodoGridView: View {
                     }
                 }
             }
-            
         })
         .toolbar {
             ToolbarItem {

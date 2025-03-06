@@ -365,6 +365,7 @@ struct MakeTodoView: View {
                 Button {
                     if cameraVM.photoData.count < 10 {
                         isCameraSheetOn = true
+                        home = false
                     } else {
                         //TODO: 토스트 메세지 출력하기
                         print("이미지는 10장 이상 추가할 수 없습니다.")

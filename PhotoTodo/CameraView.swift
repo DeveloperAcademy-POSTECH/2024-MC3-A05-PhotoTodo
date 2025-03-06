@@ -126,6 +126,7 @@ struct CameraView: View {
             .padding(.bottom, 10)
             .padding(.top, 30)
         }
+
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: {
             if isCameraSheetOn == false {
