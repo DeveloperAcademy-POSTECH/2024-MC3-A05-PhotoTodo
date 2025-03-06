@@ -33,27 +33,11 @@ struct TabBarView: View {
     @AppStorage("deletionCount") var deletionCount: Int = 0
     
     var folderManager = FolderManager()
+    @State var recentTag: Int = 0
     
     var body: some View {
                 ZStack(alignment: .bottom) {
                     VStack{
-                        if isCameraViewActive {
-                            NavigationStack {
-                                VStack {
-                                    EmptyView()
-                                }
-                                .animation(.easeInOut, value: isCameraViewActive)
-                                .navigationDestination(isPresented: $isCameraViewNavigate){
-                                        CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
-                                        .onDisappear {
-                                            if home == true {
-                                                isCameraViewActive = false
-                                                home = false
-                                            }
-                                        }
-                                    }
-                            }
-                        } else {
                             TabView(selection: $selectedTab) {
                                 NavigationStack {
                                     ZStack{
@@ -62,9 +46,24 @@ struct TabBarView: View {
                                     }
                                 }
                                 .tag(0)
-                                
-                                CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
-                                    .tag(1)
+
+                                NavigationStack {
+                                    VStack {
+                                        EmptyView()
+                                    }
+                                    .animation(.easeInOut, value: isCameraViewActive)
+                                    .navigationDestination(isPresented: $isCameraViewNavigate){
+                                            CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
+                                            .onDisappear {
+                                                if home == true {
+                                                    isCameraViewActive = false
+                                                    home = false
+                                                    selectedTab = recentTag
+                                                }
+                                            }
+                                        }
+                                }
+                                .tag(1)
                                 
                                 NavigationStack {
                                     ZStack{
@@ -77,7 +76,7 @@ struct TabBarView: View {
                             .onAppear {
                                 UITabBar.appearance().isHidden = true
                             }
-                        }
+
 
                     }
                     .animation(.easeInOut, value: isCameraViewActive)
@@ -88,6 +87,7 @@ struct TabBarView: View {
                             HStack {
                                 Button {
                                     selectedTab = 0
+                                    recentTag = 0
                                     page = .main
                                 } label: {
                                     VStack(spacing: 0) {
@@ -110,6 +110,7 @@ struct TabBarView: View {
                                 
                                 Button {
                                     selectedTab = 2
+                                    recentTag = 2
                                     page = .folder
                                 } label: {
                                     VStack(spacing: 0) {
@@ -137,6 +138,7 @@ struct TabBarView: View {
                     
                     HStack {
                         Button  {
+                            selectedTab = 1
                             isCameraViewActive = true
                             DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
                                 isCameraViewNavigate = true
