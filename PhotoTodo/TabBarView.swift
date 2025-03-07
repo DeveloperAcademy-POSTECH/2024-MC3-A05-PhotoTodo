@@ -71,7 +71,7 @@ struct TabBarView: View {
                                 NavigationStack {
                                     ZStack{
                                         Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
-                                        FolderListView(recentFolder: $recentlySeenFolder)
+                                        FolderListView(recentlySeenFolder: $recentlySeenFolder)
                                     }
                                 }
                                 .tag(2)

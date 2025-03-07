@@ -20,7 +20,7 @@ struct FolderListView: View {
     @Environment(\.modelContext) var modelContext
     @State private var editMode: EditMode = .inactive
     @Query var folders: [Folder]
-    @Binding var recentlyVisitedFolder: Folder?
+    @Binding var recentlySeenFolder: Folder?
     
     //폴더 삭제시
     @State private var showingAlert = false
@@ -45,11 +45,10 @@ struct FolderListView: View {
         return folderManager.getOrderedFolder(folders, folderOrders)
     }
     
-    // Custom initializer
-    init(recentFolder: Binding<Folder?>) {
-        self._recentlyVisitedFolder = recentFolder
+    
+    init(recentlySeenFolder: Binding<Folder?>) {
+        self._recentlySeenFolder = recentlySeenFolder
     }
-
     
     var body: some View {
         List {
@@ -57,7 +56,7 @@ struct FolderListView: View {
             NavigationLink{
                 TodoGridView(currentFolder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
                     .onAppear {
-                        recentlyVisitedFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                        recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
                     }
             } label : {
                 FolderRow(folder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
@@ -76,7 +75,7 @@ struct FolderListView: View {
                             NavigationLink {
                                 TodoGridView(currentFolder: folder, viewType: basicViewType)
                                     .onAppear {
-                                        recentlyVisitedFolder = folder
+                                        recentlySeenFolder = folder
                                     }
                             } label: {
                                 FolderRow(folder: folder, viewType: basicViewType)
@@ -94,7 +93,7 @@ struct FolderListView: View {
             NavigationLink {
                 DoneListView()
                                 .onAppear {
-                                    recentlyVisitedFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                                    recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
                                 }
             } label : {
                 FolderRow(folder: nil, viewType: doneListViewType)
@@ -110,7 +109,7 @@ struct FolderListView: View {
             //folderOrder 세팅 로직
             folderManager.setFolderOrder(folders, folderOrders, modelContext)
             
-            recentlyVisitedFolder = nil
+            recentlySeenFolder = nil
         }
         
         .scrollContentBackground(.hidden)
@@ -307,9 +306,9 @@ extension FolderRow {
 
 
 #Preview {
-    @Previewable @State var recentFolder: Folder? = nil
+    @Previewable @State var recentlySeenFolder: Folder? = nil
     
-    FolderListView(recentFolder: $recentFolder)
+    FolderListView(recentlySeenFolder: $recentlySeenFolder)
         .modelContainer(for: Folder.self, inMemory: true)
 }
 
