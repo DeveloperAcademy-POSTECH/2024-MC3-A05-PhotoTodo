@@ -17,9 +17,10 @@ enum TodoGridViewType {
 }
 
 struct FolderListView: View {
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) var modelContext
     @State private var editMode: EditMode = .inactive
-    @Query private var folders: [Folder]
+    @Query var folders: [Folder]
+    @Binding var recentlySeenFolder: Folder?
     
     //폴더 삭제시
     @State private var showingAlert = false
@@ -45,11 +46,18 @@ struct FolderListView: View {
     }
     
     
+    init(recentlySeenFolder: Binding<Folder?>) {
+        self._recentlySeenFolder = recentlySeenFolder
+    }
+    
     var body: some View {
         List {
             //기본 폴더(인덱스 0에 있음) → 삭제 불가능하게 만들기 위해 따로 뺌
             NavigationLink{
                 TodoGridView(currentFolder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
+                    .onAppear {
+                        recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                    }
             } label : {
                 FolderRow(folder: folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil, viewType: basicViewType)
             }
@@ -66,6 +74,9 @@ struct FolderListView: View {
                         })]) {
                             NavigationLink {
                                 TodoGridView(currentFolder: folder, viewType: basicViewType)
+                                    .onAppear {
+                                        recentlySeenFolder = folder
+                                    }
                             } label: {
                                 FolderRow(folder: folder, viewType: basicViewType)
                             }
@@ -81,6 +92,9 @@ struct FolderListView: View {
             //리스트 뷰의 마지막에는 완료함이 위치함
             NavigationLink {
                 DoneListView()
+                                .onAppear {
+                                    recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                                }
             } label : {
                 FolderRow(folder: nil, viewType: doneListViewType)
             }
@@ -94,6 +108,8 @@ struct FolderListView: View {
             
             //folderOrder 세팅 로직
             folderManager.setFolderOrder(folders, folderOrders, modelContext)
+            
+            recentlySeenFolder = nil
         }
         
         .scrollContentBackground(.hidden)
@@ -168,7 +184,7 @@ private struct FolderRow: View {
     @Environment(\.editMode) private var editMode
     @State var folder: Folder?
     @State var viewType: TodoGridViewType
-    @Query private var todos: [Todo]
+    @Query private var folders: [Folder]
     @State private var doneCount: Int = 0 // 뷰가 업데이트될 때마다 다시 계산하는 대신, 값을 미리 계산하여 사용
     @State private var incompleteTodosCount: Int = 0
     
@@ -190,7 +206,10 @@ private struct FolderRow: View {
     @AppStorage("defaultFolderID") private var defaultFolderID: String?
     @State private var showingAlert = false
     @Query var folderOrders: [FolderOrder]
-
+    
+    private var todos: [Todo] {
+        folders.flatMap { $0.todos }
+    }
     
     var body: some View {
         HStack{
@@ -287,7 +306,9 @@ extension FolderRow {
 
 
 #Preview {
-    FolderListView()
+    @Previewable @State var recentlySeenFolder: Folder? = nil
+    
+    FolderListView(recentlySeenFolder: $recentlySeenFolder)
         .modelContainer(for: Folder.self, inMemory: true)
 }
 

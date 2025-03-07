@@ -337,7 +337,7 @@ struct MakeTodoView: View {
         }
         .sheet(isPresented: $isCameraSheetOn, content: {
             NavigationStack{
-                CameraView(isCameraSheetOn: $isCameraSheetOn)
+                CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
             }
             .presentationDragIndicator(.visible)
         })
@@ -365,6 +365,7 @@ struct MakeTodoView: View {
                 Button {
                     if cameraVM.photoData.count < 10 {
                         isCameraSheetOn = true
+                        home = false
                     } else {
                         //TODO: 토스트 메세지 출력하기
                         print("이미지는 10장 이상 추가할 수 없습니다.")
@@ -475,7 +476,7 @@ extension Binding {
     @Previewable @State var contentAlarm = Date()
     @Previewable @State var memo: String = ""
     @Previewable @State var alarmDataisEmpty: Bool = true
-    @Previewable @State var home: Bool = false
+    @Previewable @State var home: Bool? = false
     @Previewable @State var alarmID = ""
     return MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
