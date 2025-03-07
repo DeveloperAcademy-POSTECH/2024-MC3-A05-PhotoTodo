@@ -39,138 +39,138 @@ struct TabBarView: View {
     @State var recentTag: Int = 0
     
     var body: some View {
-                ZStack(alignment: .bottom) {
-                    VStack{
-                            TabView(selection: $selectedTab) {
-                                NavigationStack {
-                                    ZStack{
-                                        Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
-                                        MainView()
-                                    }
-                                }
-                                .tag(0)
-
-                                NavigationStack {
-                                    VStack {
-                                        EmptyView()
-                                    }
-                                    .animation(.easeInOut, value: isCameraViewActive)
-                                    .navigationDestination(isPresented: $isCameraViewNavigate){
-                                        CameraView(chosenFolder: recentlySeenFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
-                                            .onDisappear {
-                                                if home == true {
-                                                    isCameraViewActive = false
-                                                    home = false
-                                                    selectedTab = recentTag
-                                                }
-                                            }
-                                        }
-                                }
-                                .tag(1)
-                                
-                                NavigationStack {
-                                    ZStack{
-                                        Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
-                                        FolderListView(recentlySeenFolder: $recentlySeenFolder)
-                                    }
-                                }
-                                .tag(2)
-                            }
-                            .onAppear {
-                                UITabBar.appearance().isHidden = true
-                            }
-
-
-                    }
-                    .animation(.easeInOut, value: isCameraViewActive)
-
-                    VStack(spacing: 0) {
-                        Spacer()
-                        HStack(spacing: 0) {
-                            HStack {
-                                Button {
-                                    selectedTab = 0
-                                    recentTag = 0
-                                    recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
-                                    page = .main
-                                } label: {
-                                    VStack(spacing: 0) {
-                                        VStack{
-                                            Image(page == .main ? "allTodo.fill" : "allTodo")
-                                                .font(.system(size: 24))
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 20, height: 20)
-                                        }
-                                        .frame(width: 44, height: 44)
-                                        Text("전체투두")
-                                            .font(.system(size: 12))
-                                            .bold()
-                                    }
-                                    .frame(height: 60)
-                                }
-                                .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
-                                
-                                Spacer()
-                                
-                                Button {
-                                    selectedTab = 2
-                                    recentTag = 2
-                                    page = .folder
-                                    recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
-                                } label: {
-                                    VStack(spacing: 0) {
-                                        VStack {
-                                            Image(systemName: page == .folder ? "folder.fill" : "folder")
-                                                .font(.system(size: 24))
-                                                .aspectRatio(contentMode: .fit)
-                                        }
-                                        .frame(width: 44, height: 44)
-                                        Text("폴더")
-                                            .font(.system(size: 12))
-                                            .bold()
-                                    }
-                                    .frame(height: 60)
-                                }
-                                .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
-                            }
-                            .padding(.horizontal, 42)
-                            .padding(.bottom, 23)
+        ZStack(alignment: .bottom) {
+            VStack{ // 메모리에 적재되어 네비게이션 되고 있는 뷰들을 탭바로 관리함
+                TabView(selection: $selectedTab) {
+                    NavigationStack {
+                        ZStack{
+                            Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
+                            MainView()
                         }
-                        .background(Color.white)
                     }
-                    .animation(.easeInOut, value: isCameraViewActive)
-                    .opacity(isCameraViewActive ? 0 : 1)
+                    .tag(0)
                     
-                    HStack {
-                        Button  {
-                            selectedTab = 1
-                            isCameraViewActive = true
-                            DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
-                                isCameraViewNavigate = true
-                            }
-                        } label:  {
-                            ZStack{
-                                Circle()
-                                    .frame(width: 78, height: 78)
-                                    .foregroundStyle(Color.white)
-                                    .shadow(color: .lightGray, radius: 10)
-                                VStack {
-                                    Image("cloverCamera.fill")
-                                        .font(.system(size: 40))
-                                        .aspectRatio(contentMode: .fill)
-                                        .foregroundStyle(Color("green/green-400"))
-                                }
-                                .frame(width: 48, height: 48)
-                            }
+                    NavigationStack {
+                        VStack {
+                            EmptyView()
                         }
-                        .offset(y: -42)
+                        .animation(.easeInOut, value: isCameraViewActive)
+                        .navigationDestination(isPresented: $isCameraViewNavigate){
+                            CameraView(chosenFolder: recentlySeenFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
+                                .onDisappear {
+                                    if home == true {
+                                        isCameraViewActive = false
+                                        home = false
+                                        selectedTab = recentTag
+                                    }
+                                }
+                        }
                     }
-                    .opacity(isCameraViewActive ? 0 : 1)
-                    .animation(.easeInOut, value: isCameraViewActive)
+                    .tag(1)
+                    
+                    NavigationStack {
+                        ZStack{
+                            Color("gray/gray-200").ignoresSafeArea(.all, edges: .top)
+                            FolderListView(recentlySeenFolder: $recentlySeenFolder)
+                        }
+                    }
+                    .tag(2)
                 }
-
-            .edgesIgnoringSafeArea(.bottom)
-            .ignoresSafeArea(.keyboard)
+                .onAppear {
+                    UITabBar.appearance().isHidden = true
+                }
+                
+                
+            }
+            .animation(.easeInOut, value: isCameraViewActive)
+            
+            VStack(spacing: 0) { // 커스텀 탭바 뷰
+                Spacer()
+                HStack(spacing: 0) {
+                    HStack {
+                        Button { // 전체 투두 탭
+                            selectedTab = 0
+                            recentTag = 0
+                            recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                            page = .main
+                        } label: {
+                            VStack(spacing: 0) {
+                                VStack{
+                                    Image(page == .main ? "allTodo.fill" : "allTodo")
+                                        .font(.system(size: 24))
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 20, height: 20)
+                                }
+                                .frame(width: 44, height: 44)
+                                Text("전체투두")
+                                    .font(.system(size: 12))
+                                    .bold()
+                            }
+                            .frame(height: 60)
+                        }
+                        .foregroundStyle(page == .main ? Color("gray/gray-700") : Color("gray/gray-500"))
+                        
+                        Spacer()
+                        
+                        Button { //카메라 탭
+                            selectedTab = 2
+                            recentTag = 2
+                            page = .folder
+                            recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                        } label: {
+                            VStack(spacing: 0) {
+                                VStack {
+                                    Image(systemName: page == .folder ? "folder.fill" : "folder")
+                                        .font(.system(size: 24))
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                                .frame(width: 44, height: 44)
+                                Text("폴더")
+                                    .font(.system(size: 12))
+                                    .bold()
+                            }
+                            .frame(height: 60)
+                        }
+                        .foregroundStyle(page == .folder ? Color("gray/gray-700") : Color("gray/gray-500"))
+                    }
+                    .padding(.horizontal, 42)
+                    .padding(.bottom, 23)
+                }
+                .background(Color.white)
+            }
+            .animation(.easeInOut, value: isCameraViewActive)
+            .opacity(isCameraViewActive ? 0 : 1)
+            
+            HStack { //탭바의 카메라 버튼
+                Button  {
+                    selectedTab = 1
+                    isCameraViewActive = true
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 0.1) {
+                        isCameraViewNavigate = true
+                    }
+                } label:  {
+                    ZStack{
+                        Circle()
+                            .frame(width: 78, height: 78)
+                            .foregroundStyle(Color.white)
+                            .shadow(color: .lightGray, radius: 10)
+                        VStack {
+                            Image("cloverCamera.fill")
+                                .font(.system(size: 40))
+                                .aspectRatio(contentMode: .fill)
+                                .foregroundStyle(Color("green/green-400"))
+                        }
+                        .frame(width: 48, height: 48)
+                    }
+                }
+                .offset(y: -42)
+            }
+            .opacity(isCameraViewActive ? 0 : 1)
+            .animation(.easeInOut, value: isCameraViewActive)
+        }
+        
+        .edgesIgnoringSafeArea(.bottom)
+        .ignoresSafeArea(.keyboard)
         
         .fullScreenCover(isPresented: $isOnboarindViewActive) {
             OnboardingView()
