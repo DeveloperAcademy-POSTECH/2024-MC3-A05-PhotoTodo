@@ -112,7 +112,7 @@ struct TabBarView: View {
                         
                         Spacer()
                         
-                        Button { //카메라 탭
+                        Button { //폴더뷰 탭
                             selectedTab = 2
                             recentTag = 2
                             page = .folder
@@ -166,7 +166,6 @@ struct TabBarView: View {
                 .offset(y: -42)
             }
             .opacity(isCameraViewActive ? 0 : 1)
-            .animation(.easeInOut, value: isCameraViewActive)
         }
         
         .edgesIgnoringSafeArea(.bottom)
