@@ -57,13 +57,6 @@ struct TabBarView: View {
                         .animation(.easeInOut, value: isCameraViewActive)
                         .navigationDestination(isPresented: $isCameraViewNavigate){
                             CameraView(chosenFolder: recentlySeenFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
-                                .onDisappear {
-                                    if home == true {
-                                        isCameraViewActive = false
-                                        home = false
-                                        selectedTab = recentTag
-                                    }
-                                }
                         }
                     }
                     .tag(1)
@@ -75,6 +68,13 @@ struct TabBarView: View {
                         }
                     }
                     .tag(2)
+                }
+                .onChange(of: isCameraViewNavigate) { newValue in
+                    if newValue == false && home == true {
+                        isCameraViewActive = false
+                        home = false
+                        selectedTab = recentTag
+                    }
                 }
                 .onAppear {
                     UITabBar.appearance().isHidden = true
