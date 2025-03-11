@@ -134,12 +134,22 @@ struct CameraView: View {
             }
             // true일 때는 photoData를 그대로 보존함
             // 네비게이션 되돌아가는 로직
+            // onAppear 시 home이 true일 때는 메인 화면으로 바로 돌아감
             if home == nil { return }
             if home! == false { return }
             dismiss()
         })
+        
         .task(id: cameraCaptureisActive) {
+            // onAppear 이후에 수행됨
+            // onAppear 시 home이 false여서 메인화면으로 바로 돌아가지 않더라도,
+            // 카메라 뷰에서 '뒤로'버튼을 눌렀을 때 home이 참값을 가지고 있어야, 탭바가 원래되로 돌아오기 때문에 다시 home을 참값으로 바꿔주는 작업이 필요함
             if !cameraCaptureisActive {
+                // 카메라를 촬영해서(cameraCaptureisActive가 true임) makeTodoView로 들어가는 경우,
+                // button 내부의 액션 클로저에서 home값을 false로 다시 바꿔놓는데,
+                // task는 makeTodoView로 들어간 이후에 실행되므로,
+                // home을 true로 다시 바꿔놓으면 뒤로가기 했을 때 위의 onAppear에 의해 메인으로 바로 돌아가게 됨
+                // 이런 이유로 카메라를 촬영해서 들어가는 경우에는 이 처리를 수행하지 않도록 해둠
                 home = true
             }
         }
