@@ -197,6 +197,13 @@ struct TodoGridView: View {
                     ScrollView{
                         MakeTodoView(chosenFolder: $currentFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                             .presentationDragIndicator(.visible)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button("취소") {
+                                        isDoneSelecting = false
+                                    }
+                                }
+                            }
                     }
                 }
             }
