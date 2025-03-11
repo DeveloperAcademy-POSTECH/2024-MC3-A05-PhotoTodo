@@ -182,11 +182,9 @@ struct TodoGridView: View {
             NavigationStack{
                 CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
                     .toolbar {
-                        if !isCameraSheetOn {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button("취소") {
-                                    print("Edit tapped")
-                                }
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("취소") {
+                                isCameraNavigate = false
                             }
                         }
                     }
