@@ -30,11 +30,11 @@ struct CameraView: View {
     // 폴더 관련
     @State var chosenFolder: Folder? = nil
     @Query private var folders: [Folder]
-    @State private var home: Bool? = false
     @State private var lastScale: CGFloat = 1.0
     
     //이미지 추가 관련
     @Binding var isCameraSheetOn: Bool
+    @Binding var home: Bool?
     
     var body: some View {
         VStack(alignment: .center, spacing: 0){
@@ -58,6 +58,7 @@ struct CameraView: View {
                                     cameraManager.takePhoto()
                                     cameraCaptureisActive.toggle()
                                     isCameraSheetOn = false
+                                    home = false
                                 } label: {
                                     ZStack{
                                         Circle().frame(width: 78, height: 78)
@@ -125,6 +126,7 @@ struct CameraView: View {
             .padding(.bottom, 10)
             .padding(.top, 30)
         }
+
         .navigationBarTitleDisplayMode(.inline)
         .onAppear(perform: {
             if isCameraSheetOn == false {
@@ -132,11 +134,25 @@ struct CameraView: View {
             }
             // true일 때는 photoData를 그대로 보존함
             // 네비게이션 되돌아가는 로직
+            // onAppear 시 home이 true일 때는 메인 화면으로 바로 돌아감
             if home == nil { return }
             if home! == false { return }
-            home = false
             dismiss()
-        })        
+        })
+        
+        .task(id: cameraCaptureisActive) {
+            // onAppear 이후에 수행됨
+            // onAppear 시 home이 false여서 메인화면으로 바로 돌아가지 않더라도,
+            // 카메라 뷰에서 '뒤로'버튼을 눌렀을 때 home이 참값을 가지고 있어야, 탭바가 원래되로 돌아오기 때문에 다시 home을 참값으로 바꿔주는 작업이 필요함
+            if !cameraCaptureisActive {
+                // 카메라를 촬영해서(cameraCaptureisActive가 true임) makeTodoView로 들어가는 경우,
+                // button 내부의 액션 클로저에서 home값을 false로 다시 바꿔놓는데,
+                // task는 makeTodoView로 들어간 이후에 실행되므로,
+                // home을 true로 다시 바꿔놓으면 뒤로가기 했을 때 위의 onAppear에 의해 메인으로 바로 돌아가게 됨
+                // 이런 이유로 카메라를 촬영해서 들어가는 경우에는 이 처리를 수행하지 않도록 해둠
+                home = true
+            }
+        }
     }
     
     private var cameraPreview: some View {
@@ -168,5 +184,6 @@ struct CameraView: View {
 
 #Preview {
     @Previewable @State var isCameraSheetOn = false
-    CameraView(isCameraSheetOn: $isCameraSheetOn)
+    @Previewable @State var home: Bool? = false
+    CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
 }
