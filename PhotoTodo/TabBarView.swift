@@ -78,9 +78,7 @@ struct TabBarView: View {
                 }
                 .onAppear {
                     UITabBar.appearance().isHidden = true
-                }
-                
-                
+                }    
             }
             .animation(.easeInOut, value: isCameraViewActive)
             
