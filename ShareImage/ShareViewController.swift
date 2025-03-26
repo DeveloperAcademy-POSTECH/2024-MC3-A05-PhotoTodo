@@ -10,7 +10,7 @@ import Social
 import SwiftData
 import UniformTypeIdentifiers
 
-class ShareViewController: SLComposeServiceViewController {
+class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // 이 자리에 공유 뷰의 구성 자리가 나옴
@@ -48,6 +48,7 @@ struct ShareView: View {
     var extensionContext: NSExtensionContext?
     @State private var items: [ImageItem] = []
     @State private var chosenFolder: Folder? = nil
+    @State private var inputText = ""
     
     //    @State var defaultFolder: Folder = Folder(id: UUID(), name: "임시저장폴더", color: "green", todos: [])
     
@@ -91,7 +92,7 @@ struct ShareView: View {
                 .scrollTargetBehavior(.viewAligned)
                 .frame(height: 300) // 이미지 사진 크기를 줄일 때 사용됨
                 .scrollIndicators(.hidden)
-                
+                TextField("메모를 입력하세요", text: $inputText)
                 Spacer(minLength: 0)
             }
             .padding(15)
@@ -148,7 +149,7 @@ struct ShareView: View {
             // SwiftData에 저장된 Folder의 기본폴더로 초기화 저장됨
             let fetchDescriptor = FetchDescriptor<Folder>()
             let result = try context.fetch(fetchDescriptor)
-            let newTodo = Todo(folder: chosenFolder ?? result.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(), isDone: false)
+            let newTodo = Todo(folder: chosenFolder ?? result.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(memo: inputText), isDone: false)
             context.insert(newTodo)
             try context.save()
             dismiss()
