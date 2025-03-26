@@ -30,7 +30,6 @@ enum ToastOption {
 struct TodoGridView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
-    @Query private var compositeTodos: [Todo]
     @State var currentFolder: Folder? = nil
     var viewType: TodoGridViewType
     @State private var selectedTodos = Set<UUID>()
@@ -60,20 +59,20 @@ struct TodoGridView: View {
     
     /// 카메라 뷰 진입시 필요한 변수임. False일 때는 sheet에서 진입하는 것이 아님, true일 때는 sheet에서 진입함. 두 개 상황에서 뷰가 다르게 그려짐.
     @State private var isCameraSheetOn: Bool = false
+    @State private var isCameraNavigate: Bool = false
     
+    private var compositeTodos: [Todo] {
+        folders.flatMap { $0.todos }
+    }
     
     private var todos: [Todo] {
         switch viewType {
         case .singleFolder:
             return currentFolder?.todos.filter { !$0.isDone } ?? []
         case .main:
-            return compositeTodos.filter { todo in
-                todo.isDone == false
-            }
+            return compositeTodos.filter { !$0.isDone }
         case .doneList:
-            return compositeTodos.filter { todo in
-                todo.isDone == true
-            }
+            return compositeTodos.filter { $0.isDone }
         }
     }
     
@@ -167,10 +166,9 @@ struct TodoGridView: View {
             toastHeight = UIScreen.main.bounds.height / 2 - 127 - 50
         }
         .confirmationDialog("포토투두 추가 방법 선택", isPresented: $isShowingOptions, titleVisibility: .visible) {
-            NavigationLink{
-                CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn)
-            } label : {
-                Text("촬영하기")
+            Button("촬영하기") {
+                isCameraNavigate = true
+                home = false
             }
             Button("앨범에서 가져오기"){
                 cameraVM.photoData.removeAll()
@@ -180,10 +178,36 @@ struct TodoGridView: View {
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
         .navigationBarHidden( viewType == .main ? true : false)
-        //PhotosPicker에서 아이템 선택 완료 시, isActive가 true로 바뀌고, MakeTodoView로 전환됨
-        .navigationDestination(isPresented: $isDoneSelecting) {
-            MakeTodoView(chosenFolder: $currentFolder, startViewType: viewType == .singleFolder ? .gridSingleFolder : .gridMain , contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
-        }
+        .sheet(isPresented: $isCameraNavigate, content: {
+            NavigationStack{
+                CameraView(chosenFolder: currentFolder, isCameraSheetOn: $isCameraSheetOn, home: $home)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("취소") {
+                                isCameraNavigate = false
+                            }
+                        }
+                    }
+                    .presentationDragIndicator(.visible)
+            }
+        })
+        .sheet(isPresented: $isDoneSelecting, content: {
+            NavigationStack{
+                VStack{
+                    ScrollView{
+                        MakeTodoView(chosenFolder: $currentFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                            .presentationDragIndicator(.visible)
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button("취소") {
+                                        isDoneSelecting = false
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
+        })
         .toolbar {
             ToolbarItem {
                 //편집모드에서 다중선택된 아이템 삭제

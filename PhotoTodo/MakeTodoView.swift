@@ -337,12 +337,19 @@ struct MakeTodoView: View {
         }
         .sheet(isPresented: $isCameraSheetOn, content: {
             NavigationStack{
-                CameraView(isCameraSheetOn: $isCameraSheetOn)
+                CameraView(isCameraSheetOn: $isCameraSheetOn, home: $home)
             }
             .presentationDragIndicator(.visible)
         })
         .photosPicker(isPresented: $showingImagePicker, selection: $selectedItems,  maxSelectionCount: 10-cameraVM.photoData.count, matching: .not(.videos))
         .onChange(of: selectedItems, loadImage)
+        .onChange(of: isCameraSheetOn) {
+            // 이 작업이 없으면 MakeTodoView에서 시트로 카메라를 열었을 때 '뒤로' 버튼을 누르면 네비게이션 오류가 남
+            // 카메라를 열고 나서 사진을 찍지 않으면, home이 참인 상태로 남아있게 됨 (사진을 찍을 때 다시 home을 false로 바꿔주는 로직이 있음)
+            // home이 참인 상태로 뒤돌아가면, task보다 먼저 실행되는 onAppear에 의해 메인 화면으로 다시 돌아감
+            // 이러한 이유로, 원치 않은 사이드 이팩트를 막기 위해 카메라 시트를 닫을 때에 반드시 home을 false로 바꿔줘야 함
+            home = false
+        }
         .toolbar(startViewType == .edit ? .hidden : .visible)
         .toolbar(content: {
             // 완료 및 저장 버튼
@@ -365,6 +372,7 @@ struct MakeTodoView: View {
                 Button {
                     if cameraVM.photoData.count < 10 {
                         isCameraSheetOn = true
+                        home = false
                     } else {
                         //TODO: 토스트 메세지 출력하기
                         print("이미지는 10장 이상 추가할 수 없습니다.")
@@ -475,7 +483,7 @@ extension Binding {
     @Previewable @State var contentAlarm = Date()
     @Previewable @State var memo: String = ""
     @Previewable @State var alarmDataisEmpty: Bool = true
-    @Previewable @State var home: Bool = false
+    @Previewable @State var home: Bool? = false
     @Previewable @State var alarmID = ""
     return MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
