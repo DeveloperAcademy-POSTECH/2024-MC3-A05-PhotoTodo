@@ -49,7 +49,6 @@ struct ShareView: View {
     @State private var items: [ImageItem] = []
     @State private var chosenFolder: Folder? = nil
     @State private var inputText = ""
-    
     //    @State var defaultFolder: Folder = Folder(id: UUID(), name: "임시저장폴더", color: "green", todos: [])
     
     var body: some View {
@@ -97,7 +96,6 @@ struct ShareView: View {
             }
             .padding(15)
             .onAppear(perform: {
-                
                 extractItems(size: size)
                 //                defaultFolder = folders.first ?? Folder(id: UUID(), name: "임시저장폴더", color: "green", todos: [])
             })
