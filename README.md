@@ -6,7 +6,6 @@ PhotoTodo🍀
 </p>
 
 ![Frame](https://github.com/user-attachments/assets/4309c1d5-f505-4aa0-969f-e78c8260fcd8)
-
 ## 📸 우리는 언제, 왜 사진을 찍을까?
 
 > _어딘가에 자랑하거나, 추억을 기록하거나_
@@ -94,6 +93,9 @@ SNS에서 발견한 관심있는 브랜드의 할인 특가 광고<br>
 </div>
 
 <br>
+
+## 🕸️ 아키텍처 다이어그램
+![diagram-2](https://github.com/user-attachments/assets/3bc81a90-0c0d-407c-a33c-c82612b76002)
 
 ## 👍 팀 오합지존
 
