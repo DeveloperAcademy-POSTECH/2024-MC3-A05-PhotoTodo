@@ -50,6 +50,7 @@ struct ShareView: View {
     @State private var chosenFolder: Folder? = nil
     @State private var inputText = ""
     //    @State var defaultFolder: Folder = Folder(id: UUID(), name: "임시저장폴더", color: "green", todos: [])
+    @Query var folders: [Folder]
     
     var body: some View {
         GeometryReader {
@@ -132,31 +133,19 @@ struct ShareView: View {
     }
 
     func saveItems() {
-        let schema = Schema([
-            Folder.self,
-            Todo.self,
-            Options.self,
-            FolderOrder.self
-        ])
-        do {
-            let context = try ModelContext(.init(for: schema.self))
-            var imageData : [Data] = []
-            for i in items {
-                imageData.append(i.imageData)
-            }
-            // SwiftData에 저장된 Folder의 기본폴더로 초기화 저장됨
-            let fetchDescriptor = FetchDescriptor<Folder>()
-            let result = try context.fetch(fetchDescriptor)
-            let newTodo = Todo(folder: chosenFolder ?? result.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(memo: inputText), isDone: false)
-            context.insert(newTodo)
-            try context.save()
-            dismiss()
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+        var imageData : [Data] = []
+        for i in items {
+            imageData.append(i.imageData)
         }
+        // SwiftData에 저장된 Folder의 기본폴더로 초기화 저장됨
+        let newTodo = Todo(folder: chosenFolder ?? folders.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(memo: inputText), isDone: false)
         
-//        let newTodo = Todo(id: UUID(), image: Data(), createdAt: Date(), options: Options(), isDone: false)
-//        modelContext.insert(newTodo)
+        let chosenFolder = chosenFolder ?? folders.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: [])
+
+        chosenFolder.todos.append(newTodo)
+        modelContext.insert(newTodo)
+        try? modelContext.save()
+        
         dismiss()
     }
     
