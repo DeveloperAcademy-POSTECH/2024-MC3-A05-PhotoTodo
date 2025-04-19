@@ -19,7 +19,6 @@ struct TabBarView: View {
     @State private var home: Bool? = false
     
     @State private var page: page = .main
-    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     @Environment(\.modelContext) private var modelContext
     @Query private var folders: [Folder]
     @Query private var folderOrders: [FolderOrder]
@@ -29,6 +28,8 @@ struct TabBarView: View {
     @State var isCameraSheetOn: Bool = false
     // 온보딩뷰
     @Environment(\.presentationMode) var presentationMode
+    
+    @AppStorage("hasBeenLaunched") private var hasBeenLaunched = false
     @AppStorage("onboarding") var isOnboarindViewActive: Bool = true
     @AppStorage("deletionCount") var deletionCount: Int = 0
     
@@ -79,8 +80,6 @@ struct TabBarView: View {
                 .onAppear {
                     UITabBar.appearance().isHidden = true
                 }
-                
-                
             }
             .animation(.easeInOut, value: isCameraViewActive)
             
@@ -181,24 +180,17 @@ struct TabBarView: View {
             //MARK: 30일 초과한 아이템을 지움
             removeTodoItemsPastDueDate()
             
-            //MARK: 최초 1회 실행된 적이 있을 시
             if hasBeenLaunched {
-                return
+                //포토투두 앱 내부에서만 쓰이는 AppStorage에서 앱 그룹의 유저디폴트 값으로 기본 폴더 생성을 여부를 판단하고자 심어놓은 코드
+                let defaults = UserDefaults(suiteName: "group.PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo")
+                if defaults?.bool(forKey: "hasBeenLaunched") == false {
+                    defaults?.set(true, forKey: "hasBeenLaunched")
+                }
+            } else {
+                folderManager.setDefaultFolder(modelContext, folderOrders, folders)
             }
-            
-            //MARK: 최초 1회 실행된 적 없을 시 세팅 작업 실행
-            let defaultFolder = Folder(
-                id: UUID(),
-                name: "기본",
-                color: "green",
-                todos: []
-            )
-            modelContext.insert(defaultFolder)
-            hasBeenLaunched = true
-            
-            manager.requestAuthorization()
-            
-            //MARK: 폴더 순서 정렬 관련 안정화 코드
+        }
+        .task {
             folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
     }

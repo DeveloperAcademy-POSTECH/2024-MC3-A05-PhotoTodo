@@ -34,6 +34,7 @@ func changeStringToColor(colorName: String) -> Color {
 }
 
 struct FolderCarouselView: View {
+    @Environment(\.modelContext) private var modelContext
     @Binding var chosenFolder: Folder?
     @State private var selectedButtonIndex: Int = 0
     //#if DEBUG
@@ -127,6 +128,15 @@ struct FolderCarouselView: View {
             }
         }
         .frame(height: 34)
+        .onAppear {
+            if chosenFolder == nil {
+                chosenFolder = folders.first
+            }
+            folderManager.setDefaultFolder(modelContext, folderOrders, folders)
+        }
+        .task {
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
+        }
         .sheet(isPresented: $isShowingSheet, content: {
             FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $newFolder)
                 .presentationDetents([.medium, .large])

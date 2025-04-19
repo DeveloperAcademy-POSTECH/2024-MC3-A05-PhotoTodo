@@ -30,6 +30,10 @@
 		1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A619E492C7DC68A0082FD5C /* ToastView.swift */; };
 		1A8584012D435EC600092B0E /* FolderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8584002D435EBA00092B0E /* FolderRowView.swift */; };
 		1A8584032D435F0000092B0E /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8584022D435EFB00092B0E /* ActionButton.swift */; };
+		1ACE61902D92E10800090C27 /* FolderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A27017D2D62C35900DA8892 /* FolderManager.swift */; };
+		1ACE61912D92E2D200090C27 /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */; };
+		1ACE61922D92E32400090C27 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
+		1ACE61932D92E33800090C27 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A2778E32C56395A00A02C7E /* Assets.xcassets */; };
 		1AFB127E2C69C22D00952121 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 1AFB127D2C69C22D00952121 /* Collections */; };
 		1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12A32C77243A00952121 /* ShareViewController.swift */; };
 		1AFB12A72C77243A00952121 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1AFB12A62C77243A00952121 /* Base */; };
@@ -91,6 +95,7 @@
 		1A619E492C7DC68A0082FD5C /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		1A8584002D435EBA00092B0E /* FolderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRowView.swift; sourceTree = "<group>"; };
 		1A8584022D435EFB00092B0E /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		1ACE61942D92F0EF00090C27 /* PhotoTodoRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoTodoRelease.entitlements; sourceTree = "<group>"; };
 		1AFB12A12C77243A00952121 /* ShareImage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareImage.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AFB12A32C77243A00952121 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		1AFB12A62C77243A00952121 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
@@ -165,6 +170,7 @@
 		1A2778DC2C56395900A02C7E /* PhotoTodo */ = {
 			isa = PBXGroup;
 			children = (
+				1ACE61942D92F0EF00090C27 /* PhotoTodoRelease.entitlements */,
 				1AFB12B42C7724BC00952121 /* PhotoTodo.entitlements */,
 				3CC113B42C72036100281EBD /* Info.plist */,
 				3C90390C2C623EFF00025335 /* Date+Extension.swift */,
@@ -315,6 +321,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1ACE61932D92E33800090C27 /* Assets.xcassets in Resources */,
 				1AFB12A72C77243A00952121 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,7 +366,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1ACE61912D92E2D200090C27 /* FolderCarouselView.swift in Sources */,
+				1ACE61902D92E10800090C27 /* FolderManager.swift in Sources */,
 				1AFB12B22C77245500952121 /* PhotoTodoModel.swift in Sources */,
+				1ACE61922D92E32400090C27 /* FolderEditView.swift in Sources */,
 				1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,10 +523,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = PhotoTodo/PhotoTodo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoTodo/Info.plist;
@@ -534,10 +546,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PhotoTodoProfile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -552,12 +565,14 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = PhotoTodo/PhotoTodo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PhotoTodo/PhotoTodoRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PhotoTodo/Preview Content\"";
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2J2UA8CPHM;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PhotoTodo/Info.plist;
@@ -575,10 +590,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PhotoTodoProfile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -592,9 +608,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ShareImage/ShareImage.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2J2UA8CPHM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ShareImage/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShareImage;
@@ -609,6 +627,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo.ShareImage";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PhotoTodoShareExtensionProvisioningProfile;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -623,9 +642,11 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ShareImage/ShareImage.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2J2UA8CPHM;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2J2UA8CPHM;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ShareImage/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ShareImage;
@@ -640,6 +661,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo.ShareImage";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = PhotoTodoShareExtensionProvisioningProfile;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
