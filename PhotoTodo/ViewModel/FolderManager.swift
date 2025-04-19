@@ -75,21 +75,25 @@ struct FolderManager {
         try? modelContext.save()
     }
     
-    func setDefaultFolder(_ modelContext: ModelContext, _ folderOrders: [FolderOrder], _ folders: [Folder]) {
+    func setDefaultFolder(_ modelContext: ModelContext,_  folderOrders: [FolderOrder], _ folders: [Folder]) {
            let defaults = UserDefaults(suiteName: "group.PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo")
            if defaults?.bool(forKey: "hasBeenLaunched") == false {
-               DispatchQueue.main.async {
-                   let defaultFolder = Folder(
-                       id: UUID(),
-                       name: "기본",
-                       color: "green",
-                       todos: []
-                   )
-                   modelContext.insert(defaultFolder)
-                   setFolderOrder(folders, folderOrders, modelContext)
-                   try? modelContext.save()
-                   defaults?.set(true, forKey: "hasBeenLaunched")
+               if folderOrders.count == 0 {
+                   let folderOrder = FolderOrder()
+                   modelContext.insert(folderOrder)
                }
+               
+               let defaultFolder = Folder(
+                   id: UUID(),
+                   name: "기본",
+                   color: "green",
+                   todos: []
+               )
+               
+               modelContext.insert(defaultFolder)
+               setFolderOrder(folders, folderOrders, modelContext)
+               defaults?.set(true, forKey: "hasBeenLaunched")
+                try? modelContext.save()
            } else {
                print("UserDefaults key가 이미 있음")
            }

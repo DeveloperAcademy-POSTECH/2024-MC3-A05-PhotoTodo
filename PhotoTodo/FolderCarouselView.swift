@@ -129,7 +129,13 @@ struct FolderCarouselView: View {
         }
         .frame(height: 34)
         .onAppear {
+            if chosenFolder == nil {
+                chosenFolder = folders.first
+            }
             folderManager.setDefaultFolder(modelContext, folderOrders, folders)
+        }
+        .task {
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
         .sheet(isPresented: $isShowingSheet, content: {
             FolderEditView(isSheetPresented: $isShowingSheet, folderNameInput: $folderNameInput, selectedColor: $selectedColor, selectedFolder: $newFolder)

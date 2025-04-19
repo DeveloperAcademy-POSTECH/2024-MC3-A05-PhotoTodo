@@ -186,11 +186,12 @@ struct TabBarView: View {
                 if defaults?.bool(forKey: "hasBeenLaunched") == false {
                     defaults?.set(true, forKey: "hasBeenLaunched")
                 }
-                return
+            } else {
+                folderManager.setDefaultFolder(modelContext, folderOrders, folders)
             }
-            
-            folderManager.setDefaultFolder(modelContext, folderOrders, folders)
-            hasBeenLaunched = true
+        }
+        .task {
+            folderManager.setFolderOrder(folders, folderOrders, modelContext)
         }
     }
     
