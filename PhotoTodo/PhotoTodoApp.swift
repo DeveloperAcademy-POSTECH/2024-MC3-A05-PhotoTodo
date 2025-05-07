@@ -39,8 +39,15 @@ struct PhotoTodoApp: App {
 
     var body: some Scene {
         WindowGroup {
-            TabBarView()
+            if let defaults = UserDefaults(suiteName: "group.PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo") {
+                TabBarView()
+                    .defaultAppStorage(defaults)
+            }
+            else {
+                Text("Failed to load UserDefaults")
+            }
         }
         .modelContainer(sharedModelContainer)
     }
 }
+

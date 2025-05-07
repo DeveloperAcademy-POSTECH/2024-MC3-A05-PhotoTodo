@@ -10,18 +10,35 @@ import Social
 import SwiftData
 import UniformTypeIdentifiers
 
-class ShareViewController: SLComposeServiceViewController {
+class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // 이 자리에 공유 뷰의 구성 자리가 나옴
-        isModalInPresentation = true
-        
-        if let itemProviders = (extensionContext!.inputItems.first as? NSExtensionItem)?.attachments {
-            let hostingView = UIHostingController(rootView: ShareView(itemProviders: itemProviders, extensionContext: extensionContext))
-            hostingView.view.frame = view.frame
-            view.addSubview(hostingView.view)
+        do{
+            // 📌 App Group 기반 SwiftData Configuration
+           let config = ModelConfiguration(
+               groupContainer: .identifier("group.PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo")
+           )
+           let container = try ModelContainer(
+               for: Folder.self, FolderOrder.self, Todo.self, Options.self,
+               configurations: config
+           )
+           let context = ModelContext(container)
+
+            if let itemProviders = (extensionContext!.inputItems.first as? NSExtensionItem)?.attachments {
+                let shareView = ShareView(
+                                itemProviders: itemProviders,
+                                extensionContext: extensionContext
+                            )
+                            .modelContainer(container)
+                let hostingView = UIHostingController(rootView: shareView)
+                hostingView.view.frame = view.frame
+                view.addSubview(hostingView.view)
+            }
+    //        let screenCaptureView =
+        }  catch {
+            fatalError("Failed to configure SwiftData container.")
         }
-//        let screenCaptureView =
     }
 }
 
@@ -30,8 +47,10 @@ struct ShareView: View {
     var itemProviders: [NSItemProvider]
     var extensionContext: NSExtensionContext?
     @State private var items: [ImageItem] = []
-    @Query private var folders: [Folder]
+    @State private var chosenFolder: Folder? = nil
+    @State private var inputText = ""
     //    @State var defaultFolder: Folder = Folder(id: UUID(), name: "임시저장폴더", color: "green", todos: [])
+    @Query var folders: [Folder]
     
     var body: some View {
         GeometryReader {
@@ -57,29 +76,7 @@ struct ShareView: View {
                 .padding(.vertical, 10)
                 .frame(maxWidth: .infinity)
                 
-                
-//                Text("이미지 Todo 추가")
-//                    .font(.title3.bold())
-//                    .frame(maxWidth: .infinity)
-//                    .overlay(alignment: .leading) {
-//                        HStack{
-//                            Button("취소"){
-//                                dismiss()
-//                            }
-//                            .tint(.red)
-//                            Spacer()
-//                            Button {
-//                                saveItems()
-//                            } label: {
-//                                Text("저장")
-//                                    .font(.title3)
-//                                    .fontWeight(.semibold)
-//                                    .padding(.vertical, 10)
-//                                    .frame(maxWidth: .infinity)
-//                            }
-//                        }
-//                    }
-//                    .padding(.bottom, 10)
+                FolderCarouselView(chosenFolder: $chosenFolder)
                 
                 ScrollView(.horizontal) {
                     HStack {
@@ -95,19 +92,15 @@ struct ShareView: View {
                 .scrollTargetBehavior(.viewAligned)
                 .frame(height: 300) // 이미지 사진 크기를 줄일 때 사용됨
                 .scrollIndicators(.hidden)
-                
+                TextField("메모를 입력하세요", text: $inputText)
                 Spacer(minLength: 0)
             }
             .padding(15)
             .onAppear(perform: {
-                
                 extractItems(size: size)
                 //                defaultFolder = folders.first ?? Folder(id: UUID(), name: "임시저장폴더", color: "green", todos: [])
             })
         }
-        .onAppear(perform: {
-            print("폴더 : \(folders)")
-        })
     }
     
     func extractItems(size: CGSize) {
@@ -140,31 +133,19 @@ struct ShareView: View {
     }
 
     func saveItems() {
-        let schema = Schema([
-            Folder.self,
-            Todo.self,
-            Options.self,
-            FolderOrder.self
-        ])
-        do {
-            let context = try ModelContext(.init(for: schema.self))
-            var imageData : [Data] = []
-            for i in items {
-                imageData.append(i.imageData)
-            }
-            // SwiftData에 저장된 Folder의 기본폴더로 초기화 저장됨
-            let fetchDescriptor = FetchDescriptor<Folder>()
-            let result = try context.fetch(fetchDescriptor)
-            let newTodo = Todo(folder: result.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(), isDone: false)
-            context.insert(newTodo)
-            try context.save()
-            dismiss()
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+        var imageData : [Data] = []
+        for i in items {
+            imageData.append(i.imageData)
         }
+        // SwiftData에 저장된 Folder의 기본폴더로 초기화 저장됨
+        let newTodo = Todo(folder: chosenFolder ?? folders.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(memo: inputText), isDone: false)
         
-//        let newTodo = Todo(id: UUID(), image: Data(), createdAt: Date(), options: Options(), isDone: false)
-//        modelContext.insert(newTodo)
+        let chosenFolder = chosenFolder ?? folders.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: [])
+
+        chosenFolder.todos.append(newTodo)
+        modelContext.insert(newTodo)
+        try? modelContext.save()
+        
         dismiss()
     }
     

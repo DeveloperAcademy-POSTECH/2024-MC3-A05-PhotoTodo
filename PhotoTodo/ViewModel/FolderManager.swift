@@ -18,7 +18,7 @@ struct FolderManager {
             try? modelContext.save()
         }
     }
-
+    
     func getOrderedFolder(_ folders: [Folder], _ folderOrders: [FolderOrder]) -> [Folder] {
         guard let order = folderOrders.first?.uuidOrder else { return folders }
         let folderDict = Dictionary(uniqueKeysWithValues: folders.map { ($0.id, $0) })
@@ -51,7 +51,7 @@ struct FolderManager {
             try? modelContext.save()
         }
     }
-
+    
     func saveFolder(_ folderOrders: [FolderOrder], _ folderNameInput: String, _ selectedFolder: Folder?, _ selectedColor: Color?, _ modelContext: ModelContext){
         if folderNameInput == "" {
             return
@@ -69,11 +69,35 @@ struct FolderManager {
                 folderOrders.first?.uuidOrder.append(newFolder.id)
             }
         } else { // 바인딩된 폴더가 존재 -> 폴더 수정
-                selectedFolder?.name = folderNameInput
-                selectedFolder?.color = selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green"
-            }
+            selectedFolder?.name = folderNameInput
+            selectedFolder?.color = selectedColor != nil ? colorDictionary[selectedColor!, default: "green"] : "green"
+        }
         try? modelContext.save()
     }
+    
+    func setDefaultFolder(_ modelContext: ModelContext,_  folderOrders: [FolderOrder], _ folders: [Folder]) {
+           let defaults = UserDefaults(suiteName: "group.PhotoTodo-com.2024-MC3-A05-team5.PhotoTodo")
+           if defaults?.bool(forKey: "hasBeenLaunched") == false {
+               if folderOrders.count == 0 {
+                   let folderOrder = FolderOrder()
+                   modelContext.insert(folderOrder)
+               }
+               
+               let defaultFolder = Folder(
+                   id: UUID(),
+                   name: "기본",
+                   color: "green",
+                   todos: []
+               )
+               
+               modelContext.insert(defaultFolder)
+               setFolderOrder(folders, folderOrders, modelContext)
+               defaults?.set(true, forKey: "hasBeenLaunched")
+                try? modelContext.save()
+           } else {
+               print("UserDefaults key가 이미 있음")
+           }
+       }
 }
 
 let colorDictionary: [Color: String] = [
