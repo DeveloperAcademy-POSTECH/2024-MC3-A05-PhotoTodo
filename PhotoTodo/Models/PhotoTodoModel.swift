@@ -4,10 +4,10 @@ import SwiftUI
 
 @Model
 class Folder {
+    @Relationship(deleteRule:.cascade, inverse: \Todo.folder) var todos: [Todo]
     @Attribute(.unique) var id : UUID
     var name: String
     var color: String
-    @Relationship(deleteRule:.cascade, inverse: \Todo.folder) var todos: [Todo]
     init(id: UUID, name: String, color: String, todos: [Todo]) {
         self.id = id
         self.name = name
@@ -19,9 +19,9 @@ class Folder {
 
 @Model
 class Todo {
+    @Attribute(.externalStorage) var images: [Data]
     var folder: Folder?
     @Attribute(.unique) var id: UUID
-    @Attribute(.externalStorage) var images: [Data]
     var createdAt: Date
     @Relationship(inverse: \Options.todo) var options: Options
     var isDone: Bool
