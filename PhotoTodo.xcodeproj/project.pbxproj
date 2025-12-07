@@ -38,8 +38,8 @@
 		1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12A32C77243A00952121 /* ShareViewController.swift */; };
 		1AFB12A72C77243A00952121 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 1AFB12A62C77243A00952121 /* Base */; };
 		1AFB12AB2C77243A00952121 /* ShareImage.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1AFB12A12C77243A00952121 /* ShareImage.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		1AFB12B12C77245500952121 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12B02C77245500952121 /* PhotoTodoModel.swift */; };
-		1AFB12B22C77245500952121 /* PhotoTodoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12B02C77245500952121 /* PhotoTodoModel.swift */; };
+		1AFB12B12C77245500952121 /* PhotoTodoSchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12B02C77245500952121 /* PhotoTodoSchemaV1.swift */; };
+		1AFB12B22C77245500952121 /* PhotoTodoSchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFB12B02C77245500952121 /* PhotoTodoSchemaV1.swift */; };
 		3C90390D2C623EFF00025335 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C90390C2C623EFF00025335 /* Date+Extension.swift */; };
 		3CB22B5D2CC8EA3B00337F9E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB22B5C2CC8EA3B00337F9E /* OnboardingView.swift */; };
 		3CBC08FC2D38C623008EBA78 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBC08FB2D38C623008EBA78 /* CameraManager.swift */; };
@@ -100,7 +100,7 @@
 		1AFB12A32C77243A00952121 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		1AFB12A62C77243A00952121 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		1AFB12A82C77243A00952121 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1AFB12B02C77245500952121 /* PhotoTodoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoModel.swift; sourceTree = "<group>"; };
+		1AFB12B02C77245500952121 /* PhotoTodoSchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoSchemaV1.swift; sourceTree = "<group>"; };
 		1AFB12B32C7724B000952121 /* ShareImage.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareImage.entitlements; sourceTree = "<group>"; };
 		1AFB12B42C7724BC00952121 /* PhotoTodo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoTodo.entitlements; sourceTree = "<group>"; };
 		3C90390C2C623EFF00025335 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 		1A2472A22C57A79C00A135D9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				1AFB12B02C77245500952121 /* PhotoTodoModel.swift */,
+				1AFB12B02C77245500952121 /* PhotoTodoSchemaV1.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -349,7 +349,7 @@
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
 				1A2778FA2C5741CF00A02C7E /* TodoGridView.swift in Sources */,
 				1A2778F62C57416800A02C7E /* FolderListView.swift in Sources */,
-				1AFB12B12C77245500952121 /* PhotoTodoModel.swift in Sources */,
+				1AFB12B12C77245500952121 /* PhotoTodoSchemaV1.swift in Sources */,
 				1A0D96752C59287600784CBA /* TodoItemView.swift in Sources */,
 				1A19FFA12D4F88C0004916C0 /* Color.swift in Sources */,
 				1A0D96832C5A14F300784CBA /* CameraViewModel.swift in Sources */,
@@ -368,7 +368,7 @@
 			files = (
 				1ACE61912D92E2D200090C27 /* FolderCarouselView.swift in Sources */,
 				1ACE61902D92E10800090C27 /* FolderManager.swift in Sources */,
-				1AFB12B22C77245500952121 /* PhotoTodoModel.swift in Sources */,
+				1AFB12B22C77245500952121 /* PhotoTodoSchemaV1.swift in Sources */,
 				1ACE61922D92E32400090C27 /* FolderEditView.swift in Sources */,
 				1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */,
 			);
