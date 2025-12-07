@@ -13,15 +13,16 @@ import SwiftData
 struct PhotoTodoApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Folder.self,
-            FolderOrder.self,
-            Todo.self,
-            Options.self
+            PhotoTodoSchemaV2.Folder.self,
+            PhotoTodoSchemaV2.FolderOrder.self,
+            PhotoTodoSchemaV2.Todo.self,
+            PhotoTodoSchemaV2.Photo.self,
+            PhotoTodoSchemaV2.Options.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(for: schema, migrationPlan: PhotoTodoMigrationPlan.self, configurations: [modelConfiguration])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
