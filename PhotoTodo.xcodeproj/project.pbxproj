@@ -150,9 +150,9 @@
 		1A2472A22C57A79C00A135D9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				1AB52CFC2EE56280001237D1 /* PhotoTodoMigrationPlan.swift */,
-				1AB52CF92EE56010001237D1 /* PhotoTodoSchemaV2.swift */,
 				1AFB12B02C77245500952121 /* PhotoTodoSchemaV1.swift */,
+				1AB52CF92EE56010001237D1 /* PhotoTodoSchemaV2.swift */,
+				1AB52CFC2EE56280001237D1 /* PhotoTodoMigrationPlan.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
