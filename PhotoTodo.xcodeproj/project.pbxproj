@@ -30,6 +30,10 @@
 		1A619E4A2C7DC68A0082FD5C /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A619E492C7DC68A0082FD5C /* ToastView.swift */; };
 		1A8584012D435EC600092B0E /* FolderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8584002D435EBA00092B0E /* FolderRowView.swift */; };
 		1A8584032D435F0000092B0E /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A8584022D435EFB00092B0E /* ActionButton.swift */; };
+		1AB52CFA2EE56014001237D1 /* PhotoTodoSchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB52CF92EE56010001237D1 /* PhotoTodoSchemaV2.swift */; };
+		1AB52CFB2EE56014001237D1 /* PhotoTodoSchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB52CF92EE56010001237D1 /* PhotoTodoSchemaV2.swift */; };
+		1AB52CFD2EE56292001237D1 /* PhotoTodoMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB52CFC2EE56280001237D1 /* PhotoTodoMigrationPlan.swift */; };
+		1AB52CFE2EE56292001237D1 /* PhotoTodoMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB52CFC2EE56280001237D1 /* PhotoTodoMigrationPlan.swift */; };
 		1ACE61902D92E10800090C27 /* FolderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A27017D2D62C35900DA8892 /* FolderManager.swift */; };
 		1ACE61912D92E2D200090C27 /* FolderCarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2E5C832C5B573400BAFD13 /* FolderCarouselView.swift */; };
 		1ACE61922D92E32400090C27 /* FolderEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F46B28A2C5C7E2100556646 /* FolderEditView.swift */; };
@@ -95,6 +99,8 @@
 		1A619E492C7DC68A0082FD5C /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		1A8584002D435EBA00092B0E /* FolderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRowView.swift; sourceTree = "<group>"; };
 		1A8584022D435EFB00092B0E /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		1AB52CF92EE56010001237D1 /* PhotoTodoSchemaV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoSchemaV2.swift; sourceTree = "<group>"; };
+		1AB52CFC2EE56280001237D1 /* PhotoTodoMigrationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTodoMigrationPlan.swift; sourceTree = "<group>"; };
 		1ACE61942D92F0EF00090C27 /* PhotoTodoRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoTodoRelease.entitlements; sourceTree = "<group>"; };
 		1AFB12A12C77243A00952121 /* ShareImage.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareImage.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AFB12A32C77243A00952121 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +150,8 @@
 		1A2472A22C57A79C00A135D9 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				1AB52CFC2EE56280001237D1 /* PhotoTodoMigrationPlan.swift */,
+				1AB52CF92EE56010001237D1 /* PhotoTodoSchemaV2.swift */,
 				1AFB12B02C77245500952121 /* PhotoTodoSchemaV1.swift */,
 			);
 			path = Models;
@@ -344,6 +352,8 @@
 				1A2E5C842C5B573400BAFD13 /* FolderCarouselView.swift in Sources */,
 				1A2E5C902C634BAE00BAFD13 /* DoneListView.swift in Sources */,
 				1A2778F82C5741BD00A02C7E /* MainView.swift in Sources */,
+				1AB52CFB2EE56014001237D1 /* PhotoTodoSchemaV2.swift in Sources */,
+				1AB52CFD2EE56292001237D1 /* PhotoTodoMigrationPlan.swift in Sources */,
 				3CBC08FC2D38C623008EBA78 /* CameraManager.swift in Sources */,
 				4F46B28B2C5C7E2100556646 /* FolderEditView.swift in Sources */,
 				1A0D96872C5A152A00784CBA /* MakeTodoView.swift in Sources */,
@@ -371,6 +381,8 @@
 				1AFB12B22C77245500952121 /* PhotoTodoSchemaV1.swift in Sources */,
 				1ACE61922D92E32400090C27 /* FolderEditView.swift in Sources */,
 				1AFB12A42C77243A00952121 /* ShareViewController.swift in Sources */,
+				1AB52CFE2EE56292001237D1 /* PhotoTodoMigrationPlan.swift in Sources */,
+				1AB52CFA2EE56014001237D1 /* PhotoTodoSchemaV2.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
