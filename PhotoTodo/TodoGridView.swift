@@ -383,7 +383,7 @@ struct TodoGridView: View {
             let newTodo = Todo(
                 folder: currentFolder,
                 id: UUID(),
-                images: [Data()],
+                images: [],
                 createdAt: Date(),
                 options: Options(
                     alarm : nil,

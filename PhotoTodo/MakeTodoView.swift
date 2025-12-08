@@ -413,7 +413,7 @@ struct MakeTodoView: View {
         
         
         
-        let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), images: cameraVM.photoData, createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, alarmUUID: alarmDataisEmpty ?? true ? nil : id,  memo: memo), isDone: false)
+        let newTodo: Todo = Todo(folder: chosenFolder, id: UUID(), images: cameraVM.photoData.map { Photo(image: $0) }, createdAt: Date(), options: Options(alarm: alarmDataisEmpty ?? true ? nil : contentAlarm, alarmUUID: alarmDataisEmpty ?? true ? nil : id,  memo: memo), isDone: false)
         if let chosenFolder = chosenFolder {
             chosenFolder.todos.append(newTodo)
         } else {

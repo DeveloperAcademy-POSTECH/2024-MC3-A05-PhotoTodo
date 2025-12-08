@@ -138,7 +138,7 @@ struct ShareView: View {
             imageData.append(i.imageData)
         }
         // SwiftData에 저장된 Folder의 기본폴더로 초기화 저장됨
-        let newTodo = Todo(folder: chosenFolder ?? folders.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData, createdAt: Date(), options: Options(memo: inputText), isDone: false)
+        let newTodo = Todo(folder: chosenFolder ?? folders.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: []), id: UUID(), images: imageData.map {Photo(image: $0)}, createdAt: Date(), options: Options(memo: inputText), isDone: false)
         
         let chosenFolder = chosenFolder ?? folders.first ?? Folder(id: UUID(), name: "기본", color: "green", todos: [])
 

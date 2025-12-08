@@ -177,7 +177,7 @@ struct TodoItemView: View {
         
         //UI Hang 방지 위해 백그라운드 작업
         DispatchQueue.global().async() {
-            cameraVM.photoData = todo.images
+            cameraVM.photoData = todo.images.map {$0.image}
         }
         
         //MakeTodoView로 Navigate하기
@@ -207,9 +207,9 @@ struct TodoItemView: View {
             contentAlarm = nil
             alarmDataisEmpty = true
         }
-        //현재 화면에 노출된 변경 가능한 상태들의 현재 상태가 그대로 반영되도록 설 정하기
+        //현재 화면에 노출된 변경 가능한 상태들의 현재 상태가 그대로 반영되도록 설정하기
         todo.folder = chosenFolder
-        todo.images = cameraVM.photoData
+        todo.images = cameraVM.photoData.map{ Photo(image: $0) }
         todo.options = Options(alarm: contentAlarm, alarmUUID: id, memo: memo)
         editTodoisActive.toggle()
         try? modelContext.save()
@@ -243,7 +243,7 @@ struct TodoItemView: View {
     @Previewable @State var recentlyDoneTodo: Todo? = nil
     let newTodo = Todo(
         id: UUID(),
-        images: [UIImage(systemName: "star")?.pngData() ?? Data()],
+        images: [Photo(image: UIImage(systemName: "star")?.pngData() ?? Data())],
         createdAt: Date(),
         options: Options(
             alarm: nil,
@@ -251,7 +251,7 @@ struct TodoItemView: View {
         ),
         isDone: false
     )
-    return TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption,
+    TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption,
                         recentlyDoneTodo: $recentlyDoneTodo)
 }
 
