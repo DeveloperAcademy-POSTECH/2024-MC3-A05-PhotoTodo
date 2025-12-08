@@ -10,14 +10,14 @@ import SwiftData
 
 @main
 
-struct PhotoTodoApp: App {
+struct PhotoTodoApp: App {    
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            PhotoTodoSchemaV2.Folder.self,
-            PhotoTodoSchemaV2.FolderOrder.self,
-            PhotoTodoSchemaV2.Todo.self,
-            PhotoTodoSchemaV2.Photo.self,
-            PhotoTodoSchemaV2.Options.self
+            Folder.self,
+            FolderOrder.self,
+            Todo.self,
+            Photo.self,
+            Options.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

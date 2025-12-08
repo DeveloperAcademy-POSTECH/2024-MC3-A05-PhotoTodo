@@ -85,3 +85,8 @@ enum PhotoTodoSchemaV2: VersionedSchema {
     }
 }
 
+typealias Folder = PhotoTodoSchemaV2.Folder
+typealias Todo = PhotoTodoSchemaV2.Todo
+typealias Photo = PhotoTodoSchemaV2.Photo
+typealias Options = PhotoTodoSchemaV2.Options
+typealias FolderOrder = PhotoTodoSchemaV2.FolderOrder

@@ -9,7 +9,7 @@ enum PhotoTodoSchemaV1: VersionedSchema {
     }
     
     @Model
-    final class Folder {
+    class Folder {
         @Attribute(.unique) var id : UUID
         var name: String
         var color: String
@@ -24,7 +24,7 @@ enum PhotoTodoSchemaV1: VersionedSchema {
 
 
     @Model
-    final class Todo {
+    class Todo {
         var folder: Folder?
         @Attribute(.unique) var id: UUID
         @Attribute(.externalStorage) var images: [Data]
@@ -45,7 +45,7 @@ enum PhotoTodoSchemaV1: VersionedSchema {
     }
 
     @Model
-    final class Options {
+    class Options {
         var todo: Todo?
         var alarm: Date?
         var alarmUUID: String?
@@ -62,7 +62,7 @@ enum PhotoTodoSchemaV1: VersionedSchema {
     }
 
     @Model
-    final class FolderOrder {
+    class FolderOrder {
         var uuidOrder: [UUID] // 폴더를 UUID별로 보여줄 배열
 
         init() {
