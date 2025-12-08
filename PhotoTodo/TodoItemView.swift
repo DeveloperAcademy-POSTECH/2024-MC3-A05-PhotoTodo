@@ -222,7 +222,7 @@ struct TodoItemView: View {
     
     func loadPreviewImage() async {
         guard !todo.images.isEmpty else { return }
-        let data = todo.images[0]
+        let data = todo.images[0].image
 
         let image = await Task.detached(priority: .userInitiated) {
                 UIImage(data: data)
