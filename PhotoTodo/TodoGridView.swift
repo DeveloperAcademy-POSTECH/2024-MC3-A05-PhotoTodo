@@ -61,9 +61,7 @@ struct TodoGridView: View {
     @State private var isCameraSheetOn: Bool = false
     @State private var isCameraNavigate: Bool = false
     
-    private var compositeTodos: [Todo] {
-        folders.flatMap { $0.todos }
-    }
+    @Query private var compositeTodos: [Todo] 
     
     private var todos: [Todo] {
         switch viewType {
@@ -383,7 +381,7 @@ struct TodoGridView: View {
             let newTodo = Todo(
                 folder: currentFolder,
                 id: UUID(),
-                images: [Data()],
+                images: [],
                 createdAt: Date(),
                 options: Options(
                     alarm : nil,

@@ -14,6 +14,8 @@ struct TodoItemView: View {
     @Environment(\.modelContext) private var modelContext
     @Binding var editMode: EditMode
     @State private var editTodoisActive: Bool = false
+    @State private var previewImage: UIImage? = nil
+
     
     // TodoGridView에서 해당하는 todo를 넘겨받음
     var todo: Todo
@@ -38,38 +40,42 @@ struct TodoItemView: View {
             Button {
                 onTodoItemTapped()
             } label: {
-                Image(uiImage: UIImage(data: todo.images.count > 0 ? todo.images[0] : Data()))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 170, height: 170)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                //MARK: 다중선택 여부 표시
-                    .overlay(alignment: . bottomLeading){
-                        VStack{
-                            Image(systemName: "square.on.square")
-                                .font(.title2)
-                                .foregroundColor(todo.images.count > 1 ? .paleGray : Color.clear)
-                        }
-                        .frame(width: 44, height: 44)
-                        .padding(8)
-                    }
-                //MARK: 삭제될 날까지의 D-Day 표시
-                    .overlay(alignment: .bottomTrailing){
-                        RoundedRectangle(cornerRadius: 35)
-                            .fill(todo.isDone ? .paleGray : Color.clear)
-                            .opacity(0.8)
-                            .frame(width: 100, height: 40)
-                            .overlay {
-                                Text(todo.isDone ? "\(daysLeft())일남음" : "")
-                                    .font(.subheadline).foregroundStyle(.green).padding()
+                if let image = previewImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 170, height: 170)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                    //MARK: 다중선택 여부 표시
+                        .overlay(alignment: . bottomLeading){
+                            VStack{
+                                Image(systemName: "square.on.square")
+                                    .font(.title2)
+                                    .foregroundColor(todo.images.count > 1 ? .paleGray : Color.clear)
                             }
-                            .padding(12)
-                    }
-                //MARK: 체크박스 표시
-                    .overlay(alignment: .topLeading) {
-                        checkBoxButton
-                    }
-                
+                            .frame(width: 44, height: 44)
+                            .padding(8)
+                        }
+                    //MARK: 삭제될 날까지의 D-Day 표시
+                        .overlay(alignment: .bottomTrailing){
+                            RoundedRectangle(cornerRadius: 35)
+                                .fill(todo.isDone ? .paleGray : Color.clear)
+                                .opacity(0.8)
+                                .frame(width: 100, height: 40)
+                                .overlay {
+                                    Text(todo.isDone ? "\(daysLeft())일남음" : "")
+                                        .font(.subheadline).foregroundStyle(.green).padding()
+                                }
+                                .padding(12)
+                        }
+                    //MARK: 체크박스 표시
+                        .overlay(alignment: .topLeading) {
+                            checkBoxButton
+                        }
+                } else {
+                    ProgressView()
+                           .frame(width: 170, height: 170)
+                }
             }
             .disabled(editMode == .active)
             .sheet(isPresented: $editTodoisActive, content: {
@@ -101,6 +107,10 @@ struct TodoItemView: View {
             })
             
         }
+        .task(priority: .background) {
+            await loadPreviewImage()
+        }
+
     }
     
     private var checkBoxButton: some View {
@@ -167,7 +177,7 @@ struct TodoItemView: View {
         
         //UI Hang 방지 위해 백그라운드 작업
         DispatchQueue.global().async() {
-            cameraVM.photoData = todo.images
+            cameraVM.photoData = todo.images.map {$0.image}
         }
         
         //MakeTodoView로 Navigate하기
@@ -197,9 +207,9 @@ struct TodoItemView: View {
             contentAlarm = nil
             alarmDataisEmpty = true
         }
-        //현재 화면에 노출된 변경 가능한 상태들의 현재 상태가 그대로 반영되도록 설 정하기
+        //현재 화면에 노출된 변경 가능한 상태들의 현재 상태가 그대로 반영되도록 설정하기
         todo.folder = chosenFolder
-        todo.images = cameraVM.photoData
+        todo.images = cameraVM.photoData.map{ Photo(image: $0) }
         todo.options = Options(alarm: contentAlarm, alarmUUID: id, memo: memo)
         editTodoisActive.toggle()
         try? modelContext.save()
@@ -208,6 +218,21 @@ struct TodoItemView: View {
     ///삭제되기까지 남은 기간을 계산하는 함수
     func daysLeft() -> Int {
         return 30-(daysPassedSinceJanuaryFirst2024(from : Date())-daysPassedSinceJanuaryFirst2024(from : todo.isDoneAt ?? Date()))
+    }
+    
+    func loadPreviewImage() async {
+        guard !todo.images.isEmpty else { return }
+        let data = todo.images[0].image
+
+        let image = await Task.detached(priority: .userInitiated) {
+                UIImage(data: data)
+            }.value
+
+        if let image {
+            await MainActor.run {
+                self.previewImage = image
+            }
+        }
     }
 }
 
@@ -218,7 +243,7 @@ struct TodoItemView: View {
     @Previewable @State var recentlyDoneTodo: Todo? = nil
     let newTodo = Todo(
         id: UUID(),
-        images: [UIImage(systemName: "star")?.pngData() ?? Data()],
+        images: [Photo(image: UIImage(systemName: "star")?.pngData() ?? Data())],
         createdAt: Date(),
         options: Options(
             alarm: nil,
@@ -226,7 +251,7 @@ struct TodoItemView: View {
         ),
         isDone: false
     )
-    return TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption,
+    TodoItemView(editMode: $editMode, todo: newTodo, toastMessage: $toastMessage, toastOption: $toastOption,
                         recentlyDoneTodo: $recentlyDoneTodo)
 }
 
