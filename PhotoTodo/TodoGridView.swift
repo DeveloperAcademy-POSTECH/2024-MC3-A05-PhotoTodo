@@ -145,11 +145,11 @@ struct TodoGridView: View {
     private var sortOptionString: String {
         switch sortOption {
         case .byDateDecreasing:
-            "일별빠른순"
+            "일별최신순"
         case .byDateIncreasing:
             "일별오래된순"
         case .byMonthDecreasing:
-            "월별빠른순"
+            "월별최신순"
         case .byMonthIncreasing:
             "월별오래된순"
         default:
@@ -343,9 +343,9 @@ struct TodoGridView: View {
             Spacer()
             Menu {
                 Picker("정렬", selection: $sortOption) {
-                    Text("일별빠른순").tag(SortOption.byDateDecreasing)
+                    Text("일별최신순").tag(SortOption.byDateDecreasing)
                     Text("일별오래된순").tag(SortOption.byDateIncreasing)
-                    Text("월별빠른순").tag(SortOption.byMonthDecreasing)
+                    Text("월별최신순").tag(SortOption.byMonthDecreasing)
                     Text("월별오래된순").tag(SortOption.byMonthIncreasing)
                 }
             } label: {
