@@ -461,7 +461,7 @@ extension TodoGridView {
     
     private func getMonthString(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YY년 MM월"
+        dateFormatter.dateFormat = "yy년 MM월"
         return dateFormatter.string(from: date)
     }
     
