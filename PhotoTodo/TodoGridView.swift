@@ -14,6 +14,8 @@ import OrderedCollections
 enum SortOption: String, CaseIterable {
     case byDateIncreasing
     case byDateDecreasing
+    case byMonthIncreasing
+    case byMonthDecreasing
     case byName
     case byStatus
     case byDueDate
@@ -81,6 +83,10 @@ struct TodoGridView: View {
             return todos.sorted { $0.createdAt < $1.createdAt }
         case .byDateDecreasing:
             return todos.sorted { $0.createdAt > $1.createdAt }
+        case .byMonthIncreasing:
+            return todos.sorted { $0.createdAt < $1.createdAt }
+        case .byMonthDecreasing:
+            return todos.sorted { $0.createdAt > $1.createdAt }
         case .byName:
             return todos.sorted { $0.options.memo ?? "" < $1.options.memo ?? "" }
         case .byStatus:
@@ -106,8 +112,21 @@ struct TodoGridView: View {
     }
     
     //TODO: folder.todos를 여러 옵션으로 정렬하기
-    var todosGroupedByDate: OrderedDictionary<Int, [Todo]> {
-        return getTodosGroupedByDate()
+    private var groupedTodos: OrderedDictionary<String, [Todo]> {
+        switch sortOption {
+        case .byDateDecreasing, .byDateIncreasing:
+            return OrderedDictionary(grouping: filteredTodos) { todo in
+                getDateString(todo.createdAt)
+            }
+        case .byMonthDecreasing, .byMonthIncreasing:
+            return OrderedDictionary(grouping: filteredTodos) { todo in
+                getMonthString(todo.createdAt)
+            }
+        default:
+            return OrderedDictionary(grouping: filteredTodos) { todo in
+                getDateString(todo.createdAt)
+            }
+        }
     }
     
     
@@ -125,10 +144,14 @@ struct TodoGridView: View {
     @State var toastHeight: CGFloat = 0
     private var sortOptionString: String {
         switch sortOption {
-        case .byDateIncreasing:
-            "오래된순"
         case .byDateDecreasing:
-            "최신순"
+            "일별최신순"
+        case .byDateIncreasing:
+            "일별오래된순"
+        case .byMonthDecreasing:
+            "월별최신순"
+        case .byMonthIncreasing:
+            "월별오래된순"
         default:
             "기타"
         }
@@ -320,8 +343,10 @@ struct TodoGridView: View {
             Spacer()
             Menu {
                 Picker("정렬", selection: $sortOption) {
-                    Text("최신순").tag(SortOption.byDateDecreasing)
-                    Text("오래된순").tag(SortOption.byDateIncreasing)
+                    Text("일별최신순").tag(SortOption.byDateDecreasing)
+                    Text("일별오래된순").tag(SortOption.byDateIncreasing)
+                    Text("월별최신순").tag(SortOption.byMonthDecreasing)
+                    Text("월별오래된순").tag(SortOption.byMonthIncreasing)
                 }
             } label: {
                 HStack(spacing: 2) {
@@ -355,10 +380,10 @@ struct TodoGridView: View {
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     private var groupedGridView: some View {
-        ForEach(todosGroupedByDate.elements, id: \.key) { element in
+        ForEach(groupedTodos.elements, id: \.key) { element in
             VStack(spacing: 8) {
                 HStack {
-                    Text(getDateString(element.value[0].createdAt))
+                    Text(element.key)
                         .font(.callout)
                         .foregroundStyle(Color("gray/gray-700"))
                         .padding(.leading, 10)
@@ -434,27 +459,10 @@ extension TodoGridView {
         return dateFormatter.string(from: date)
     }
     
-    /// 날짜별로 투두 아이템을 그루핑한 배열을 모은 배열을 리턴함
-    private func getTodosGroupedByDate() -> OrderedDictionary<Int, [Todo]> {
-        if filteredTodos.count == 0 {
-            return [dayOfYear(from : Date()): filteredTodos] //dayOfYear는 현재 연도의 몇번째 날짜인지를 리턴함
-        }
-        var groupedTodos: OrderedDictionary<Int, [Todo]> = [:] //OrderedDictionary 타입을 사용하여
-        var i = 0
-        var curr: Int
-        while i != filteredTodos.count {
-            switch sortOption {
-            case .byDateIncreasing:
-                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].createdAt)
-            case .byDueDate:
-                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].options.alarm ?? Date())
-            default: //그룹화는 만들어진 날짜를 기준으로 이루어짐
-                curr = daysPassedSinceJanuaryFirst2024(from : filteredTodos[i].createdAt)
-            }
-            groupedTodos[curr, default: []].append(filteredTodos[i])
-            i += 1
-        }
-        return groupedTodos
+    private func getMonthString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy년 MM월"
+        return dateFormatter.string(from: date)
     }
     
     ///a method that will be called when the ImagePicker view has been dismissed
