@@ -159,48 +159,36 @@ struct MakeTodoView: View {
                             List {
                                 Section{
                                     // 폴더 선택 행
-                                    HStack{
+                                    HStack {
                                         Text("폴더")
                                         Spacer()
-                                        Group{
-                                            Circle()
-                                                .frame(width: 12, height: 12)
-                                                .foregroundStyle(chosenFolderColor)
-                                            
-                                            Menu {
-                                                ForEach(orderedFolder, id: \.self.id){ folder in
-                                                    Button(action: {
-                                                        chosenFolder = folder
-                                                    }) {
-                                                        HStack {
-                                                            if chosenFolder == folder {
-                                                                Image(systemName: "checkmark")
-                                                            } else {
-                                                                Image(systemName: "checkmark").hidden()
-                                                            }
-                                                            
-                                                            Text("\(folder.name)")
-                                                            Spacer()
-                                                            HStack {
-                                                                if chosenFolder == folder {
-                                                                    Image(systemName: "checkmark")
-                                                                } else {
-                                                                    Image(systemName: "checkmark").hidden()
-                                                                }
-                                                            }
-                                                            .frame(width: 30)
+                                        Menu {
+                                            ForEach(orderedFolder, id: \.self.id){ folder in
+                                                Button {
+                                                    chosenFolder = folder
+                                                } label : {
+                                                    HStack {
+                                                        if chosenFolder == folder {
+                                                            Image(systemName: "checkmark")
+                                                        } else {
+                                                            Image(systemName: "checkmark").hidden()
                                                         }
+                                                        Text("\(folder.name)")
+                                                        Spacer()
                                                     }
                                                 }
-                                            } label: {
+                                            }
+                                        } label: {
+                                            Group {
+                                                Circle()
+                                                    .frame(width: 12, height: 12)
+                                                    .foregroundStyle(chosenFolderColor)
                                                 Text("\(chosenFolderName)")
                                                 //                                Text(chosenFolder.name)
                                                 Image(systemName: "chevron.up.chevron.down")
                                                     .resizable()
                                                     .frame(width: 10, height: 15)
                                             }
-                                            
-                                            
                                         }
                                     }
                                     
@@ -208,7 +196,7 @@ struct MakeTodoView: View {
                                     Button {
                                         alarmisActive.toggle()
                                     } label: {
-                                        HStack{
+                                        HStack {
                                             Text("알람")
                                             Spacer()
                                             Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
