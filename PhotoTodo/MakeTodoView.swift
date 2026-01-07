@@ -154,143 +154,145 @@ struct MakeTodoView: View {
                     }
                     VStack {
                         ZStack{
-                            RoundedRectangle(cornerRadius: 20) // 원하는 radius 값
-                                .fill(Color.paleGray) // 배경색 설정
-                            List {
-                                Section{
-                                    // 폴더 선택 행
-                                    HStack {
-                                        Text("폴더")
-                                        Spacer()
-                                        Menu {
-                                            ForEach(orderedFolder, id: \.self.id){ folder in
-                                                Button {
-                                                    chosenFolder = folder
-                                                } label : {
-                                                    HStack {
-                                                        if chosenFolder == folder {
-                                                            Image(systemName: "checkmark")
-                                                        } else {
-                                                            Image(systemName: "checkmark").hidden()
-                                                        }
-                                                        Text("\(folder.name)")
-                                                        Spacer()
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color.paleGray)
+                            VStack(spacing: 0) {
+                                // 폴더 선택 행
+                                HStack {
+                                    Text("폴더")
+                                    Spacer()
+                                    Menu {
+                                        ForEach(orderedFolder, id: \.self.id){ folder in
+                                            Button {
+                                                chosenFolder = folder
+                                            } label : {
+                                                HStack {
+                                                    if chosenFolder == folder {
+                                                        Image(systemName: "checkmark")
+                                                    } else {
+                                                        Image(systemName: "checkmark").hidden()
                                                     }
+                                                    Text("\(folder.name)")
+                                                    Spacer()
                                                 }
                                             }
-                                        } label: {
-                                            Group {
-                                                Circle()
-                                                    .frame(width: 12, height: 12)
-                                                    .foregroundStyle(chosenFolderColor)
-                                                Text("\(chosenFolderName)")
-                                                //                                Text(chosenFolder.name)
-                                                Image(systemName: "chevron.up.chevron.down")
-                                                    .resizable()
-                                                    .frame(width: 10, height: 15)
-                                            }
                                         }
-                                    }
-                                    
-                                    // 알림 생성 행
-                                    Button {
-                                        alarmisActive.toggle()
                                     } label: {
-                                        HStack {
-                                            Text("알람")
-                                            Spacer()
-                                            Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
+                                        Group {
+                                            Circle()
+                                                .frame(width: 12, height: 12)
+                                                .foregroundStyle(chosenFolderColor)
+                                            Text("\(chosenFolderName)")
+                                            Image(systemName: "chevron.up.chevron.down")
+                                                .resizable()
+                                                .frame(width: 10, height: 15)
                                         }
                                     }
-                                    .sheet(isPresented: $alarmisActive, content: {
-                                        VStack{
-                                            HStack{
-                                                Button(action: {
-                                                    contentAlarm = Date()
-                                                    alarmDataisEmpty = true
-                                                    alarmisActive.toggle()
-                                                }, label: {
-                                                    Text("리셋")
-                                                })
-                                                Spacer()
-                                                Button(action: {
-                                                    alarmDataisEmpty = false
-                                                    alarmisActive.toggle()
-                                                }, label: {
-                                                    Text("완료")
-                                                })
-                                            }
-                                            
-                                            DatePicker(
-                                                "Select Date",
-                                                selection: $contentAlarm.withDefault(Date()),
-                                                in: Date()...,
-                                                displayedComponents: [.date, .hourAndMinute]
-                                            )
-                                            .labelsHidden()
-                                            .datePickerStyle(.wheel)
-                                        }
-                                        .padding()
-                                        .presentationDetents([.height(CGFloat(300))])
-                                    })
-                                    
-                                    // 메모 생성 행
-                                    Button(action: {
-                                        memoisActive.toggle()
-                                        newMemo = memo ?? ""
-                                    }, label: {
-                                        HStack{
-                                            //                                        Image(systemName: "pencil")
-                                            //                                            .resizable()
-                                            //                                            .frame(width: 15, height: 15)
-                                            Text("메모")
-                                            Spacer()
-                                            if let memo = memo {
-                                                Text(memo.count > 5 ? String("\(memo.prefix(5))...") : memo)
-                                                    .lineLimit(1)
-                                                    .truncationMode(.tail)
-                                            }
-                                            
-                                            Image(systemName: "chevron.right")
-                                                .resizable()
-                                                .frame(width: 8, height: 12)
-                                        }
-                                    })
-                                    .sheet(isPresented: $memoisActive, content: {
-                                        VStack{
-                                            HStack{
-                                                Spacer()
-                                                Button(action: {
-                                                    memoisActive.toggle()
-                                                    memo = newMemo
-                                                }, label: {
-                                                    Text("완료")
-                                                })
-                                            }
-                                            
-                                            VStack{
-                                                TextField("메모를 입력해주세요.", text: $newMemo, axis: .vertical	)
-                                            }.frame(height: 100, alignment: .top)
-                                            
-                                            Spacer()
-                                        }
-                                        .padding()
-                                        .presentationDetents([.height(CGFloat(200))])
-                                    })
                                 }
-                                .listRowBackground(Color.clear)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 12)
                                 .foregroundStyle(Color.black)
+                                
+                                Divider()
+                                    .padding(.horizontal, 20)
+                                
+                                // 알림 생성 행
+                                Button {
+                                    alarmisActive.toggle()
+                                } label: {
+                                    HStack {
+                                        Text("알람")
+                                        Spacer()
+                                        Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
+                                    }
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 12)
+                                    .foregroundStyle(Color.black)
+                                }
+                                .sheet(isPresented: $alarmisActive, content: {
+                                    VStack{
+                                        HStack{
+                                            Button(action: {
+                                                contentAlarm = Date()
+                                                alarmDataisEmpty = true
+                                                alarmisActive.toggle()
+                                            }, label: {
+                                                Text("리셋")
+                                            })
+                                            Spacer()
+                                            Button(action: {
+                                                alarmDataisEmpty = false
+                                                alarmisActive.toggle()
+                                            }, label: {
+                                                Text("완료")
+                                            })
+                                        }
+                                        
+                                        DatePicker(
+                                            "Select Date",
+                                            selection: $contentAlarm.withDefault(Date()),
+                                            in: Date()...,
+                                            displayedComponents: [.date, .hourAndMinute]
+                                        )
+                                        .labelsHidden()
+                                        .datePickerStyle(.wheel)
+                                    }
+                                    .padding()
+                                    .presentationDetents([.height(CGFloat(300))])
+                                })
+                                
+                                Divider()
+                                    .padding(.horizontal, 20)
+                                
+                                // 메모 생성 행
+                                Button(action: {
+                                    memoisActive.toggle()
+                                    newMemo = memo ?? ""
+                                }, label: {
+                                    HStack{
+                                        Text("메모")
+                                        Spacer()
+                                        if let memo = memo {
+                                            Text(memo.count > 5 ? String("\(memo.prefix(5))...") : memo)
+                                                .lineLimit(1)
+                                                .truncationMode(.tail)
+                                        }
+                                        
+                                        Image(systemName: "chevron.right")
+                                            .resizable()
+                                            .frame(width: 8, height: 12)
+                                    }
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 12)
+                                    .foregroundStyle(Color.black)
+                                })
+                                .sheet(isPresented: $memoisActive, content: {
+                                    VStack{
+                                        HStack{
+                                            Spacer()
+                                            Button(action: {
+                                                memoisActive.toggle()
+                                                memo = newMemo
+                                            }, label: {
+                                                Text("완료")
+                                            })
+                                        }
+                                        
+                                        VStack{
+                                            TextField("메모를 입력해주세요.", text: $newMemo, axis: .vertical	)
+                                        }.frame(height: 100, alignment: .top)
+                                        
+                                        Spacer()
+                                    }
+                                    .padding()
+                                    .presentationDetents([.height(CGFloat(200))])
+                                })
                             }
-                            .padding(.leading, -16)
-                            .padding(.top, -34)
-                            .background(Color.clear) // List의 배경색을 투명하게 설정
-                            .scrollContentBackground(.hidden)
-                            .scrollDisabled(true)
-                            .frame(minHeight: 132)
+                            .padding(.vertical, 8)
                         }
-                        .clipShape(RoundedRectangle(cornerRadius: 20)) // 모서리 둥글게
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
                     }
-                    .frame(width: 350, height: 132)
+                    .frame(width: 350)
                 }
                 .padding(.horizontal, 20)
                 if isZoomViewPresented {
