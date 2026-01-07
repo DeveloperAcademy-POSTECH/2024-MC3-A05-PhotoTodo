@@ -158,6 +158,7 @@ struct MakeTodoView: View {
                                 .fill(Color.paleGray) // 배경색 설정
                             List {
                                 Section{
+                                    // 폴더 선택 행
                                     HStack{
                                         Text("폴더")
                                         Spacer()
@@ -202,6 +203,8 @@ struct MakeTodoView: View {
                                             
                                         }
                                     }
+                                    
+                                    // 알림 생성 행
                                     Button {
                                         alarmisActive.toggle()
                                     } label: {
@@ -243,7 +246,7 @@ struct MakeTodoView: View {
                                         .presentationDetents([.height(CGFloat(300))])
                                     })
                                     
-                                    
+                                    // 메모 생성 행
                                     Button(action: {
                                         memoisActive.toggle()
                                         newMemo = memo ?? ""
