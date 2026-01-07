@@ -345,14 +345,22 @@ struct MakeTodoView: View {
             home = false
         }
         .toolbar(startViewType == .edit ? .hidden : .visible)
-        .toolbar(content: {
+        .toolbar {
             // 완료 및 저장 버튼
-            Button {
-                saveTodoItem()
-            } label: {
-                Text("완료")
+            if #available(iOS 26.0, *) {
+                Button(role: .confirm) {
+                    saveTodoItem()
+                } label : {
+                    Text("test")
+                }
+            } else {
+                Button {
+                    saveTodoItem()
+                } label: {
+                    Text("저장")
+                }
             }
-        })
+        }
         .toolbar(.visible, for: .bottomBar)
         .toolbar{
             ToolbarItemGroup(placement: .bottomBar) {
