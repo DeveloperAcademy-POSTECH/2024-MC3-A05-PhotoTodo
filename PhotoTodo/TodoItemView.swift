@@ -81,24 +81,8 @@ struct TodoItemView: View {
             .sheet(isPresented: $editTodoisActive, content: {
                 NavigationStack{
                     VStack{
-                        HStack{
-                            // 각 아이템을 클릭하면 나오는 디테일 뷰에서 뒤로가기를 할 때 사용되는 버튼
-                            Button {
-                                editTodoisActive.toggle()
-                            } label: {
-                                Text("취소")
-                            }
-                            Spacer()
-                            // 저장 버튼
-                            Button {
-                                saveTodoItem()
-                            } label: {
-                                Text("저장")
-                            }
-                        }
-                        .padding()
                         ScrollView{
-                            MakeTodoView(chosenFolder: $chosenFolder, startViewType: .edit, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                            MakeTodoView(chosenFolder: $chosenFolder, startViewType: .edit, onSave: saveTodoItem, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                                 .presentationDragIndicator(.visible)
                         }
                     }
