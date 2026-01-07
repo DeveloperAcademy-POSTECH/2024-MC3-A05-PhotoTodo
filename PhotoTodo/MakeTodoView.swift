@@ -37,6 +37,7 @@ struct MakeTodoView: View {
     @State private var cameraVM = CameraViewModel.shared
     @Binding var chosenFolder: Folder?
     var startViewType: startViewType
+    var onSave: (() -> Void)? = nil
     
     // 내부 컨텐츠
     @Binding var contentAlarm: Date?
@@ -344,20 +345,45 @@ struct MakeTodoView: View {
             // 이러한 이유로, 원치 않은 사이드 이팩트를 막기 위해 카메라 시트를 닫을 때에 반드시 home을 false로 바꿔줘야 함
             home = false
         }
-        .toolbar(startViewType == .edit ? .hidden : .visible)
         .toolbar {
-            // 완료 및 저장 버튼
-            if #available(iOS 26.0, *) {
-                Button(role: .confirm) {
-                    saveTodoItem()
-                } label : {
-                    Text("test")
+            if (startViewType == .edit) {
+                ToolbarItem(placement: .topBarLeading) {
+                    if #available(iOS 26.0, *) {
+                        Button(role: .close) {
+                            dismiss()
+                        }
+                    } else {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("취소")
+                        }
+                    }
                 }
-            } else {
-                Button {
-                    saveTodoItem()
-                } label: {
-                    Text("저장")
+            }
+            
+            // 완료 및 저장 버튼
+            ToolbarItem {
+                if #available(iOS 26.0, *) {
+                    Button(role: .confirm) {
+                        // .edit 모드일 때는 콜백 함수 실행
+                        if startViewType == .edit {
+                            onSave?()
+                            return
+                        }
+                        createTodoItem()
+                    }
+                } else {
+                    Button {
+                        // .edit 모드일 때는 콜백 함수 실행
+                        if startViewType == .edit {
+                            onSave?()
+                            return
+                        }
+                        createTodoItem()
+                    } label: {
+                        Text("저장")
+                    }
                 }
             }
         }
@@ -395,7 +421,7 @@ struct MakeTodoView: View {
         }
     }
     
-    func saveTodoItem() {
+    func createTodoItem() {
         var id: String = ""
         // 알림 데이터가 있으면
         
@@ -487,6 +513,6 @@ extension Binding {
     @Previewable @State var alarmDataisEmpty: Bool = true
     @Previewable @State var home: Bool? = false
     @Previewable @State var alarmID = ""
-    return MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
+    return MakeTodoView(chosenFolder: $chosenFolder, startViewType: .camera, onSave: nil, contentAlarm: .constant(Date()), alarmID: .constant(""), alarmDataisEmpty: .constant(true), memo: .constant(""), home: .constant(true))
     
 }
