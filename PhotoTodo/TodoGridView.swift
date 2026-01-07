@@ -63,7 +63,7 @@ struct TodoGridView: View {
     @State private var isCameraSheetOn: Bool = false
     @State private var isCameraNavigate: Bool = false
     
-    @Query private var compositeTodos: [Todo] 
+    @Query private var compositeTodos: [Todo]
     
     private var todos: [Todo] {
         switch viewType {
@@ -216,8 +216,16 @@ struct TodoGridView: View {
                             .presentationDragIndicator(.visible)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
-                                    Button("취소") {
-                                        isDoneSelecting = false
+                                    if #available(iOS 26.0, *) {
+                                        Button(role: .close) {
+                                            isDoneSelecting = false
+                                        }
+                                    } else {
+                                        Button {
+                                            isDoneSelecting = false
+                                        } label: {
+                                            Text("취소")
+                                        }
                                     }
                                 }
                             }
