@@ -67,7 +67,7 @@ struct MakeTodoView: View {
     @State private var selectedItems = [PhotosPickerItem]()
     @State private var selectedIndexs: Int = 0
     
-    //알람 설정 관련
+    //알림 설정 관련
     @State private var showAlert = false
     @State private var alertMessage = ""
     
@@ -201,7 +201,7 @@ struct MakeTodoView: View {
                                     alarmisActive.toggle()
                                 } label: {
                                     HStack {
-                                        Text("알람")
+                                        Text("알림")
                                         Spacer()
                                         Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
                                     }
@@ -389,9 +389,9 @@ struct MakeTodoView: View {
     
     func saveTodoItem() {
         var id: String = ""
-        // 알람 데이터가 있으면
+        // 알림 데이터가 있으면
         
-        // MARK: 생성 시 만들어 지는 곳 -> 알람 데이터 삭제 필요 없음
+        // MARK: 생성 시 만들어 지는 곳 -> 알림 데이터 삭제 필요 없음
         if alarmDataisEmpty != nil && !alarmDataisEmpty! {
             // alarmDataisEmpty == false일 경우 알림을 설정하는 것이기 때문에 데이터가 무조건 있다고 봄
             let calendar = Calendar.current
@@ -401,7 +401,7 @@ struct MakeTodoView: View {
             let hour = calendar.component(.hour, from: contentAlarm!)
             let minute = calendar.component(.minute, from: contentAlarm!)
             
-            // Notification 알람 생성 및 id Todo에 저장하기
+            // Notification 알림 생성 및 id Todo에 저장하기
             id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
         }
         
