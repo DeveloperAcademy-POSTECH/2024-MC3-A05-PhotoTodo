@@ -189,8 +189,8 @@ struct MakeTodoView: View {
                                         }
                                     }
                                 }
+                                .frame(height: 44)
                                 .padding(.horizontal, 20)
-                                .padding(.vertical, 12)
                                 .foregroundStyle(Color.black)
                                 
                                 Divider()
@@ -205,10 +205,11 @@ struct MakeTodoView: View {
                                         Spacer()
                                         Text(alarmDataisEmpty ?? true ? "없음" : Date().makeAlarmDate(alarmData: contentAlarm ?? Date()))
                                     }
+                                    .frame(height: 44)
                                     .padding(.horizontal, 20)
-                                    .padding(.vertical, 12)
                                     .foregroundStyle(Color.black)
                                 }
+                                .buttonStyle(.plain)
                                 .sheet(isPresented: $alarmisActive, content: {
                                     VStack{
                                         HStack{
@@ -262,10 +263,11 @@ struct MakeTodoView: View {
                                             .resizable()
                                             .frame(width: 8, height: 12)
                                     }
+                                    .frame(height: 44)
                                     .padding(.horizontal, 20)
-                                    .padding(.vertical, 12)
                                     .foregroundStyle(Color.black)
                                 })
+                                .buttonStyle(.plain)
                                 .sheet(isPresented: $memoisActive, content: {
                                     VStack{
                                         HStack{
@@ -288,7 +290,6 @@ struct MakeTodoView: View {
                                     .presentationDetents([.height(CGFloat(200))])
                                 })
                             }
-                            .padding(.vertical, 8)
                         }
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                     }
