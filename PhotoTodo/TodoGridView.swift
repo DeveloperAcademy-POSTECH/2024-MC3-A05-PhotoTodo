@@ -335,15 +335,25 @@ struct TodoGridView: View {
     }
     
     private var scrollableGridView: some View {
-        ScrollView(showsIndicators: false) {
-            LazyVStack(spacing: 0) {
-                CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
-                sortMenu
-                if viewType == .doneList {
-                    GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
-                } else {
-                    groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+        ScrollViewReader { proxy in
+            ScrollView(showsIndicators: false) {
+                LazyVStack(spacing: 0) {
+                    Color.clear
+                        .frame(height: 0)
+                        .id("scrollTop")
+                    
+                    CustomTitle(todos: todos, viewType: viewType, navigationBarTitle: navigationBarTitle, folder: currentFolder)
+                    sortMenu
+                    if viewType == .doneList {
+                        GridView(sortedTodos: sortedTodos, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo, selectedTodos: $selectedTodos, editMode: $editMode) //메인뷰가 아닐 때는 그리드 뷰 하나로 모든 아이템을 모아서 보여줌
+                    } else {
+                        groupedGridView //메인뷰일 때는 날짜별로 그룹화된 아이템을 보여줌
+                    }
                 }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ScrollToTop"))) { _ in
+                // 애니메이션 없이 즉시 스크롤 - 메모리 크래시 방지
+                proxy.scrollTo("scrollTop", anchor: .top)
             }
         }
     }
@@ -466,32 +476,28 @@ struct GridView: View {
     ]
     
     var body: some View {
-        VStack {
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 13) {
-                    //TODO: 이미지 비율 맞추기
-                    ForEach(sortedTodos) { todo in
-                        TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
-                        //tap gesture로 선택되었을 시 라인으로 표시됨
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .strokeBorder(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
-                            )
-                        //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
-                            .onTapGesture {
-                                if editMode == .active {
-                                    if selectedTodos.contains(todo.id) {
-                                        selectedTodos.remove(todo.id)
-                                    } else {
-                                        selectedTodos.insert(todo.id)
-                                    }
-                                }
+        // 중첩 ScrollView 제거 - 메모리 최적화
+        LazyVGrid(columns: columns, spacing: 13) {
+            //TODO: 이미지 비율 맞추기
+            ForEach(sortedTodos) { todo in
+                TodoItemView(editMode: $editMode, todo: todo, toastMessage: $toastMessage, toastOption: $toastOption, recentlyDoneTodo: $recentlyDoneTodo)
+                //tap gesture로 선택되었을 시 라인으로 표시됨
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .strokeBorder(selectedTodos.contains(todo.id) ? Color("green/green-500") : Color.clear, lineWidth: 4)
+                    )
+                //편집모드가 활성화되어 있을 시 tap gesture로 여러 아이템을 선택할 수 있게 함
+                    .onTapGesture {
+                        if editMode == .active {
+                            if selectedTodos.contains(todo.id) {
+                                selectedTodos.remove(todo.id)
+                            } else {
+                                selectedTodos.insert(todo.id)
                             }
+                        }
                     }
-                }
             }
         }
-        .ignoresSafeArea(.keyboard)
         .padding(.bottom, 24)
         .padding(.horizontal)
     }
