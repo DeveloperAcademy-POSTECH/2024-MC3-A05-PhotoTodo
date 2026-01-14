@@ -212,7 +212,7 @@ struct TodoGridView: View {
             NavigationStack{
                 VStack{
                     ScrollView{
-                        MakeTodoView(chosenFolder: $currentFolder, startViewType: .camera, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
+                        MakeTodoView(chosenFolder: $currentFolder, startViewType: viewType == .main ? .gridMain : .gridSingleFolder, contentAlarm: $contentAlarm, alarmID: $alarmID, alarmDataisEmpty: $alarmDataisEmpty, memo: $memo, home: $home)
                             .presentationDragIndicator(.visible)
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {

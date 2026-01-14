@@ -209,6 +209,7 @@ struct MakeTodoView: View {
                                     .frame(height: 44)
                                     .padding(.horizontal, 20)
                                     .foregroundStyle(Color.black)
+                                    .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
                                 .sheet(isPresented: $alarmisActive, content: {
@@ -247,10 +248,10 @@ struct MakeTodoView: View {
                                     .padding(.horizontal, 20)
                                 
                                 // 메모 생성 행
-                                Button(action: {
+                                Button {
                                     memoisActive.toggle()
                                     newMemo = memo ?? ""
-                                }, label: {
+                                } label: {
                                     HStack{
                                         Text("메모")
                                         Spacer()
@@ -267,28 +268,40 @@ struct MakeTodoView: View {
                                     .frame(height: 44)
                                     .padding(.horizontal, 20)
                                     .foregroundStyle(Color.black)
-                                })
+                                    .contentShape(Rectangle())
+                                }
                                 .buttonStyle(.plain)
                                 .sheet(isPresented: $memoisActive, content: {
-                                    VStack{
-                                        HStack{
+                                    NavigationStack {
+                                        VStack(alignment: .leading) {
+                                            TextField("메모를 입력해주세요.", text: $newMemo, axis: .vertical)
+                                                .textFieldStyle(.plain)
+                                                .frame(maxHeight: .infinity, alignment: .top)
+                                            
                                             Spacer()
-                                            Button(action: {
-                                                memoisActive.toggle()
-                                                memo = newMemo
-                                            }, label: {
-                                                Text("완료")
-                                            })
                                         }
-                                        
-                                        VStack{
-                                            TextField("메모를 입력해주세요.", text: $newMemo, axis: .vertical	)
-                                        }.frame(height: 100, alignment: .top)
-                                        
-                                        Spacer()
+                                        .padding()
+                                        .navigationTitle("메모")
+                                        .navigationBarTitleDisplayMode(.inline)
+                                        .toolbar {
+                                            ToolbarItem(placement: .topBarTrailing) {
+                                                if #available(iOS 26.0, *) {
+                                                    Button(role: .confirm) {
+                                                        memoisActive.toggle()
+                                                        memo = newMemo
+                                                    }
+                                                } else {
+                                                    Button {
+                                                        memoisActive.toggle()
+                                                        memo = newMemo
+                                                    } label: {
+                                                        Text("완료")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        .presentationDetents([.height(CGFloat(250))])
                                     }
-                                    .padding()
-                                    .presentationDetents([.height(CGFloat(200))])
                                 })
                             }
                         }
