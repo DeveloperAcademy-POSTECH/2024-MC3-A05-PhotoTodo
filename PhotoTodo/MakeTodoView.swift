@@ -209,6 +209,7 @@ struct MakeTodoView: View {
                                     .frame(height: 44)
                                     .padding(.horizontal, 20)
                                     .foregroundStyle(Color.black)
+                                    .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
                                 .sheet(isPresented: $alarmisActive, content: {
@@ -267,6 +268,7 @@ struct MakeTodoView: View {
                                     .frame(height: 44)
                                     .padding(.horizontal, 20)
                                     .foregroundStyle(Color.black)
+                                    .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
                                 .sheet(isPresented: $memoisActive, content: {
