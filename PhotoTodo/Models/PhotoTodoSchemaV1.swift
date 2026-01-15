@@ -5,7 +5,7 @@ import SwiftUI
 enum PhotoTodoSchemaV1: VersionedSchema {
     static var versionIdentifier: Schema.Version { Schema.Version(1, 0, 0)}
     static var models: [any PersistentModel.Type] {
-        [Folder.self, Todo.self, Options.self, FolderOrder.self]
+        [PhotoTodoSchemaV1.Folder.self, PhotoTodoSchemaV1.Todo.self, PhotoTodoSchemaV1.Options.self, PhotoTodoSchemaV1.FolderOrder.self]
     }
     
     @Model

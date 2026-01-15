@@ -40,6 +40,8 @@ enum PhotoTodoSchemaV3: VersionedSchema {
         var isDone: Bool
         var isDoneAt: Date?
         
+        private var schemaPatch_v3: Int?
+        
         init(folder: Folder? = nil, id: UUID, images: [Photo], createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil) {
             self.folder = folder
             self.id = id
