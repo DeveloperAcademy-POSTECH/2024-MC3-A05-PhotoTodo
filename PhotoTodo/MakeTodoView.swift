@@ -41,6 +41,7 @@ struct MakeTodoView: View {
     
     // 내부 컨텐츠
     @Binding var contentAlarm: Date?
+    @State var selectedAlarm: Date?
     @Binding var alarmID: String?
     @State private var folderMenuisActive: Bool = false
     @State private var alarmisActive: Bool = false
@@ -200,6 +201,7 @@ struct MakeTodoView: View {
                                 // 알림 생성 행
                                 Button {
                                     alarmisActive.toggle()
+                                    selectedAlarm = contentAlarm
                                 } label: {
                                     HStack {
                                         Text("알림")
@@ -217,7 +219,7 @@ struct MakeTodoView: View {
                                         VStack {
                                             DatePicker(
                                                 "Select Date",
-                                                selection: $contentAlarm.withDefault(Date()),
+                                                selection: $selectedAlarm.withDefault(Date()),
                                                 in: Date()...,
                                                 displayedComponents: [.date, .hourAndMinute]
                                             )
@@ -234,6 +236,7 @@ struct MakeTodoView: View {
                                                 if #available(iOS 26.0, *) {
                                                     Button(role: .destructive) {
                                                         contentAlarm = Date()
+                                                        selectedAlarm = contentAlarm
                                                         alarmDataisEmpty = true
                                                         alarmisActive.toggle()
                                                     } label: {
@@ -242,6 +245,7 @@ struct MakeTodoView: View {
                                                 } else {
                                                     Button {
                                                         contentAlarm = Date()
+                                                        selectedAlarm = contentAlarm
                                                         alarmDataisEmpty = true
                                                         alarmisActive.toggle()
                                                     } label: {
@@ -255,11 +259,13 @@ struct MakeTodoView: View {
                                                 if #available(iOS 26.0, *) {
                                                     Button(role: .confirm) {
                                                         alarmDataisEmpty = false
+                                                        contentAlarm = selectedAlarm
                                                         alarmisActive.toggle()
                                                     }
                                                 } else {
                                                     Button {
                                                         alarmDataisEmpty = false
+                                                        contentAlarm = selectedAlarm
                                                         alarmisActive.toggle()
                                                     } label: {
                                                         Text("완료")
@@ -269,7 +275,8 @@ struct MakeTodoView: View {
                                         }
                                         .presentationDetents([.height(CGFloat(380))])
                                     }
-                                })
+                                }
+                                )
                                 
                                 Divider()
                                     .padding(.horizontal, 20)
