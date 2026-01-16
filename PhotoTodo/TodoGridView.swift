@@ -273,7 +273,7 @@ struct TodoGridView: View {
                             alarmSetting.toggle()
                         } label: {
                             HStack {
-                                Text("정기 알람 설정")
+                                Text("정기 알림 설정")
                                 Image(systemName: "alarm")
                             }
                         }
