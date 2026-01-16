@@ -209,7 +209,9 @@ struct TodoItemView: View {
         let data = todo.images[0].image
 
         let image = await Task.detached(priority: .userInitiated) {
-                UIImage(data: data)
+            guard let originalImage = UIImage(data: data) else { return UIImage(data: Data()) }
+                // 메모리 최적화: 디스플레이 크기로 리사이징 (170x170)
+                return originalImage.resizedImage(targetSize: CGSize(width: 340, height: 340))
             }.value
 
         if let image {
@@ -217,6 +219,32 @@ struct TodoItemView: View {
                 self.previewImage = image
             }
         }
+    }
+}
+
+// MARK: - UIImage Extension for Memory Optimization
+extension UIImage {
+    /// 메모리 효율적으로 이미지 리사이징
+    func resizedImage(targetSize: CGSize) -> UIImage {
+        let size = self.size
+        
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        // 작은 비율을 선택하여 aspect ratio 유지
+        let scaleFactor = min(widthRatio, heightRatio)
+        
+        let scaledImageSize = CGSize(
+            width: size.width * scaleFactor,
+            height: size.height * scaleFactor
+        )
+        
+        let renderer = UIGraphicsImageRenderer(size: scaledImageSize)
+        let scaledImage = renderer.image { _ in
+            self.draw(in: CGRect(origin: .zero, size: scaledImageSize))
+        }
+        
+        return scaledImage
     }
 }
 

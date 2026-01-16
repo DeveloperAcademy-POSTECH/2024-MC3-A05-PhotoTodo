@@ -88,10 +88,15 @@ struct TabBarView: View {
                 HStack(spacing: 0) {
                     HStack {
                         Button { // 전체 투두 탭
-                            selectedTab = 0
-                            recentTag = 0
-                            recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
-                            page = .main
+                            if selectedTab == 0 && page == .main {
+                                // 이미 전체 투두 탭이 활성화되어 있으면 스크롤을 위로 올림
+                                NotificationCenter.default.post(name: NSNotification.Name("ScrollToTop"), object: nil)
+                            } else {
+                                selectedTab = 0
+                                recentTag = 0
+                                recentlySeenFolder = folders.count > 0 ? folders.first(where: {$0.id.uuidString == defaultFolderID}) : nil
+                                page = .main
+                            }
                         } label: {
                             VStack(spacing: 0) {
                                 VStack{
