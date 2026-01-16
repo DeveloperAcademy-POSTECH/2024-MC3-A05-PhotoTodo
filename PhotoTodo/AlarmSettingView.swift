@@ -44,7 +44,7 @@ struct AlarmSettingView: View {
                 .padding(EdgeInsets(top: 0, leading: 20, bottom: 11, trailing: 20))
                 
                 VStack(alignment: .leading){
-                    Text("정기 알람 설정")
+                    Text("정기 알림 설정")
                         .font(.title2.bold())
                         .padding(.bottom, 3)
                     Text("지정한 요일과 시간에 알림을 보내드립니다.")

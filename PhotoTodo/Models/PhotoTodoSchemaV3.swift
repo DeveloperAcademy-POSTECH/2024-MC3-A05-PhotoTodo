@@ -1,17 +1,18 @@
 //
-//  PhotoTodoSchemaV2.swift
+//  PhotoTodoSchemaV3.swift
 //  PhotoTodo
 //
-//  Created by Lyosha's MacBook   on 12/7/25.
+//  Created by Lyosha's MacBook   on 1/14/26.
 //
+
 import Foundation
 import SwiftData
 import SwiftUI
 
-enum PhotoTodoSchemaV2: VersionedSchema {
-    static var versionIdentifier: Schema.Version { Schema.Version(2, 0, 0)}
+enum PhotoTodoSchemaV3: VersionedSchema {
+    static var versionIdentifier: Schema.Version { Schema.Version(3, 0, 0)}
     static var models: [any PersistentModel.Type] {
-        [PhotoTodoSchemaV2.Folder.self, PhotoTodoSchemaV2.Todo.self, PhotoTodoSchemaV2.Photo.self, PhotoTodoSchemaV2.Options.self, PhotoTodoSchemaV2.FolderOrder.self]
+        [Folder.self, Todo.self, Photo.self, Options.self, FolderOrder.self]
     }
     
     @Model
@@ -33,11 +34,13 @@ enum PhotoTodoSchemaV2: VersionedSchema {
     final class Todo {
         var folder: Folder?
         @Attribute(.unique) var id: UUID
-        @Attribute var images: [Photo]
+        @Relationship(deleteRule:.cascade) var images: [Photo]
         var createdAt: Date
         @Relationship(inverse: \Options.todo) var options: Options
         var isDone: Bool
         var isDoneAt: Date?
+        
+        private var schemaPatch_v3: Int?
         
         init(folder: Folder? = nil, id: UUID, images: [Photo], createdAt: Date, options: Options, isDone: Bool, isDoneAt: Date? = nil) {
             self.folder = folder
@@ -84,3 +87,11 @@ enum PhotoTodoSchemaV2: VersionedSchema {
         }
     }
 }
+
+typealias Folder = PhotoTodoSchemaV3.Folder
+typealias Todo = PhotoTodoSchemaV3.Todo
+typealias Photo = PhotoTodoSchemaV3.Photo
+typealias Options = PhotoTodoSchemaV3.Options
+typealias FolderOrder = PhotoTodoSchemaV3.FolderOrder
+
+

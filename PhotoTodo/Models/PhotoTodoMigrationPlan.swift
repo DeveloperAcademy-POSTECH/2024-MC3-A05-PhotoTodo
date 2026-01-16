@@ -10,11 +10,11 @@ import SwiftUI
 
 enum PhotoTodoMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [PhotoTodoSchemaV1.self, PhotoTodoSchemaV2.self]
+        [PhotoTodoSchemaV1.self, PhotoTodoSchemaV2.self, PhotoTodoSchemaV3.self]
     }
     
     static var stages: [MigrationStage] {
-        [migrateV1toV2]
+        [migrateV1toV2, migrateV2toV3]
     }
     static var rawImageBackup: [UUID: [Data]] = [:]
     
@@ -40,5 +40,10 @@ enum PhotoTodoMigrationPlan: SchemaMigrationPlan {
             try? context.save()
             rawImageBackup.removeAll()
         }
+    )
+    
+    static let migrateV2toV3 = MigrationStage.lightweight(
+        fromVersion: PhotoTodoSchemaV2.self,
+        toVersion: PhotoTodoSchemaV3.self
     )
 }
