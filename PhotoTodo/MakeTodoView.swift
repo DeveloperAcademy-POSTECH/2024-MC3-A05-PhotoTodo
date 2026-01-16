@@ -41,6 +41,7 @@ struct MakeTodoView: View {
     
     // 내부 컨텐츠
     @Binding var contentAlarm: Date?
+    @State var selectedAlarm: Date?
     @Binding var alarmID: String?
     @State private var folderMenuisActive: Bool = false
     @State private var alarmisActive: Bool = false
@@ -200,6 +201,7 @@ struct MakeTodoView: View {
                                 // 알림 생성 행
                                 Button {
                                     alarmisActive.toggle()
+                                    selectedAlarm = contentAlarm
                                 } label: {
                                     HStack {
                                         Text("알림")
@@ -213,36 +215,68 @@ struct MakeTodoView: View {
                                 }
                                 .buttonStyle(.plain)
                                 .sheet(isPresented: $alarmisActive, content: {
-                                    VStack{
-                                        HStack{
-                                            Button(action: {
-                                                contentAlarm = Date()
-                                                alarmDataisEmpty = true
-                                                alarmisActive.toggle()
-                                            }, label: {
-                                                Text("리셋")
-                                            })
+                                    NavigationStack {
+                                        VStack {
+                                            DatePicker(
+                                                "Select Date",
+                                                selection: $selectedAlarm.withDefault(Date()),
+                                                in: Date()...,
+                                                displayedComponents: [.date, .hourAndMinute]
+                                            )
+                                            .labelsHidden()
+                                            .datePickerStyle(.wheel)
+                                            
                                             Spacer()
-                                            Button(action: {
-                                                alarmDataisEmpty = false
-                                                alarmisActive.toggle()
-                                            }, label: {
-                                                Text("완료")
-                                            })
                                         }
-                                        
-                                        DatePicker(
-                                            "Select Date",
-                                            selection: $contentAlarm.withDefault(Date()),
-                                            in: Date()...,
-                                            displayedComponents: [.date, .hourAndMinute]
-                                        )
-                                        .labelsHidden()
-                                        .datePickerStyle(.wheel)
+                                        .padding()
+                                        .navigationTitle("알림")
+                                        .navigationBarTitleDisplayMode(.inline)
+                                        .toolbar {
+                                            ToolbarItem(placement: .topBarLeading) {
+                                                if #available(iOS 26.0, *) {
+                                                    Button(role: .destructive) {
+                                                        contentAlarm = Date()
+                                                        selectedAlarm = contentAlarm
+                                                        alarmDataisEmpty = true
+                                                        alarmisActive.toggle()
+                                                    } label: {
+                                                        Text("리셋")
+                                                    }
+                                                } else {
+                                                    Button {
+                                                        contentAlarm = Date()
+                                                        selectedAlarm = contentAlarm
+                                                        alarmDataisEmpty = true
+                                                        alarmisActive.toggle()
+                                                    } label: {
+                                                        Text("리셋")
+                                                            .foregroundStyle(.red)
+                                                    }
+                                                }
+                                            }
+                                            
+                                            ToolbarItem(placement: .topBarTrailing) {
+                                                if #available(iOS 26.0, *) {
+                                                    Button(role: .confirm) {
+                                                        alarmDataisEmpty = false
+                                                        contentAlarm = selectedAlarm
+                                                        alarmisActive.toggle()
+                                                    }
+                                                } else {
+                                                    Button {
+                                                        alarmDataisEmpty = false
+                                                        contentAlarm = selectedAlarm
+                                                        alarmisActive.toggle()
+                                                    } label: {
+                                                        Text("완료")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        .presentationDetents([.height(CGFloat(380))])
                                     }
-                                    .padding()
-                                    .presentationDetents([.height(CGFloat(300))])
-                                })
+                                }
+                                )
                                 
                                 Divider()
                                     .padding(.horizontal, 20)

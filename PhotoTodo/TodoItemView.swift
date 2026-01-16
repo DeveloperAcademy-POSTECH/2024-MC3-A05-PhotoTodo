@@ -175,8 +175,8 @@ struct TodoItemView: View {
         
         var id: String? = nil
         if alarmDataisEmpty != nil && !alarmDataisEmpty! {
-            print("알람 데이터 있음")
-            // 알람 생성
+            print("알림 데이터 있음")
+            // 알림 생성
             let calendar = Calendar.current
             let year = calendar.component(.year, from: contentAlarm ?? .now)
             let month = calendar.component(.month, from: contentAlarm ?? .now)
@@ -184,10 +184,10 @@ struct TodoItemView: View {
             let hour = calendar.component(.hour, from: contentAlarm ?? .now)
             let minute = calendar.component(.minute, from: contentAlarm ?? .now)
             
-            // Notification 알람 생성 및 id Todo에 저장하기
+            // Notification 알림 생성 및 id Todo에 저장하기
             id = manager.makeTodoNotification(year: year, month: month, day: day, hour: hour, minute: minute)
         } else {
-            print("알람 데이터 없음")
+            print("알림 데이터 없음")
             contentAlarm = nil
             alarmDataisEmpty = true
         }
