@@ -336,7 +336,7 @@ struct TodoGridView: View {
     
     private var scrollableGridView: some View {
         ScrollViewReader { proxy in
-            ScrollView(showsIndicators: false) {
+            ScrollView(showsIndicators: true) {
                 LazyVStack(spacing: 0) {
                     Color.clear
                         .frame(height: 0)
@@ -352,8 +352,9 @@ struct TodoGridView: View {
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ScrollToTop"))) { _ in
-                // 애니메이션 없이 즉시 스크롤 - 메모리 크래시 방지
-                proxy.scrollTo("scrollTop", anchor: .top)
+                withAnimation {
+                    proxy.scrollTo("scrollTop", anchor: .top)
+                }
             }
         }
     }
