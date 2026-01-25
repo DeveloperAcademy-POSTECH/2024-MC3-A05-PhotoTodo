@@ -308,7 +308,53 @@ extension FolderRow {
 #Preview {
     @Previewable @State var recentlySeenFolder: Folder? = nil
     
-    FolderListView(recentlySeenFolder: $recentlySeenFolder)
-        .modelContainer(for: Folder.self, inMemory: true)
+    let container = try! ModelContainer(
+        for: Folder.self, Todo.self, Photo.self, Options.self, FolderOrder.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    let mockTodos1 = [
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "doc.text")?.pngData() ?? Data())],
+            createdAt: Date(),
+            options: Options(memo: "보고서 작성"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "envelope")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-3600),
+            options: Options(alarm: Date().addingTimeInterval(7200), memo: "이메일 답장"),
+            isDone: false
+        )
+    ]
+    
+    let mockTodos2 = [
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "house")?.pngData() ?? Data())],
+            createdAt: Date(),
+            options: Options(memo: "청소하기"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "trash")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-86400),
+            options: Options(memo: "분리수거"),
+            isDone: true,
+            isDoneAt: Date()
+        )
+    ]
+    
+    let folder1 = Folder(id: UUID(), name: "기본", color: "green", todos: mockTodos1)
+    let folder2 = Folder(id: UUID(), name: "집안일", color: "blue", todos: mockTodos2)
+    
+    container.mainContext.insert(folder1)
+    container.mainContext.insert(folder2)
+    
+    return FolderListView(recentlySeenFolder: $recentlySeenFolder)
+        .modelContainer(container)
 }
 

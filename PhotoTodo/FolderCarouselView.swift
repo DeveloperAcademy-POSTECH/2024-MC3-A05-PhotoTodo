@@ -145,6 +145,34 @@ struct FolderCarouselView: View {
 }
 
 #Preview {
-    @Previewable @State var chosenFolder: Folder? = Folder(id: UUID(), name: "기본폴더", color: "red", todos: [])
+    @Previewable @State var chosenFolder: Folder? = {
+        let mockTodos = [
+            Todo(
+                id: UUID(),
+                images: [Photo(image: UIImage(systemName: "cart")?.pngData() ?? Data())],
+                createdAt: Date(),
+                options: Options(memo: "장보기"),
+                isDone: false
+            ),
+            Todo(
+                id: UUID(),
+                images: [Photo(image: UIImage(systemName: "book.fill")?.pngData() ?? Data())],
+                createdAt: Date().addingTimeInterval(-86400),
+                options: Options(alarm: Date().addingTimeInterval(3600), memo: "독서하기"),
+                isDone: false
+            ),
+            Todo(
+                id: UUID(),
+                images: [Photo(image: UIImage(systemName: "figure.run")?.pngData() ?? Data())],
+                createdAt: Date().addingTimeInterval(-172800),
+                options: Options(memo: "운동하기"),
+                isDone: true,
+                isDoneAt: Date()
+            )
+        ]
+        return Folder(id: UUID(), name: "기본폴더", color: "red", todos: mockTodos)
+    }()
+    
     return FolderCarouselView(chosenFolder: $chosenFolder)
+        .modelContainer(for: [Folder.self, Todo.self], inMemory: true)
 }

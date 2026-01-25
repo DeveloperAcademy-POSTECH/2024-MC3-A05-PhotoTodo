@@ -93,5 +93,3 @@ typealias Todo = PhotoTodoSchemaV3.Todo
 typealias Photo = PhotoTodoSchemaV3.Photo
 typealias Options = PhotoTodoSchemaV3.Options
 typealias FolderOrder = PhotoTodoSchemaV3.FolderOrder
-
-

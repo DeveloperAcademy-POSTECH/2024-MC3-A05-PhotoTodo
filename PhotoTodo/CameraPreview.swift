@@ -42,3 +42,10 @@ struct CameraPreview: UIViewRepresentable {
         print("뷰 업데이트됨")
     }
 }
+
+#Preview {
+    CameraPreview(
+        cameraManager: CameraManager(),
+        frame: CGRect(x: 0, y: 0, width: 350, height: 400)
+    )
+}

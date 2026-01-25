@@ -222,6 +222,40 @@ struct TabBarView: View {
 }
 
 #Preview {
-    TabBarView()
+    let container = try! ModelContainer(
+        for: Folder.self, Todo.self, Photo.self, Options.self, FolderOrder.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    let mockTodos = [
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "leaf")?.pngData() ?? Data())],
+            createdAt: Date(),
+            options: Options(memo: "친환경 실천하기"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "drop")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-3600),
+            options: Options(alarm: Date().addingTimeInterval(7200), memo: "물 아끼기"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "recycle")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-86400),
+            options: Options(memo: "재활용하기"),
+            isDone: true,
+            isDoneAt: Date()
+        )
+    ]
+    
+    let folder = Folder(id: UUID(), name: "기본", color: "green", todos: mockTodos)
+    container.mainContext.insert(folder)
+    
+    return TabBarView()
+        .modelContainer(container)
 }
 

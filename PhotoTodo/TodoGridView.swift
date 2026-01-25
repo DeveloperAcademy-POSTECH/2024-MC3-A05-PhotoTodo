@@ -580,29 +580,60 @@ private struct CustomTitle: View{
 
 
 
-//struct TodoListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        var viewType: TodoGridViewType = .singleFolder
-//        TodoGridView(defaultStorageFolder: previewFolder, todos: previewFolder.todos, viewType: viewType)
-//    }
-//
-//    static var previewFolder: Folder {
-//        let sampleTodo = Todo(
-//            id: UUID(),
-//            image: UIImage(systemName: "star")?.pngData() ?? Data(),
-//            createdAt: Date(),
-//            options: Options(
-//                alarm: nil,
-//                memo: nil
-//            ),
-//            isDone: false
-//        )
-//
-//        return Folder(
-//            id: UUID(),
-//            name: "예제폴더",
-//            color: "red",
-//            todos: [sampleTodo]
-//        )
-//    }
-//}
+#Preview {
+    let container = try! ModelContainer(
+        for: Folder.self, Todo.self, Photo.self, Options.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    let mockTodos = [
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "star.fill")?.pngData() ?? Data())],
+            createdAt: Date(),
+            options: Options(memo: "중요한 작업"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "bell.fill")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-3600),
+            options: Options(alarm: Date().addingTimeInterval(7200), memo: "알림 설정된 작업"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "heart.fill")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-86400),
+            options: Options(memo: "하고 싶은 일"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "sparkles")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-172800),
+            options: Options(memo: "특별한 작업"),
+            isDone: false
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "checkmark.seal.fill")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-259200),
+            options: Options(memo: "완료된 작업"),
+            isDone: true,
+            isDoneAt: Date().addingTimeInterval(-86400)
+        )
+    ]
+    
+    let folder = Folder(
+        id: UUID(),
+        name: "예제폴더",
+        color: "red",
+        todos: mockTodos
+    )
+    
+    container.mainContext.insert(folder)
+    
+    return TodoGridView(currentFolder: folder, viewType: .singleFolder)
+        .modelContainer(container)
+}

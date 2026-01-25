@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DoneListView: View {
     @AppStorage("deletionCount") var deletionCount: Int = 0
@@ -59,5 +60,49 @@ struct DoneListView: View {
 
 
 #Preview {
-    DoneListView()
+    let container = try! ModelContainer(
+        for: Folder.self, Todo.self, Photo.self, Options.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    
+    let mockDoneTodos = [
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "checkmark.circle.fill")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-86400),
+            options: Options(memo: "완료된 작업 1"),
+            isDone: true,
+            isDoneAt: Date()
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "checkmark.square.fill")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-172800),
+            options: Options(memo: "완료된 작업 2"),
+            isDone: true,
+            isDoneAt: Date().addingTimeInterval(-86400)
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "checkmark.seal.fill")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-259200),
+            options: Options(memo: "완료된 작업 3"),
+            isDone: true,
+            isDoneAt: Date().addingTimeInterval(-172800)
+        ),
+        Todo(
+            id: UUID(),
+            images: [Photo(image: UIImage(systemName: "checkmark.diamond.fill")?.pngData() ?? Data())],
+            createdAt: Date().addingTimeInterval(-345600),
+            options: Options(memo: "완료된 작업 4"),
+            isDone: true,
+            isDoneAt: Date().addingTimeInterval(-259200)
+        )
+    ]
+    
+    let folder = Folder(id: UUID(), name: "기본", color: "green", todos: mockDoneTodos)
+    container.mainContext.insert(folder)
+    
+    return DoneListView()
+        .modelContainer(container)
 }

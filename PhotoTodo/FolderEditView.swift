@@ -136,3 +136,44 @@ struct FolderEditView: View {
         selectedColor = nil
     }
 }
+
+#Preview {
+    @Previewable @State var isSheetPresented = true
+    @Previewable @State var folderNameInput = ""
+    @Previewable @State var selectedColor: Color? = Color("folder_color/green")
+    @Previewable @State var selectedFolder: Folder? = {
+        let mockTodos = [
+            Todo(
+                id: UUID(),
+                images: [Photo(image: UIImage(systemName: "photo")?.pngData() ?? Data())],
+                createdAt: Date(),
+                options: Options(memo: "장보기"),
+                isDone: false
+            ),
+            Todo(
+                id: UUID(),
+                images: [Photo(image: UIImage(systemName: "doc")?.pngData() ?? Data())],
+                createdAt: Date().addingTimeInterval(-86400),
+                options: Options(alarm: Date(), memo: "과제 제출"),
+                isDone: false
+            ),
+            Todo(
+                id: UUID(),
+                images: [Photo(image: UIImage(systemName: "book")?.pngData() ?? Data())],
+                createdAt: Date().addingTimeInterval(-172800),
+                options: Options(memo: "책 읽기"),
+                isDone: true,
+                isDoneAt: Date()
+            )
+        ]
+        return Folder(id: UUID(), name: "프로젝트", color: "green", todos: mockTodos)
+    }()
+    
+    return FolderEditView(
+        isSheetPresented: $isSheetPresented,
+        folderNameInput: $folderNameInput,
+        selectedColor: $selectedColor,
+        selectedFolder: $selectedFolder
+    )
+    .modelContainer(for: [Folder.self, Todo.self, FolderOrder.self], inMemory: true)
+}
