@@ -362,13 +362,17 @@ struct TodoGridView: View {
     
     /// 날짜별로 그룹화된 아이템들의 각 그룹 각각에 대응하는 그리드 뷰가  ForEach문으로 그려짐
     private var groupedGridView: some View {
-        ForEach(groupedTodos.elements, id: \.key) { element in
+        let currentYear = getYearString(Date())
+        
+        return ForEach(groupedTodos.elements, id: \.key) { element in
             VStack(spacing: 8) {
                 HStack {
-                    Text(element.key)
-                        .font(.callout)
-                        .foregroundStyle(Color("gray/gray-700"))
-                        .padding(.leading, 10)
+                    Text(element.key.hasPrefix(currentYear) && element.key.contains("일")
+                                               ? String(element.key.dropFirst(4))
+                                               : element.key)
+                    .font(.callout)
+                    .foregroundStyle(Color("gray/gray-700"))
+                    .padding(.leading, 10)
                     Spacer()
                 }
                 .padding(.horizontal, 20)
@@ -437,15 +441,23 @@ struct TodoGridView: View {
 extension TodoGridView {
     private func getDateString(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM월 d일"
+        dateFormatter.dateFormat = "yy년 M월 d일"
         return dateFormatter.string(from: date)
     }
     
     private func getMonthString(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yy년 MM월"
+        dateFormatter.dateFormat = "yy년 M월"
         return dateFormatter.string(from: date)
     }
+    
+    private func getYearString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy년"
+        return dateFormatter.string(from: date)
+    }
+    
+    
     
     ///a method that will be called when the ImagePicker view has been dismissed
     func loadImage() {
