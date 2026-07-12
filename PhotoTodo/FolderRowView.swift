@@ -1,109 +1,239 @@
 import SwiftUI
 
 struct FolderRowView<Content: View>: View {
-  init(
-    actions: [Action],
-    @ViewBuilder content: () -> Content
-  ) {
-    self.actions = actions
-    self.content = content()
-  }
+    init(
+        actions: [Action],
+        @ViewBuilder content: () -> Content
+    ) {
+        self.actions = actions
+        self.content = content()
+    }
 
-  var content: Content
+    var content: Content
 
-  @State private var offset: CGFloat = 0
-  @State private var startOffset: CGFloat = 0
-  @State private var isDragging = false
-  @State private var isTriggered = false
+    @State private var offset: CGFloat = 0
+    @State private var startOffset: CGFloat = 0
+    @State private var isTriggered = false
 
-  let triggerThreshhold: CGFloat = -250
-  let expansionThreshhold: CGFloat = -60
-  let actions: [Action]
+    let triggerThreshhold: CGFloat = -250
+    let expansionThreshhold: CGFloat = -60
+    let actions: [Action]
 
-  var expansionOffset: CGFloat { CGFloat(actions.count) * -60 }
+    var expansionOffset: CGFloat { CGFloat(actions.count) * -60 }
 
-  var dragGesture: some Gesture {
-    DragGesture()
-      .onChanged { value in
-          if value.translation.width > 0 {
-                  withAnimation(.interactiveSpring) {
-                      offset = 0
-                  }
-                  return
-              }
+    var body: some View {
+        content
+            .offset(x: offset)
+            .padding()
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
+            .overlay(alignment: .trailing) {
+                ZStack(alignment: .trailing) {
+                    ForEach(Array(actions.enumerated()), id: \.offset) { index, action in
+                        let width = isTriggered ? -offset : -offset * CGFloat(actions.count - index) / CGFloat(actions.count)
 
-          
-        if !isDragging {
-          startOffset = offset
-          isDragging = true
-        }
-          
-        withAnimation(.interactiveSpring) {
-          offset = startOffset + value.translation.width
-        }
-        
-        isTriggered = offset < triggerThreshhold
-      }
-      .onEnded { value in
-        isDragging = false
+                        ActionButton(
+                            action: action,
+                            width: width,
+                            dismiss: { withAnimation { offset = 0 } },
+                            onActionTriggered: {
+                                withAnimation {
+                                    offset = -UIScreen.main.bounds.width + 30
+                                    isTriggered = true
+                                }
+                            }
+                        )
+                    }
+                }
+                .animation(.spring, value: isTriggered)
+                .onChange(of: isTriggered) {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                }
+            }
+            .background {
+                HorizontalPanGestureInstaller(
+                    isOpen: offset != 0,
+                    onBegan: {
+                        startOffset = offset
+                    },
+                    onChanged: { translationX in
+                        offset = min(0, startOffset + translationX)
+                        isTriggered = offset < triggerThreshhold
+                    },
+                    onEnded: { translationX, velocityX in
+                        finishSwipe(
+                            translationX: translationX,
+                            velocityX: velocityX
+                        )
+                    },
+                    onCancelled: {
+                        withAnimation {
+                            offset = startOffset
+                        }
+                        isTriggered = false
+                    }
+                )
+            }
+    }
 
-        if let action = actions.last, isTriggered {
-          withAnimation {
-            offset = -UIScreen.main.bounds.width + 30
-              //화면 왼쪽의 패딩만큼 더 가야 함
-              //리스트의 패딩값이 조정된다면 이부분도 조정 필요
-          }
-          action.action {
+    private func finishSwipe(
+        translationX: CGFloat,
+        velocityX: CGFloat
+    ) {
+        if let action = actions.last,
+           offset < triggerThreshhold {
             withAnimation {
-              offset = 0 // Reset after action completes
+                offset = -UIScreen.main.bounds.width + 30
             }
-          }
+
+            action.action {
+                withAnimation {
+                    offset = 0
+                }
+            }
         } else {
-          withAnimation {
-            if value.predictedEndTranslation.width < expansionThreshhold {
-              offset = expansionOffset
-            } else {
-              offset = 0
+            // UIKit에는 predictedEndTranslation이 없으므로 현재 속도로 투영한다.
+            let projectedOffset = startOffset
+                + translationX
+                + velocityX * 0.2
+
+            withAnimation {
+                offset = projectedOffset < expansionThreshhold
+                    ? expansionOffset
+                    : 0
             }
-          }
         }
 
         isTriggered = false
-      }
-  }
+    }
+}
 
-  var body: some View {
-    content
-      .offset(x: offset)
-      .padding()
-      .frame(maxWidth: .infinity)
-      .contentShape(Rectangle())
-      .overlay(alignment: .trailing) {
-        ZStack(alignment: .trailing) {
-          ForEach(Array(actions.enumerated()), id: \.offset) { index, action in
-            let isDefault = index == actions.count - 1
-            let width = isTriggered ? -offset : -offset * CGFloat(actions.count - index) / CGFloat(actions.count)
+private struct HorizontalPanGestureInstaller: UIViewRepresentable {
+    let isOpen: Bool
+    let onBegan: () -> Void
+    let onChanged: (CGFloat) -> Void
+    let onEnded: (CGFloat, CGFloat) -> Void
+    let onCancelled: () -> Void
 
-            ActionButton(
-              action: action,
-              width: width,
-              dismiss: { withAnimation { offset = 0 } },
-              onActionTriggered: {
-                  withAnimation {
-                      offset = -UIScreen.main.bounds.width + 30
-                      isTriggered = true
-                  }
-              }
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        let markerView = UIView(frame: .zero)
+        markerView.isUserInteractionEnabled = false
+        return markerView
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        context.coordinator.parent = self
+
+        DispatchQueue.main.async {
+            context.coordinator.attachIfNeeded(from: uiView)
+        }
+    }
+
+    static func dismantleUIView(
+        _ uiView: UIView,
+        coordinator: Coordinator
+    ) {
+        coordinator.detach()
+    }
+
+    final class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        var parent: HorizontalPanGestureInstaller
+
+        private weak var targetView: UIView?
+        private lazy var panGesture: UIPanGestureRecognizer = {
+            let gesture = UIPanGestureRecognizer(
+                target: self,
+                action: #selector(handlePan(_:))
             )
-          }
+            gesture.delegate = self
+            gesture.cancelsTouchesInView = true
+            gesture.maximumNumberOfTouches = 1
+            return gesture
+        }()
+
+        init(parent: HorizontalPanGestureInstaller) {
+            self.parent = parent
         }
-        .animation(.spring, value: isTriggered)
-        .onChange(of: isTriggered) {
-          UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+
+        func attachIfNeeded(from markerView: UIView) {
+            guard targetView == nil,
+                  let cellContentView = markerView.enclosingListCellContentView else {
+                return
+            }
+
+            targetView = cellContentView
+            cellContentView.addGestureRecognizer(panGesture)
         }
-      }
-      .highPriorityGesture(dragGesture)
-  }
+
+        func detach() {
+            targetView?.removeGestureRecognizer(panGesture)
+            targetView = nil
+        }
+
+        func gestureRecognizerShouldBegin(
+            _ gestureRecognizer: UIGestureRecognizer
+        ) -> Bool {
+            guard let pan = gestureRecognizer as? UIPanGestureRecognizer else {
+                return false
+            }
+
+            let velocity = pan.velocity(in: pan.view)
+            guard abs(velocity.x) > abs(velocity.y) else {
+                return false
+            }
+
+            return parent.isOpen || velocity.x < 0
+        }
+
+        func gestureRecognizer(
+            _ gestureRecognizer: UIGestureRecognizer,
+            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+        ) -> Bool {
+            true
+        }
+
+        @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
+            let translationX = gesture.translation(in: gesture.view).x
+            let velocityX = gesture.velocity(in: gesture.view).x
+
+            switch gesture.state {
+            case .began:
+                parent.onBegan()
+            case .changed:
+                parent.onChanged(translationX)
+            case .ended:
+                parent.onEnded(translationX, velocityX)
+            case .cancelled, .failed:
+                parent.onCancelled()
+            default:
+                break
+            }
+        }
+    }
+}
+
+private extension UIView {
+    var enclosingListCellContentView: UIView? {
+        var candidate = superview
+
+        while let view = candidate {
+            if let cell = view as? UICollectionViewCell {
+                return cell.contentView
+            }
+
+            if let cell = view as? UITableViewCell {
+                return cell.contentView
+            }
+
+            candidate = view.superview
+        }
+
+        return nil
+    }
 }
 
 #Preview {
