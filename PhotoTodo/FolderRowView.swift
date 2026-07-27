@@ -137,12 +137,13 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
         _ uiView: UIView,
         coordinator: Coordinator
     ) {
-        coordinator.detach()
+        coordinator.deactivate()
     }
 
     final class Coordinator: NSObject, UIGestureRecognizerDelegate {
         var parent: HorizontalPanGestureInstaller
 
+        private var isActive = true
         private weak var targetView: UIView?
         private lazy var panGesture: UIPanGestureRecognizer = {
             let gesture = UIPanGestureRecognizer(
@@ -160,7 +161,8 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
         }
 
         func attachIfNeeded(from markerView: UIView) {
-            guard targetView == nil,
+            guard isActive,
+                  targetView == nil,
                   let cellContentView = markerView.enclosingListCellContentView else {
                 return
             }
@@ -169,7 +171,8 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
             cellContentView.addGestureRecognizer(panGesture)
         }
 
-        func detach() {
+        func deactivate() {
+            isActive = false
             targetView?.removeGestureRecognizer(panGesture)
             targetView = nil
         }
