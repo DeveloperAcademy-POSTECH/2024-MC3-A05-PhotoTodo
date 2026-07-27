@@ -120,7 +120,14 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UIView {
-        let markerView = UIView(frame: .zero)
+        let markerView = HierarchyTrackingView(frame: .zero)
+        let coordinator = context.coordinator
+
+        markerView.onHierarchyChange = { [weak coordinator] view in
+            DispatchQueue.main.async {
+                coordinator?.attachIfNeeded(from: view)
+            }
+        }
         markerView.isUserInteractionEnabled = false
         return markerView
     }
@@ -137,6 +144,7 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
         _ uiView: UIView,
         coordinator: Coordinator
     ) {
+        (uiView as? HierarchyTrackingView)?.onHierarchyChange = nil
         coordinator.deactivate()
     }
 
@@ -162,13 +170,17 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
 
         func attachIfNeeded(from markerView: UIView) {
             guard isActive,
-                  targetView == nil,
-                  let cellContentView = markerView.enclosingListCellContentView else {
+                  let gestureTargetView = markerView.gestureTargetView else {
                 return
             }
 
-            targetView = cellContentView
-            cellContentView.addGestureRecognizer(panGesture)
+            guard targetView !== gestureTargetView else {
+                return
+            }
+
+            targetView?.removeGestureRecognizer(panGesture)
+            targetView = gestureTargetView
+            gestureTargetView.addGestureRecognizer(panGesture)
         }
 
         func deactivate() {
@@ -219,8 +231,18 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
     }
 }
 
+private final class HierarchyTrackingView: UIView {
+    var onHierarchyChange: ((UIView) -> Void)?
+
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        onHierarchyChange?(self)
+    }
+}
+
 private extension UIView {
-    var enclosingListCellContentView: UIView? {
+    var gestureTargetView: UIView? {
+        let fallbackView = superview
         var candidate = superview
 
         while let view = candidate {
@@ -235,7 +257,7 @@ private extension UIView {
             candidate = view.superview
         }
 
-        return nil
+        return fallbackView
     }
 }
 
