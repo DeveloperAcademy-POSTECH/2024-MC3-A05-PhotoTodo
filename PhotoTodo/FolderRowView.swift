@@ -208,7 +208,11 @@ private struct HorizontalPanGestureInstaller: UIViewRepresentable {
             _ gestureRecognizer: UIGestureRecognizer,
             shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
         ) -> Bool {
-            true
+            guard let scrollView = otherGestureRecognizer.view as? UIScrollView else {
+                return false
+            }
+
+            return otherGestureRecognizer === scrollView.panGestureRecognizer
         }
 
         @objc private func handlePan(_ gesture: UIPanGestureRecognizer) {
